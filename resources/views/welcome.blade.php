@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-     <title>Health - Medical Website Template</title>
+     <title>HealthCare Center </title>
 <!--
 
 Template 2098 Health
@@ -51,7 +51,8 @@ http://www.tooplate.com/view/2098-health
                     <div class="col-md-8 col-sm-7 text-align-right">
                          <span class="phone-icon"><i class="fa fa-phone"></i> 010-060-0160</span>
                          <span class="date-icon"><i class="fa fa-calendar-plus-o"></i> 6:00 AM - 10:00 PM (Mon-Fri)</span>
-                         <span class="email-icon"><i class="fa fa-envelope-o"></i> <a href="#">info@company.com</a></span>
+                         <a href="#login" class="btn-login"><i class="fa fa-lock"></i> Đăng nhập</a>
+                         <a href="#register" class="btn-register"><i class="fa fa-user"></i> Đăng ký</a>                    
                     </div>
 
                </div>
@@ -72,18 +73,22 @@ http://www.tooplate.com/view/2098-health
 
                     <!-- lOGO TEXT HERE -->
                     <a href="index.html" class="navbar-brand"><i class="fa fa-h-square"></i>ealth Center</a>
+                    
+
                </div>
 
                <!-- MENU LINKS -->
                <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
-                         <li><a href="#top" class="smoothScroll">Home</a></li>
-                         <li><a href="#about" class="smoothScroll">About Us</a></li>
-                         <li><a href="#team" class="smoothScroll">Doctors</a></li>
-                         <li><a href="#news" class="smoothScroll">News</a></li>
-                         <li><a href="#google-map" class="smoothScroll">Contact</a></li>
-                         <li class="appointment-btn"><a href="#appointment">Make an appointment</a></li>
+                         <li><a href="#top" class="smoothScroll">Trang chủ</a></li>
+                         <li><a href="#team" class="smoothScroll">Chuyên khoa khám</a></li>
+                         <li><a href="#news" class="smoothScroll">Chuyên gia - Bác sĩ</a></li>
+                         <li><a href="#news" class="smoothScroll">Tra cứu kết quả khám</a></li>
+                         <li><a href="#news" class="smoothScroll">Hướng dẫn khám</a></li>
+                         <li><a href="#google-map" class="smoothScroll">Liên hệ</a></li>
+                         <li class="appointment-btn"><a href="#appointment">Đăng ký khám</a></li>
                     </ul>
+
                </div>
 
           </div>

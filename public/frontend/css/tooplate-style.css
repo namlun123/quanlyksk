@@ -1055,3 +1055,20 @@ http://www.tooplate.com/view/2098-health
 
   }
 
+  .btn-login, .btn-register {
+    margin-left: 15px;
+    font-size: 14px;
+    color: #000000;
+    text-decoration: none;
+    padding: 8px 12px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.btn-register:hover.btn-login:hover {
+    background-color: #a5c422;
+
+}
