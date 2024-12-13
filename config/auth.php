@@ -40,6 +40,18 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admins' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+        'patients' => [
+            'driver' => 'session',
+            'provider' => 'patients',
+        ],
+        'info_patients' => [
+            'driver' => 'session',
+            'provider' => 'info_patients'
+        ]
     ],
 
     /*
@@ -64,7 +76,18 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\Admin::class),
+        ],
+        'patients' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\TKbenhnhan::class),
+        ],
+        'info_patients' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\Benhnhan::class)
+        ]
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
