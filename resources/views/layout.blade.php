@@ -23,15 +23,12 @@ http://www.tooplate.com/view/2098-health
      <link rel="stylesheet" href="{{ asset('public/frontend/css/owl.carousel.css') }}">
      <link rel="stylesheet" href="{{ asset('public/frontend/css/owl.theme.default.min.css') }}">
 
+
      <!-- MAIN CSS -->
      <link rel="stylesheet" href="{{ asset('public/frontend/css/tooplate-style.css') }}">
 
      <style>
-          .text-right {
-          text-align: right;
-          padding-top: 12px;
-          font-size: 15px;
-          }
+          
           /* Tăng khoảng cách giữa các liên kết trong phần user-actions */
           .user-actions a {
           display: inline-block;
@@ -55,67 +52,53 @@ http://www.tooplate.com/view/2098-health
 
 
      <!-- HEADER -->
-     <!-- <header>
+     <header>
           <div class="container">
                <div class="row">
-
-                    <div class="col-md-4 col-sm-5">
-                         <p>Welcome to a Professional Health Care</p>
-                    </div>
-                         
-                    <div class="col-md-8 col-sm-7 text-align-right">
+                    <div class="col-md-5 col-sm-5">
                          <span class="phone-icon"><i class="fa fa-phone"></i> 010-060-0160</span>
                          <span class="date-icon"><i class="fa fa-calendar-plus-o"></i> 6:00 AM - 10:00 PM (Mon-Fri)</span>
-                         <a href="{{ URL::to('/log-in') }}" class="btn-login"><i class="fa fa-lock"></i> Đăng nhập</a>
-                         <a href="{{ URL::to('/register') }}" class="btn-register"><i class="fa fa-user"></i> Đăng ký</a>                    
                     </div>
-
+                    @if (!Auth::guard('patients')->check())
+                    <div class="col-md-7 col-sm-7 text-align-right">
+                         <span class=""><a href="{{ URL::to('/log-in') }}" class="btn-login"><i class="fa fa-lock"></i> Đăng nhập</a></span>
+                         <span class=""><a href="{{ URL::to('/register') }}" class="btn-register"><i class="fa fa-user"></i> Đăng ký</a></span>                 
+                    </div>
+                    @else
+                    <div class="col-6 col-lg-6 text-right">
+                         <span class="icon-history">
+                              <i class="fa fa-history"></i> 
+                              <a href="{{ URL::to('/enroll-history') }}" class="small mr-3" style="font-size:12px";>Lịch sử khám</a>
+                         </span>
+                         <span class="icon-profile">
+                              <i class="fa fa-user"></i>
+                              <a href="{{ URL::to('/user-profile') }}" class="small mr-3" style="font-size:12px">Profile: 
+                              @if ($user)
+                                   @php
+                                        $all_infor = DB::table('info_patients')->where('id', $user->user_id)->get();
+                                   @endphp
+                                   @foreach($all_infor as $infor) {{$infor->HoTen}}
+                                   @endforeach
+                                   @else
+                                   {{ "" }}
+                              @endif
+                                   @if ($user)
+                                        @php
+                                        session(['user_id' => $user->id]);
+                                        @endphp
+                                   @endif
+                              </a>
+                         </span>
+                         <span class="icon-logout">
+                              <i class="fa fa-sign-out"></i>
+                              <a href="{{ URL::to('/dang-xuat') }}" class="small mr-3" style="font-size:12px">Thoát</a>
+                         </span>
+                         </div>
+                    @endif
                </div>
           </div>
-     </header> -->
-     <header>
-    <div class="container">
-        <div class="row">
-            <!-- Cột chào mừng -->
-            <div class="col-md-5 col-sm-5">
-            <span class="phone-icon"><i class="fa fa-phone"></i> 010-060-0160</span>
-            <span class="date-icon"><i class="fa fa-calendar-plus-o"></i> 6:00 AM - 10:00 PM (Mon-Fri)</span>                
-            </div>
-
-            <!-- Cột thông tin liên hệ và người dùng -->
-            <div class="col-md-7 col-sm-7 text-align-center">
-               
-                @if (!Auth::guard('patients')->check())
-                    <!-- Khi người dùng chưa đăng nhập -->
-                    <a href="{{ URL::to('/log-in') }}" class="btn-login"><i class="fa fa-lock"></i> Đăng nhập</a>
-                    <a href="{{ URL::to('/register') }}" class="btn-register"><i class="fa fa-user"></i> Đăng ký</a>
-                @else
-                    <!-- Khi người dùng đã đăng nhập -->
-                    <div class="user-actions text-right">
-                        <a href="{{ URL::to('/enroll-history') }}" class="small mr-3">
-                            <i class="fa fa-history"></i> Lịch sử khám
-                        </a>
-                        <a href="{{ URL::to('/enroll-history') }}" class="small mr-3">
-                            <i class="fa fa-file-text-o"></i> Kết quả khám
-                        </a>
-                        <a href="{{ URL::to('/user-profile') }}" class="small mr-3">
-                            <i class="fa fa-user"></i> Profile: 
-                            @php
-                                $user_info = DB::table('info_patients')->where('id', Auth::guard('patients')->id())->first();
-                            @endphp
-                            {{ $user_info ? $user_info->HoTen : 'N/A' }}
-                        </a>
-                        <a href="{{ URL::to('/dang-xuat') }}" class="small">
-                            <i class="fa fa-sign-out"></i> Thoát
-                        </a>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
-</header>
-
-
+     </header>
+    
 
      <!-- MENU -->
      <section class="navbar navbar-default navbar-static-top" role="navigation">

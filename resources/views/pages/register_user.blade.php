@@ -2,118 +2,102 @@
 @section('content')
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-<div class="untree_co-hero inner-page overlay" style="background-image: url('{{ asset('public/frontend/images/home_toeic.jpg') }}');">
-    <div class="container">
-      <div class="row align-items-center justify-content-center">
-        <div class="col-12">
-          <div class="row justify-content-center ">
-            <div class="col-lg-6 text-center ">
-              <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">Đăng ký</h1>
-
-            </div>
-          </div>
-        </div>
-      </div> <!-- /.row -->
-    </div> <!-- /.container -->
-
-  </div> <!-- /.untree_co-hero -->
-  <div class="untree_co-section">
-    <div class="container">
-
-        <div class="row mb-5 justify-content-center">
-            <div class="col-lg-12 mx-auto order-1" data-aos="fade-up" data-aos-delay="200">
-                <form action="{{ route('register-kh') }}" class="form-box" method="POST">
-                    @csrf
-                    <div class="row">
-                        <div class="col-lg-6 mb-3">
-                            <input type="text" class="form-control" placeholder="Họ tên" name="name">
-                        </div>
-                        <div class="col-lg-6 mb-3">
-                            <input type="text" class="form-control" placeholder="Email" name="email">
-                        </div>
-                        <div class="col-lg-6 mb-3">
-                            <input type="password" class="form-control" placeholder="Mật khẩu" name="password">
-                        </div>
-                        <div class="col-lg-6 mb-3">
-                            <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" name="password_confirmed">
-                        </div>
-                        <div class="col-lg-6 mb-3">
-                            <label" class="form-label mb-1 text-2 required">Ngày sinh</label>
-                            <div class="input-group">
-                                <input type="date" class="form-control text-3 h-auto py-2 type-date" name="ngaysinh" id="BirthDay" placeholder="YYYY/MM/DD">
-                                <label class="" for="BirthDay"><i class="fas fa-calendar-alt"></i></label>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 ">
+                <div class="card">
+                    <div class=" text-center">
+                        <h2>Đăng ký tài khoản</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="{{ route('register-kh') }}" method="POST">
+                            @csrf
+                            <div class="form-group mb-3">
+                                <label for="name" class="form-label">Họ tên</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Nhập họ tên">
                             </div>
-                        </div>
-                        <div class="col-lg-6 mb-3">
-                            <label class="form-label mb-1 text-2 required">Giới tính</label>
-                            <div class="col-lg-9">
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gioitinh" id="1" value="1">
-                                    <label class="form-check-label" for="1">Nam</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="gioitinh" id="0" value="0" >
-                                    <label class="form-check-label" for="0">Nữ</label>
-                                </div>
+                            <div class="form-group mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email">
                             </div>
-                        </div>
+                            <div class="form-group mb-3">
+                                <label for="password" class="form-label">Mật khẩu</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="password" class="form-label">Nhập lại mật khẩu</label>
+                                <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" name="password_confirmed" required>
+                            </div>
                         
-                        <div class="col-lg-6 mb-3">
+                            <div class="form-group mb-3">
+                                <label for="BirthDay" class="form-label">Ngày sinh</label>
+                                <input type="date" class="form-control" id="BirthDay" name="ngaysinh" placeholder="YYYY/MM/DD">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label">Giới tính</label>
+                                <div class="d-flex align-items-center">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gioitinh" id="1" value="1">
+                                        <label class="form-check-label" for="1">Nam</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="gioitinh" id="0" value="0">
+                                        <label class="form-check-label" for="0">Nữ</label>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div class="form-group mb-3">
                             <label class="form-label mb-1 text-2 required">Số nhà, đường/phố</label>
                             <input type="text" value="" class="form-control text-3 h-auto py-2 " placeholder="Nhập số nhà, đường/phố/phường/quận/thành phố" name="diachi">
-                        </div>
-                        <div class="col-lg-6 mb-3">
+                            </div>
+                            <div class="form-group mb-3">
                             <label class="form-label mb-1 text-2 required" for="city">Tỉnh/Thành phố</label>
                             <select class="form-select form-control h-auto py-2"  id="city" name="province">
                                 <option value="province" selected>Chọn Tỉnh/Thành</option>
                             </select>
-                        </div>
-                        <div class="col-lg-6 mb-3">
-                            <label class="form-label mb-1 text-2 required" for="district">Quận/Huyện</label>
-                            <select class="form-select form-control h-auto py-2"  id="district" name="district">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label class="form-label mb-1 text-2 required" for="district">Quận/Huyện</label>
+                                <select class="form-select form-control h-auto py-2"  id="district" name="district">
 
-                                <option value="district" selected>Chọn Quận/Huyện</option>
+                                    <option value="district" selected>Chọn Quận/Huyện</option>
 
                             </select>
-                        </div>
-                        <div class="col-lg-6 mb-3">
+                            </div>
+                            <div class="form-group mb-3">
                             <label class="form-label mb-1 text-2 required" for="ward">Phường/Xã</label>
                             <select class="form-select form-control h-auto py-2" id="ward" name="ward">
                                 <option value="ward" selected>Chọn Phường/Xã</option>
                             </select>
-                        </div>
-                        <div class="col-lg-6 mb-3">
-                            <label class="form-label mb-1 text-2 required">Số điện thoại</label>
-                            <input class="form-control text-3 h-auto py-2" type="text" name="sdt" placeholder="Nhập số điện thoại">
-                        </div>
-                        {{-- Thêm các trường khác như giới tính, CCCD, ngày cấp CCCD, nơi cấp, địa chỉ, thành phố, quận, huyện, số điện thoại tại đây --}}
-                        <div class="col-12 mb-3">
-                            <label class="control control--checkbox">
-                                <span class="caption">Chấp nhận <a href="#">các điều khoản sử dụng</a></span>
-                                <input type="checkbox" checked="checked" />
-                                <div class="control__indicator"></div>
-                            </label>
-                        </div>
-                        <div class="col-12">
-                            <input type="submit" value="Đăng ký" class="btn btn-primary">
-                        </div>
-                    </div>
-                </form>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="sdt" class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" id="sdt" name="sdt" placeholder="Nhập số điện thoại">
+                            </div>
+                            <div class="form-group form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="terms" checked>
+                                <label class="form-check-label" for="terms">Chấp nhận <a href="#">các điều khoản sử dụng</a></label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+                        </form>
 
-                @if ($errors->any())
-                    <div class="alert alert-danger mt-3">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+                        @if ($errors->any())
+                            <div class="alert alert-danger mt-3">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
-                @endif
+                </div>
             </div>
         </div>
     </div>
-  </div> <!-- /.untree_co-section -->
-<script>
+
+    <script>
     $(document).ready(function(){
         $('#BirthDay').datepicker({
             dateFormat: 'yy/mm/dd', // Định dạng ngày được chọn bởi người dùng
@@ -169,3 +153,151 @@
     }
 </script>
 @endsection
+<style>
+/* Reset các thuộc tính mặc định của HTML */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Container chính */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.row {
+    display: flex;
+    justify-content: center; /* Căn giữa hàng */
+    align-items: center; /* Căn giữa các phần tử dọc */
+}
+
+
+
+/* Hero section */
+.untree_co-hero {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    padding: 60px 0;
+    color: #fff;
+}
+
+.untree_co-hero .heading {
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+/* Section chính */
+.untree_co-section {
+    padding: 40px 0;
+    background-color: #f9f9f9;
+}
+
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.form-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    margin-right: 5px;
+}
+
+.form-check-label {
+    margin: 0;
+}
+
+.btn {
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #a5c422;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mb-3 {
+    margin-bottom: 1rem;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.autocomplete {
+    position: relative;
+}
+
+.autocomplete .autocomplete-suggestions {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+}
+
+.autocomplete.active .autocomplete-suggestions {
+    display: block;
+}
+</style>

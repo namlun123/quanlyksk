@@ -1,0 +1,146 @@
+/* Reset các thuộc tính mặc định của HTML */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Container chính */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.row {
+    display: flex;
+    justify-content: center; /* Căn giữa hàng */
+    align-items: center; /* Căn giữa các phần tử dọc */
+}
+
+
+
+/* Hero section */
+.untree_co-hero {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    padding: 60px 0;
+    color: #fff;
+}
+
+.untree_co-hero .heading {
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+/* Section chính */
+.untree_co-section {
+    padding: 40px 0;
+    background-color: #f9f9f9;
+}
+
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.form-select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+}
+
+.form-check-input {
+    margin-right: 5px;
+}
+
+.form-check-label {
+    margin: 0;
+}
+
+.btn {
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #a5c422;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mb-3 {
+    margin-bottom: 1rem;
+}
+
+.mt-3 {
+    margin-top: 1rem;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.autocomplete {
+    position: relative;
+}
+
+.autocomplete .autocomplete-suggestions {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+}
+
+.autocomplete.active .autocomplete-suggestions {
+    display: block;
+}

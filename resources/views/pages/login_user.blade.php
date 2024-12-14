@@ -1,91 +1,90 @@
 @extends('layout')
 @section('content')
-<div class="untree_co-hero inner-page overlay" style="background-image: url('{{ asset('public/frontend/images/home_toeic.jpg') }}');">
     <div class="container">
-        <div class="row align-items-center justify-content-center">
-            <div class="col-12">
-                <div class="row justify-content-center">
-                    <div class="col-lg-6 text-center">
-                        <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">Đăng nhập</h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="login-wrapper">
+                    <div class="text-center mb-4">
+                        <h1 class="heading text-white" data-aos="fade-up" data-aos-delay="100" style = "font-size: 40px";>Đăng nhập tài khoản</h1>
                     </div>
-                </div>
-            </div>
-        </div> <!-- /.row -->
-    </div> <!-- /.container -->
-</div> <!-- /.untree_co-hero -->
-
-<div class="untree_co-section">
-    <div class="container">
-        <div class="row mb-5 justify-content-center">
-            <div class="col-lg-5 mx-auto order-1" data-aos="fade-up" data-aos-delay="200">
-                <form action="{{ route('login-kh') }}" class="form-box" method="POST">
-                    @csrf
-                    <div class="row">
-                        <div class="col-12 mb-3">
-                            <input type="text" class="form-control" placeholder="Email" name="email">
+                    <form action="{{ route('login-kh') }}" method="POST">
+                        @csrf
+                        <div class="form-group mb-3">
+                            <input type="email" class="form-control" placeholder="Email" name="email" required>
                         </div>
-                        <div class="col-12 mb-3">
-                            <input type="password" class="form-control" placeholder="Mật khẩu" name="password">
+                        <div class="form-group mb-3">
+                            <input type="password" class="form-control" placeholder="Mật khẩu" name="password" required>
                         </div>
-                        <div class="col-12 mb-3">
+            
+                        <div class="form-group mb-3">
                             <label class="control control--checkbox">
                                 <span class="caption">Nhớ mật khẩu</span>
-                                <input type="checkbox" checked="checked">
+                                <input type="checkbox" checked>
                                 <div class="control__indicator"></div>
                             </label>
                         </div>
-                        <div class="col-12 mb-3 d-flex align-items-center">
+                        <div class="form-group mb-3 d-flex align-items-center">
                             <div class="captcha-img">
-                                <img src="{{ captcha_src() }}" alt="Captcha" style="margin-right: 10px;">
-                                <!-- <button type="button" class ="btn btn-danger reload" id="reload">&#x21bb;</button> -->
+                                <img src="{{ captcha_src() }}" alt="Captcha">
                             </div>
-                            <div class="captcha-input">
-                                <input type="text" name="captcha" class="form-control" placeholder="Enter Captcha" required>
-                            </div>
+                            <input type="text" name="captcha" class="form-control" placeholder="Nhập Captcha" required>
                         </div>
-                        <div class="col-12 text-center">
-                            <input type="submit" value="Đăng nhập" class="btn btn-primary btn-login">
+                        <div class="form-group text-center">
+                            <input type="submit" value="Đăng nhập" class="btn btn-primary btn-block">
                         </div>
-                    </div>
-                </form>
-                @if ($errors->any())
-                    <ul class="error">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                @endif
+                    </form>
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul class="error">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
-</div> <!-- /.untree_co-section -->
-@endsection
 
 <style>
-  .captcha-img {
-    margin-right: 10px;
-  }
-  .captcha-input {
-    flex: 1;
-  }
-  .btn-login {
-    width: 50%; /* Chỉnh độ rộng của nút đăng nhập */
-    margin: 0 auto; /* Căn giữa nút */
-    display: block; /* Đảm bảo nút là một phần tử khối để căn giữa */
-  }
-  .error {
-    color: red;
-    text-align: left;
-  }
+    .login-wrapper {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        justify-content: center;
+
+    }
+    .form-control {
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        font-size: 14px;
+    }
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+    }
+    .btn-primary {
+        background-color: #a5c422;
+        border: none;
+        color: #fff;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 4px;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+    .error {
+        color: red;
+        text-align: left;
+    }
+    .row {
+    display: flex;
+    justify-content: center; /* Căn giữa hàng */
+    align-items: center; /* Căn giữa các phần tử dọc */
+}
 </style>
-<!-- <script>
-    $('#reload').click(function() {
-        $.ajax({
-            type:'GET',
-            url:'reload-captcha',
-            success:function(data){
-                $(".captcha span").html(data.captcha)
-            }
-        });
-    });
-    </script> -->
+@endsection
