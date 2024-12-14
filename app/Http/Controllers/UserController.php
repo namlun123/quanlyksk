@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\BN;
+use App\Http\Middleware\TKBN;
 use App\Http\Middleware\User;
 use Illuminate\Http\Request;
 use App\Models\Benhnhan as ModelsBN;
@@ -61,7 +61,6 @@ class UserController extends Controller
         $bn->HoTen = $data['name'];
         $bn->NgaySinh = $data['ngaysinh'];
         $bn->GioiTinh  = $data['gioitinh'];
-       
         $bn->DiaChi = $data['diachi'];
         $bn->province  = $data['province'];
         $bn->district = $data['district'];
@@ -115,5 +114,70 @@ class UserController extends Controller
         Auth::guard('patients')->logout();
         return Redirect('/log-in');
     }
+    public function user_profile() {
+        $user = Auth::guard('patients')->user();
+        return view('pages.user_profile.user_profile', ['user'=>$user]);
+    }
+    public function update_profile(Request $request, $id) {
+        $user = Auth::guard('patients')->user();
+        $user_id = DB::table('patients')->where('id', $id)->value('user_id');
+        $bn = ModelsBN::find($user_id);
+        if ($bn) {
+            // Cập nhật thông tin của `thisinhs`
+            $bn->HoTen = $request->input('hoten');
+            $bn->NgaySinh = $request->input('ngaysinh');
+            $bn->GioiTinh  = $request->input('gioitinh');
+            $bn->DiaChi = $request->input('diachi');
+            $bn->province  = $request->input('province');
+            $bn->district = $request->input('district');
+            $bn->ward = $request->input('ward');
+            $bn->sdt  = $request->input('sdt');
+            $bn->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+            $bn->save();  // Lưu các thay đổi vào cơ sở dữ liệu
 
-}
+            Session()->put('message', 'Cập nhật thông tin cá nhân thành công');
+            return Redirect::to('/user-profile');
+        }
+    }
+    public function showChangePasswordForm()
+    {
+        $user = Auth::guard('patients')->user();
+        return view('pages.user_profile.change-password', ['user'=>$user]); // View where user can input current and new passwords
+    }
+    public function changePassword(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|confirmed',
+            'new_password_confirmation' => 'required|same:new_password', // Validate confirmation password
+        ]);
+    
+        // Check if the current password is correct
+        if (!Hash::check($request->current_password, Auth::guard('patients')->user()->password)) {
+            return redirect()->back()->withInput()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng']);
+        }
+    
+        // Update the password
+        Auth::guard('patients')->user()->password = Hash::make($request->new_password);
+        Auth::guard('patients')->user()->save();
+    
+        // Redirect with success message
+        session()->flash('success', 'Mật khẩu đã được đổi thành công!');
+        return redirect()->route('user-profile'); // Redirect to the profile page
+    }
+    // public function delete_account()
+    // {
+    //     $user = Auth::guard('patients')->user();
+    //         // Xóa thông tin tài khoản
+    //         DB::table('patients')->where('id', $user->id)->delete();
+    //         DB::table('info_patients')->where('user_id', $user->id)->delete();
+            
+    //         // Đăng xuất người dùng sau khi xóa tài khoản
+    //         Auth::logout();
+            
+    //         Session()->put('message', 'Xóa tài khoản thành công');
+    //         return Redirect::to('/home'); // Hoặc một trang khác như trang chủ
+    //     }
+    // }
+    

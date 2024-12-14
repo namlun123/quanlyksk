@@ -48,12 +48,12 @@
                             </div>
                            
                             <div class="form-group mb-3">
-                            <label class="form-label mb-1 text-2 required">Số nhà, đường/phố</label>
-                            <input type="text" value="" class="form-control text-3 h-auto py-2 " placeholder="Nhập số nhà, đường/phố/phường/quận/thành phố" name="diachi">
+                                <label class="form-label mb-1 text-2 required">Số nhà, đường/phố</label>
+                                <input type="text" value="" class="form-control text-3 h-auto py-2 " placeholder="Nhập số nhà, đường/phố/phường/quận/thành phố" name="diachi">
                             </div>
                             <div class="form-group mb-3">
-                            <label class="form-label mb-1 text-2 required" for="city">Tỉnh/Thành phố</label>
-                            <select class="form-select form-control h-auto py-2"  id="city" name="province">
+                                <label class="form-label mb-1 text-2 required" for="city">Tỉnh/Thành phố</label>
+                                <select class="form-select form-control h-auto py-2"  id="city" name="province">
                                 <option value="province" selected>Chọn Tỉnh/Thành</option>
                             </select>
                             </div>

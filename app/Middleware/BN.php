@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class Kh
+class BN
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class Kh
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::guard('patients') -> check() ) {
+        if (Auth::guard('info_patients') -> check() ) {
             return $next($request);
         } else {
             return Redirect('/log-in');
