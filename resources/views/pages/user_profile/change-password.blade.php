@@ -26,7 +26,7 @@
                 </div>
                 <div class="form-group">
                     <label for="new_password" class="form-label mb-1 text-2"><span toggle="#new_password" class="fa fa-fw fa-eye field-icon toggle-password"></span>Mật khẩu mới</label>
-                    <input type="password" id="new_password" name="new_password" class="form-control text-3 h-auto py-2" required minlength="6">
+                    <input type="password" id="new_password" name="new_password" class="form-control text-3 h-auto py-2" required minlength="1">
                     
                 </div>
                 <div class="form-group">

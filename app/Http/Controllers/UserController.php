@@ -166,18 +166,6 @@ class UserController extends Controller
         session()->flash('success', 'Mật khẩu đã được đổi thành công!');
         return redirect()->route('user-profile'); // Redirect to the profile page
     }
-    // public function delete_account()
-    // {
-    //     $user = Auth::guard('patients')->user();
-    //         // Xóa thông tin tài khoản
-    //         DB::table('patients')->where('id', $user->id)->delete();
-    //         DB::table('info_patients')->where('user_id', $user->id)->delete();
-            
-    //         // Đăng xuất người dùng sau khi xóa tài khoản
-    //         Auth::logout();
-            
-    //         Session()->put('message', 'Xóa tài khoản thành công');
-    //         return Redirect::to('/home'); // Hoặc một trang khác như trang chủ
-    //     }
-    // }
     
+    
+}
