@@ -4,11 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ManageAdminController;
+use App\Http\Controllers\CaptchaController;
 use App\Http\Middleware\BN;
 use App\Http\Middleware\TKBN;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\Admin;
-use App\Http\Controllers\CaptchaController;
 
 Route::get('/', [CaptchaController::class, 'index']);
 Route::get('/reload-captcha', [CaptchaController::class, 'reloadCaptcha']);
@@ -36,3 +37,7 @@ Route::get('/admin/login', [AdminController::class, 'admin_login'])->name('admin
 Route::post('/admin/login', [AdminController::class, 'loginPost'])->name('admin.loginPost');
 Route::get('/admin/logout', [AdminController::class, 'admin_logout'])->name('admin.logout');
 
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+Route::get('/admin/statistics', [AdminController::class, 'showstatistics'])->name('admin.statistics');
+
+Route::get('/admin/info-admin', [ManageAdminController::class, 'info_admin'])->name('admin.info.admin');
