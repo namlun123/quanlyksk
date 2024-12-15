@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Middleware\BN;
 use App\Http\Middleware\TKBN;
 use Illuminate\Foundation\Application;
@@ -29,4 +30,9 @@ Route::get('/change-password', [UserController::class, 'showChangePasswordForm']
 Route::post('/change-password', [UserController::class, 'changePassword'])->name('user.change.password');
 //xóa tài khoản
 // Route::get('user/delete-account', [UserController::class, 'delete_account'])->name('user.delete.account');
+
+// View Admin
+Route::get('/admin/login', [AdminController::class, 'admin_login'])->name('admin_login');
+Route::post('/admin/login', [AdminController::class, 'loginPost'])->name('admin.loginPost');
+Route::get('/admin/logout', [AdminController::class, 'admin_logout'])->name('admin.logout');
 

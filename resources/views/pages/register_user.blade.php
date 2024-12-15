@@ -3,11 +3,11 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <div class="container mt-5">
-        <div class="row justify-content-center">
+        <div class="row1 justify-content-center">
             <div class="col-lg-8 ">
                 <div class="card">
                     <div class=" text-center">
-                        <h2>Đăng ký tài khoản</h2>
+                        <h2>ĐĂNG KÝ TÀI KHOẢN</h2>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('register-kh') }}" method="POST">
@@ -168,7 +168,7 @@
     margin: 0 auto;
 }
 
-.row {
+.row1 {
     display: flex;
     justify-content: center; /* Căn giữa hàng */
     align-items: center; /* Căn giữa các phần tử dọc */
