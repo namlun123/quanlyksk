@@ -1408,7 +1408,7 @@ li.list-group-item1 {
     letter-spacing: 2px;
 }
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
-	border-top: none !important;
+	border-top: none ;
 }
 .tab-content > .active {
 	display: block;
@@ -1453,8 +1453,8 @@ section#tables  p {
 }
 .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
 	font-size: 0.9em;
-	color: #999;
-	border-top: none !important;
+	color: #000000;
+	border-top: none ;
 }
 .tab-content > .active {
 	display: block;

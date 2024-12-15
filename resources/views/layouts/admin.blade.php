@@ -159,7 +159,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     </a>
                     <ul class="sub">
                         <li><a href="google_map.html">Thêm mới tài khoản bệnh nhân</a></li>
-                        <li><a href="vector_map.html">Danh sách tài khoản bệnh nhân</a></li>
+                        <li><a href="{{route('admin.tkbn')}}">Danh sách tài khoản bệnh nhân</a></li>
                         <li><a href="vector_map.html">Danh sách thông tin bệnh nhân</a></li>
                     </ul>
                 </li>

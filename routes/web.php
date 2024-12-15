@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManageAdminController;
 use App\Http\Controllers\CaptchaController;
+use App\Http\Controllers\TKBNController;
 use App\Http\Middleware\BN;
 use App\Http\Middleware\TKBN;
 use Illuminate\Foundation\Application;
@@ -29,15 +30,28 @@ Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'
 //đổi mật khẩu
 Route::get('/change-password', [UserController::class, 'showChangePasswordForm'])->name('show.change.password');
 Route::post('/change-password', [UserController::class, 'changePassword'])->name('user.change.password');
-//xóa tài khoản
-// Route::get('user/delete-account', [UserController::class, 'delete_account'])->name('user.delete.account');
+
 
 // View Admin
 Route::get('/admin/login', [AdminController::class, 'admin_login'])->name('admin_login');
 Route::post('/admin/login', [AdminController::class, 'loginPost'])->name('admin.loginPost');
 Route::get('/admin/logout', [AdminController::class, 'admin_logout'])->name('admin.logout');
-
+//trang thống kê
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-Route::get('/admin/statistics', [AdminController::class, 'showstatistics'])->name('admin.statistics');
 
+//Nút Profile Admin
 Route::get('/admin/info-admin', [ManageAdminController::class, 'info_admin'])->name('admin.info.admin');
+
+//quản lý bệnh nhân
+Route::get('/admin/all-bn', [TKBNController::class, 'all_bn'])->name('admin.bn');
+    Route::get('/admin/add-bn', [TKBNController::class, 'add_bn'])->name('admin.add.bn');
+    Route::post('/admin/save-bn', [TKBNController::class, 'save_bn'])->name('admin.save.bn');
+    Route::get('admin/bn/{id}/edit', [TKBNController::class, 'edit_bn'])->name('admin.edit.bn');
+    Route::post('admin/bn/{id}/update', [TKBNController::class, 'update_bn'])->name('admin.update.bn');
+    Route::get('admin/bn/{id}/delete', [TKBNController::class, 'delete_bn'])->name('admin.delete.bn');
+    Route::get('/admin/all-tkbn', [TKBNController::class, 'all_tkbn'])->name('admin.tkbn');
+    Route::get('/admin/add-tkbn', [TKBNController::class, 'add_tkbn'])->name('admin.add.tkbn');
+    Route::post('/admin/save-tkbn', [TKBNController::class, 'save_tkbn'])->name('admin.save.tkbn');
+    Route::get('admin/tkbn/{id}/edit', [TKBNController::class, 'edit_tkbn'])->name('admin.edit.tkbn');
+    Route::post('admin/tkbn/{id}/update', [TKBNController::class, 'update_tkbn'])->name('admin.update.tkbn');
+    Route::get('admin/tkbn/{id}/delete', [TKBNController::class, 'delete_tkbn'])->name('admin.delete.tkbn');
