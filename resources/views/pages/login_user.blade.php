@@ -1,11 +1,11 @@
 @extends('layout')
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row1 justify-content-center">
             <div class="col-lg-6">
                 <div class="login-wrapper">
                     <div class="text-center mb-4">
-                        <h1 class="heading text-white" data-aos="fade-up" data-aos-delay="100" style = "font-size: 40px";>Đăng nhập tài khoản</h1>
+                        <h1 class="heading text-white" data-aos="fade-up" data-aos-delay="100" style = "font-size: 40px";>ĐĂNG NHẬP TÀI KHOẢN</h1>
                     </div>
                     <form action="{{ route('login-kh') }}" method="POST">
                         @csrf
@@ -81,7 +81,7 @@
         color: red;
         text-align: left;
     }
-    .row {
+    .row1 {
     display: flex;
     justify-content: center; /* Căn giữa hàng */
     align-items: center; /* Căn giữa các phần tử dọc */

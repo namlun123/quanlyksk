@@ -68,13 +68,13 @@ class UserController extends Controller
         $bn->sdt  = $data['sdt'];
         $bn->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $bn->created_by = Auth::id() ?? 0;  // Hoặc NULL nếu không cần giá trị cụ thể
-     // Kiểm tra xem có bản ghi nào trong bảng admins
-     $admin = DB::table('admins')->first();
-     if ($admin) {
-         $bn->created_by = $admin->id;  // Liên kết với admin đã có
-     } else {
-         $bn->created_by = NULL;  // Giá trị mặc định nếu không có admin nào
-     }
+        // Kiểm tra xem có bản ghi nào trong bảng admins
+        // $admin = DB::table('admins')->first();
+        // if ($admin) {
+        //     $bn->created_by = $admin->id;  // Liên kết với admin đã có
+        // } else {
+        //     $bn->created_by = NULL;  // Giá trị mặc định nếu không có admin nào
+        // }
         $bn->save();
 
         $user_id['user_id'] = $bn->id;

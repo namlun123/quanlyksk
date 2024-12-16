@@ -18,4 +18,8 @@ class User
     {
         return $next($request);
     }
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = Hash::make($password);
+    }
 }
