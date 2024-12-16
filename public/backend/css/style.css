@@ -2528,7 +2528,18 @@ canvas.canvasjs-chart-canvas {
     padding: 2em 1em 0;
 }
 .pagination {
-    margin: 0 !important;
+    margin: 20px auto; /* Đặt margin cho các liên kết phân trang */
+    display: flex; /* Sử dụng flex để căn chỉnh theo chiều ngang */
+    justify-content: center; /* Trung tâm hóa các liên kết */
+    left: 50%; /* Điều chỉnh sang giữa theo chiều ngang */
+}
+.pagination>.active>span 
+{
+    background-color: rgb(179, 83, 83);
+}
+.pagination > .active > span:hover {
+    background-color: rgb(202, 92, 92); /* Màu khi hover */
+    color: #fff; /* Màu chữ khi hover */
 }
 div#graph10,div#graph11 {
     width: 100%;

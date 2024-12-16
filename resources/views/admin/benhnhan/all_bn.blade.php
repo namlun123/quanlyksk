@@ -49,7 +49,7 @@
             $query->where('hoten', 'like', '%' . $keyword . '%');
         }
 
-      $all_bn = $query->paginate(10);
+      $all_bn = $query->paginate(5);
       @endphp
      
       <div class="table-responsive">

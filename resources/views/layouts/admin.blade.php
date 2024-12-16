@@ -148,7 +148,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <span>Quản lý kết quả khám</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="chartjs.html">Thêm mới kết quả</a></li>
+                        <li><a href="{{ route('admin.add.kq') }}">Thêm mới kết quả</a></li>
                         <li><a href="flot_chart.html">Danh sách kết quả</a></li>
                     </ul>
                 </li>
@@ -174,12 +174,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <li><a href="vector_map.html">Danh sách thông tin admin</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="login.html">
-                        <i class="fa fa-user"></i>
-                        <span>Login Page</span>
-                    </a>
-                </li>
+                
             </ul>            </div>
         <!-- sidebar menu end-->
     </div>

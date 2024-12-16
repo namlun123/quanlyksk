@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManageAdminController;
 use App\Http\Controllers\CaptchaController;
 use App\Http\Controllers\TKBNController;
+use App\Http\Controllers\KQController;
 use App\Http\Middleware\BN;
 use App\Http\Middleware\TKBN;
 use Illuminate\Foundation\Application;
@@ -36,9 +37,10 @@ Route::post('/change-password', [UserController::class, 'changePassword'])->name
 Route::get('/admin/login', [AdminController::class, 'admin_login'])->name('admin_login');
 Route::post('/admin/login', [AdminController::class, 'loginPost'])->name('admin.loginPost');
 Route::get('/admin/logout', [AdminController::class, 'admin_logout'])->name('admin.logout');
-//trang thống kê
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
+//trang thống kê
+Route::middleware([Admin::class])->group(function () {
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 //Nút Profile Admin
 Route::get('/admin/info-admin', [ManageAdminController::class, 'info_admin'])->name('admin.info.admin');
 
@@ -55,3 +57,12 @@ Route::get('/admin/all-bn', [TKBNController::class, 'all_bn'])->name('admin.bn')
     Route::get('admin/tkbn/{id}/edit', [TKBNController::class, 'edit_tkbn'])->name('admin.edit.tkbn');
     Route::post('admin/tkbn/{id}/update', [TKBNController::class, 'update_tkbn'])->name('admin.update.tkbn');
     Route::get('admin/tkbn/{id}/delete', [TKBNController::class, 'delete_tkbn'])->name('admin.delete.tkbn');
+});
+
+
+//quản lý kết quả
+Route::get('/admin/add-kq', [KQController::class, 'add_kq'])->name('admin.add.kq');
+Route::get('/admin/all-kq', [KQController::class, 'all_kq'])->name('admin.kq');
+Route::post('/admin/save-kq', [KQController::class, 'save_kq'])->name('admin.save.kq');
+Route::get('/get-thong-tin-bn/{id}', [KQController::class, 'get_thong_tin_bn'])->name('get.tt.bn');
+
