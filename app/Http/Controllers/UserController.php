@@ -166,6 +166,10 @@ class UserController extends Controller
         session()->flash('success', 'Mật khẩu đã được đổi thành công!');
         return redirect()->route('user-profile'); // Redirect to the profile page
     }
-    
-    
+    public function huongdankham()
+    {   
+        $user = Auth::guard('patients')->user();
+        return view('pages.information.huongdankham', ['user'=> $user]);
+    }
+
 }

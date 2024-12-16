@@ -36,3 +36,7 @@ Route::get('/admin/login', [AdminController::class, 'admin_login'])->name('admin
 Route::post('/admin/login', [AdminController::class, 'loginPost'])->name('admin.loginPost');
 Route::get('/admin/logout', [AdminController::class, 'admin_logout'])->name('admin.logout');
 
+//View thông tin hướng dẫn khám
+Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huongdankham');      
+
+
