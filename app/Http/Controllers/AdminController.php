@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-
+use Hash;
 class AdminController extends Controller
 {
     public function admin_login() {
@@ -51,4 +51,34 @@ class AdminController extends Controller
         Auth::guard('admins')->logout();
         return Redirect('admin/login');
     }
+
+    public function showChangePasswordForm()
+    {
+        return view('admin.tkadmin.change-password');
+    }
+
+    // Xử lý thay đổi mật khẩu
+    public function changePassword(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|confirmed',
+            'new_password_confirmation' => 'required|same:new_password', // Validate confirmation password
+        ]);
+    
+        // Check if the current password is correct
+        if (!Hash::check($request->current_password, Auth::guard('admins')->user()->password)) {
+            return redirect()->back()->withInput()->withErrors(['current_password' => 'Mật khẩu hiện tại không đúng']);
+        }
+    
+        // Update the password
+        Auth::guard('admins')->user()->password = Hash::make($request->new_password);
+        Auth::guard('admins')->user()->save();
+    
+        // Redirect with success message
+        session()->flash('success', 'Mật khẩu đã được thay đổi thành công!');
+        return redirect()->route('admin.dashboard'); // Redirect to the admin dashboard
+    }
+    
 }

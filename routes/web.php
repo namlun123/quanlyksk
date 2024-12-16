@@ -45,6 +45,25 @@ Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huon
 
 //Nút Profile Admin
 Route::get('/admin/info-admin', [ManageAdminController::class, 'info_admin'])->name('admin.info.admin');
+//Quản lý tài khoản admin
+Route::get('/admin/all-admins', [ManageAdminController::class, 'all_admins'])->name('admin.admins');
+    Route::get('/admin/add-tkadmin', [ManageAdminController::class, 'add_tkadmin'])->name('admin.add.tkadmin');
+    Route::get('/admin/all-tkadmin', [ManageAdminController::class, 'all_tkadmin'])->name('admin.tkadmin');
+    Route::get('admin/tkadmin/{id}/edit', [ManageAdminController::class, 'edit_tkadmin'])->name('admin.edit.tkadmin');
+    Route::get('admin/admins/{id}/edit', [ManageAdminController::class, 'edit_admins'])->name('admin.edit.admins');
+    Route::get('admin/tkadmin/{id}/delete', [ManageAdminController::class, 'delete_tkadmin'])->name('admin.delete.tkadmin');
+    Route::get('admin/admins/{id}/delete', [ManageAdminController::class, 'delete_admins'])->name('admin.delete.admins');
+    Route::post('/admin/save-tkadmin', [ManageAdminController::class, 'save_tkadmin'])->name('admin.save.tkadmin');
+    Route::post('admin/tkadmin/{id}/update', [ManageAdminController::class, 'update_tkadmin'])->name('admin.update.tkadmin');
+    Route::post('admin/admins/{id}/update', [ManageAdminController::class, 'update_admins'])->name('admin.update.admins');
+    Route::post('admin/tkadmin/{id}/password', [ManageAdminController::class, 'password_tkadmin'])->name('admin.password.tkadmin');
+    Route::post('/admin/tkadmin/login', [ManageAdminController::class, 'loginPost_tkadmin'])->name('admin.loginPost.tkadmin');
+    Route::post('/admin/tkadmin/{id}/changepassword', [ManageAdminController::class, 'changePassword'])->name('admin.changepassword.tkadmin');
+    Route::get('admin/tkadmin/{id}/password', [ManageAdminController::class, 'password_tkadmin'])->name('admin.password.tkadmin');
+    //đổi mật khẩu tk admin cá nhân
+    Route::get('/admin/change-password', [AdminController::class, 'showChangePasswordForm'])->name('admin.change-password');
+    Route::post('/admin/change-password', [AdminController::class, 'changePassword'])->name('admin.change-password.post');
+
 
 //quản lý bệnh nhân
 Route::get('/admin/all-bn', [TKBNController::class, 'all_bn'])->name('admin.bn');
