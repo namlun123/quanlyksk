@@ -142,13 +142,13 @@ class ManageAdminController extends Controller
 
     public function delete_admins($admin_id)
     {
-        $admin = DB::table('info_admins')->where('id', $admin_id)->first();
-        if (!$admin) {
+        $ad = DB::table('info_admins')->where('id', $admin_id)->first();
+        if (!$ad) {
             return back()->withErrors(['message' => 'Không tìm thấy admin']);
         }
-        $adminId = $admin->id;
+        $adminId = $ad->id;
+        DB::table('admins')->where('admin_id', $adminId)->delete();
         DB::table('info_admins')->where('id', $admin_id)->delete();
-        DB::table('admins')->where('id', $adminId)->delete();
         Session()->put('message', 'Xóa admin thành công');
         return Redirect::to('admin/all-admins');
     }
