@@ -88,86 +88,13 @@
                             </div>
 
                             <div class="btn-container">
-                            <button type="submit" class="btn btn-info">Thêm mới thí sinh</button>
+                            <button type="submit" class="btn btn-info">Thêm mới bệnh nhân</button>
                             </div>                      
                         </form>
                     </div>
 
                 
-                    <!-- <div class="col-lg-6">
-                        <h4 class="text-uppercase text-title-form">THÔNG TIN TÀI KHOẢN</h4>
-                        <div class="form-group col-lg-12">
-                            <div class="form-group col-lg-6">
-                                <label class="form-label mb-1 text-2 required">Email</label>
-                                <input type="text" value="" class="form-control text-3 h-auto py-2" name="email" data-msg-required="Vui lòng nhập Email" placeholder="Nhập Email" maxlength="255" data-rule-pattern="^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$" data-msg-pattern="Vui lòng nhập email đúng định dạng" required="">
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <label class="form-label mb-1 text-2 required">Mật khẩu</label>
-                                <input type="password" class="form-control text-3 h-auto py-2" placeholder="Nhập mật khẩu" name="password" min_length="1" max_length="10">
-                            </div>
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <div class="form-group col-lg-6">
-                                <label class="form-label mb-1 text-2 required">Họ và tên</label>
-                                <input type="text" name="hoten" value="" class="form-control text-3 h-auto py-2" placeholder="Nhập họ và tên">
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <label class="form-label mb-1 text-2 required">Ngày sinh</label>
-                                <input type="date" class="form-control text-3 h-auto py-2 type-date" name="ngaysinh" id="Day1" placeholder="DD/MM/YYYY" required="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="form-group col-lg-12">
-                                <label class="form-label mb-1 text-2 required">Giới tính</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gioitinh" id="gioitinhNam" value="1" checked>
-                                    <label class="form-check-label" for="gioitinhNam">Nam</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gioitinh" id="gioitinhNu" value="0">
-                                    <label class="form-check-label" for="gioitinhNu">Nữ</label>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <!- Các trường dữ liệu khác --
-                        <div class="form-group">
-                            <div class="form-group col-lg-6">
-                                <label class="form-label mb-1 text-2 required">Địa chỉ ở</label>
-                                <input type="text" name="diachi" value="" class="form-control text-3 h-auto py-2" placeholder="Nhập địa chỉ ở">
-                            </div>
-                            <div class="form-group row">
-                                    <div class="form-group col-lg-4">
-                                        <label class="form-label mb-1 text-2 required" for="city">Tỉnh/Thành phố</label>
-                                        <select class="form-select form-control h-auto py-2" id="city" name="province">
-                                            <option value="">Chọn Tỉnh/Thành phố</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-lg-4">
-                                        <label class="form-label mb-1 text-2 required" for="district">Quận/Huyện</label>
-                                        <select class="form-select form-control h-auto py-2" id="district" name="district">
-                                            <option value="">Chọn Quận/Huyện</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-lg-4">
-                                        <label class="form-label mb-1 text-2 required" for="ward">Phường/Xã</label>
-                                        <select class="form-select form-control h-auto py-2" id="ward" name="ward">
-                                            <option value="">Chọn Phường/Xã</option>
-                                        </select>
-                                    </div>
-                                </div>
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <label class="form-label mb-1 text-2 required">Số điện thoại</label>
-                                <input type="text" name="sdt" value="" class="form-control text-3 h-auto py-2" placeholder="Nhập số điện thoại" min_length="1" max_length="10">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <button type="submit" name="add_tkthisinh" class="btn btn-info">Thêm mới thí sinh</button>
-                            </div>
-                        </div>
-                    </div> -->
+    
                 </form>
             </div>
         </div>

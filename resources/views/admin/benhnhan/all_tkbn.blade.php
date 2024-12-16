@@ -52,7 +52,7 @@
           });
       }
 
-      $all_tkbn = $query->paginate(10);
+      $all_tkbn = $query->paginate(5);
       @endphp
      
       <div class="table-responsive">
