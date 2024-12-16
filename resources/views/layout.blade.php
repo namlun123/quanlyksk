@@ -124,7 +124,7 @@ http://www.tooplate.com/view/2098-health
                          <li><a href="#team" class="smoothScroll">Chuyên khoa khám</a></li>
                          <li><a href="#news" class="smoothScroll">Chuyên gia - Bác sĩ</a></li>
                          <!-- <li><a href="#news" class="smoothScroll">Tra cứu kết quả khám</a></li> -->
-                         <li><a href="#news" class="smoothScroll">Hướng dẫn khám</a></li>
+                         <li><a href="{{ route('huongdankham') }}" class="smoothScroll">Hướng dẫn khám</a></li>
                          <li><a href="#google-map" class="smoothScroll">Liên hệ</a></li>
                          <li class="appointment-btn"><a href="{{ route('appointment.create') }}">Đăng ký khám</a></li>
                     </ul>
