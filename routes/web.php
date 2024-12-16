@@ -43,6 +43,7 @@ Route::get('quanlyksk/payment/{enroll_id}', [SepayController::class, 'showPaymen
 Route::post('/payment', [SepayController::class, 'createPayment'])->name('payment.create'); // Tạo giao dịch
 Route::get('/payment-success', [SepayController::class, 'paymentSuccess'])->name('payment.success'); // Thành công
 Route::post('/payment-webhook', [SepayController::class, 'handleWebhook'])->name('payment.webhook'); // Webhook
+Route::get('/appointment/{id}/edit', [AppointmentController::class, 'edit_appointment'])->name('appointment.edit');
 
 
 
