@@ -147,6 +147,7 @@
 
 
      <!-- NEWS -->
+     <!-- NEWS -->
      <section id="news" data-stellar-background-ratio="2.5">
           <div class="container">
                <div class="row">
@@ -154,27 +155,31 @@
                     <div class="col-md-12 col-sm-12">
                          <!-- SECTION TITLE -->
                          <div class="section-title wow fadeInUp" data-wow-delay="0.1s">
-                              <h2>Hướng dẫn khám</h2>
+                              <h2>Latest News</h2>
                          </div>
                     </div>
 
                     <div class="col-md-4 col-sm-6">
-                    <!-- NEWS THUMB -->
-                    <div class="news-thumb wow fadeInUp" data-wow-delay="0.4s">
-                         <a href="news-detail.html">
-                              <img src="{{ asset('public/frontend/images/news-image1.jpg') }}" class="img-responsive" alt="">
-                         </a>
-                         <div class="news-info">
-                              <span>Cập nhật ngày 15 tháng 12, 2024</span>
-                              <h3><a href="news-detail.html">Danh sách cơ sở y tế</a></h3>
-                              <p>Danh sách các cơ sở y tế của chúng tôi.</p>
-                              <div class="action-buttons">
-                                   <!-- Nút Xem thêm -->
-                                   <a href="information/csyt.blade.php" class="btn btn-link pull-right">Xem thêm</a>
+                         <!-- NEWS THUMB -->
+                         <div class="news-thumb wow fadeInUp" data-wow-delay="0.4s">
+                              <a href="news-detail.html">
+                                   <img src="{{ asset('public/frontend/images/news-image1.jpg') }}" class="img-responsive" alt="">
+                              </a>
+                              <div class="news-info">
+                                   <span>March 08, 2018</span>
+                                   <h3><a href="news-detail.html">About Amazing Technology</a></h3>
+                                   <p>Maecenas risus neque, placerat volutpat tempor ut, vehicula et felis.</p>
+                                   <div class="author">
+                                        <img src="{{ asset('public/frontend/images/author-image.jpg') }}" class="img-responsive" alt="">
+                                        <div class="author-info">
+                                             <h5>Jeremie Carlson</h5>
+                                             <p>CEO / Founder</p>
+                                        </div>
+                                   </div>
                               </div>
                          </div>
                     </div>
-                    </div>
+
                     <div class="col-md-4 col-sm-6">
                          <!-- NEWS THUMB -->
                          <div class="news-thumb wow fadeInUp" data-wow-delay="0.6s">
@@ -220,7 +225,6 @@
                </div>
           </div>
      </section>
-
 
      <!-- MAKE AN APPOINTMENT -->
      <section id="appointment" data-stellar-background-ratio="3">
