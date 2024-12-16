@@ -169,9 +169,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <span>Quản lý admin</span>
                     </a>
                     <ul class="sub">
-                    <li><a href="google_map.html">Thêm mới tài khoản admin</a></li>
-                        <li><a href="vector_map.html">Danh sách tài khoản admin</a></li>
-                        <li><a href="vector_map.html">Danh sách thông tin admin</a></li>
+                    <li><a href="{{ route('admin.add.tkadmin') }}">Thêm mới tài khoản admin</a></li>
+                        <li><a href="{{ route('admin.tkadmin') }}">Danh sách tài khoản admin</a></li>
+                        <li><a href="{{ route('admin.admins') }}">Danh sách thông tin admin</a></li>
                     </ul>
                 </li>
                 

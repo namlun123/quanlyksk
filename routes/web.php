@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\SepayController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManageAdminController;
 use App\Http\Controllers\CaptchaController;
@@ -31,6 +33,29 @@ Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'
 //đổi mật khẩu
 Route::get('/change-password', [UserController::class, 'showChangePasswordForm'])->name('show.change.password');
 Route::post('/change-password', [UserController::class, 'changePassword'])->name('user.change.password');
+//xóa tài khoản
+// Route::get('user/delete-account', [UserController::class, 'delete_account'])->name('user.delete.account');
+Route::get('/dangkykham', [AppointmentController::class, 'create_appointment'])->name('appointment.create');
+Route::post('/appointment/store/{id}', [AppointmentController::class, 'store_appointment'])->name('appointment.store');
+Route::get('/get-doctors/{locationId}/{specializationId}', [AppointmentController::class, 'getDoctors']);
+Route::get('quanlyksk/get-timeslots/{locationId}/{doctorId}/{date}', [AppointmentController::class, 'getTimeSlots']);
+Route::get('quanlyksk/get-timeslots/{locationId}/{doctorId}/{selectedDate}', [AppointmentController::class, 'getTimeSlots']);
+Route::get('quanlyksk/payment/{enroll_id}', [SepayController::class, 'showPaymentPage'])->name('payment.page'); // Trang thanh toán
+Route::post('/payment', [SepayController::class, 'createPayment'])->name('payment.create'); // Tạo giao dịch
+Route::get('/payment-success', [SepayController::class, 'paymentSuccess'])->name('payment.success'); // Thành công
+Route::post('/payment-webhook', [SepayController::class, 'handleWebhook'])->name('payment.webhook'); // Webhook
+
+
+
+
+Route::middleware([BN::class])->group(function () {
+    Route::get('/lichthi', [UserController::class, 'lichthi'])->name('lich-thi');
+    Route::get('/diadiemthi', [UserController::class, 'diadiemthi'])->name('dia-diem-thi');
+    Route::get('/dangkythi/{baithi_id}', [UserController::class, 'dangkythi'])->name('dang-ky-thi');
+    Route::get('/user-profile', [UserController::class, 'user_profile'])->name('user-profile');
+    Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'])->name('user.update.profile');
+    Route::get('/enroll-history', [UserController::class, 'enroll_history'])->name('enroll.history');
+});
 
 
 // View Admin
@@ -41,8 +66,32 @@ Route::get('/admin/logout', [AdminController::class, 'admin_logout'])->name('adm
 //trang thống kê
 Route::middleware([Admin::class])->group(function () {
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+
+//View thông tin hướng dẫn khám
+Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huongdankham');      
+
+
 //Nút Profile Admin
 Route::get('/admin/info-admin', [ManageAdminController::class, 'info_admin'])->name('admin.info.admin');
+//Quản lý tài khoản admin
+Route::get('/admin/all-admins', [ManageAdminController::class, 'all_admins'])->name('admin.admins');
+    Route::get('/admin/add-tkadmin', [ManageAdminController::class, 'add_tkadmin'])->name('admin.add.tkadmin');
+    Route::get('/admin/all-tkadmin', [ManageAdminController::class, 'all_tkadmin'])->name('admin.tkadmin');
+    Route::get('admin/tkadmin/{id}/edit', [ManageAdminController::class, 'edit_tkadmin'])->name('admin.edit.tkadmin');
+    Route::get('admin/admins/{id}/edit', [ManageAdminController::class, 'edit_admins'])->name('admin.edit.admins');
+    Route::get('admin/tkadmin/{id}/delete', [ManageAdminController::class, 'delete_tkadmin'])->name('admin.delete.tkadmin');
+    Route::get('admin/admins/{id}/delete', [ManageAdminController::class, 'delete_admins'])->name('admin.delete.admins');
+    Route::post('/admin/save-tkadmin', [ManageAdminController::class, 'save_tkadmin'])->name('admin.save.tkadmin');
+    Route::post('admin/tkadmin/{id}/update', [ManageAdminController::class, 'update_tkadmin'])->name('admin.update.tkadmin');
+    Route::post('admin/admins/{id}/update', [ManageAdminController::class, 'update_admins'])->name('admin.update.admins');
+    Route::post('admin/tkadmin/{id}/password', [ManageAdminController::class, 'password_tkadmin'])->name('admin.password.tkadmin');
+    Route::post('/admin/tkadmin/login', [ManageAdminController::class, 'loginPost_tkadmin'])->name('admin.loginPost.tkadmin');
+    Route::post('/admin/tkadmin/{id}/changepassword', [ManageAdminController::class, 'changePassword'])->name('admin.changepassword.tkadmin');
+    Route::get('admin/tkadmin/{id}/password', [ManageAdminController::class, 'password_tkadmin'])->name('admin.password.tkadmin');
+    //đổi mật khẩu tk admin cá nhân
+    Route::get('/admin/change-password', [AdminController::class, 'showChangePasswordForm'])->name('admin.change-password');
+    Route::post('/admin/change-password', [AdminController::class, 'changePassword'])->name('admin.change-password.post');
+
 
 //quản lý bệnh nhân
 Route::get('/admin/all-bn', [TKBNController::class, 'all_bn'])->name('admin.bn');
@@ -65,4 +114,5 @@ Route::get('/admin/add-kq', [KQController::class, 'add_kq'])->name('admin.add.kq
 Route::get('/admin/all-kq', [KQController::class, 'all_kq'])->name('admin.kq');
 Route::post('/admin/save-kq', [KQController::class, 'save_kq'])->name('admin.save.kq');
 Route::get('/get-thong-tin-bn/{id}', [KQController::class, 'get_thong_tin_bn'])->name('get.tt.bn');
+
 
