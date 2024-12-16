@@ -28,7 +28,7 @@ class ManageAdminController extends Controller
     {
 
         $validatedData = $request->validate([
-            'email' => 'required|email|unique:khs|max:255',
+            'email' => 'required|email|unique:admins|max:255',
             'password' => 'required|min:1|max:100',
             'hoten' => 'required|string|max:255',
             'ngaysinh' => 'required|date|before:today',
@@ -42,7 +42,7 @@ class ManageAdminController extends Controller
 
         $adminId = $admin -> id;
          
-        $adminfo = new tkadmin();
+        $adminfo =  new \App\Models\tkadmin();
         $adminfo -> email = $request -> email;
         $adminfo -> password = Hash::make($request->password);
         $adminfo -> admin_id = $adminId;
@@ -158,5 +158,57 @@ class ManageAdminController extends Controller
         $admin = Admin::findOrFail($id);
         return view('admin.tkadmin.password_tkadmin', ['user' => $admin], compact('admin'));
     }
+    
+    public function loginPost_tkadmin(Request $request) {
+        $credentials = $request->only('email', 'password');
+        if (Auth::guard('admins')->attempt($credentials)) {
+            return redirect()->route('admin.password.tkadmin');
+        } else {
+            return redirect()->route('admin_login');
+        }
+    }
+
+
+    public function changePassword(Request $request, $id)
+{
+    $admin = Admin::findOrFail($id);
+    $request->validate([
+        'current_password' => ['required',
+        function($attr, $value, $fail) use($admin) {
+            if (!Hash::check($value, $admin->password)) {
+                $fail('Mật khẩu hiện tại không đúng.');
+            }
+        }],
+        'new_password' => 'required|min:6|different:current_password',
+        'confirm_password' => 'required|same:new_password',
+    ]);
+
+    if ($request->new_password === $request->current_password) {
+        return redirect()->back()->withErrors(['new_password' => 'Mật khẩu mới không thể trùng với mật khẩu cũ.']);
+    }
+
+    // Cập nhật mật khẩu mới
+    $data['password'] = bcrypt($request->new_password);
+    if($admin->update($data))
+    {
+        return redirect()->route('admin.tkadmin')->with('success', 'Updated your password');
+    }
+    else {
+        return redirect()->back()->with('no', 'Something error.');
+    }
+}
+
+// public function info_admin($info_id)
+// {
+//     $adminUser = Auth::guard('info_admins')->user();
+//     $admin = DB::table('info_admins')->where('id', $info_id)->first();
+//     $all_admin = DB::table('info_admins')->get();
+//     return view('admin.tkadmin.info_admin', ['user' => $adminUser], compact('admin','all_admin'));
+// }
+
+
+
+
+
 
 }
