@@ -61,9 +61,9 @@
             <tr  class="text-center table-primary">
               <th>ID</th>
               <th>Email</th>
-              <th>Mật khẩu</th>
+              <!-- <th>Mật khẩu</th> -->
               <th>Mã bệnh nhân</th>
-              <th>Sửa/Xoá</th>
+              <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -71,12 +71,12 @@
             <tr>
                 <td>{{$khs->id}}</td>
                 <td>{{$khs->email}}</td>
-                <td>{{$khs->password}}</td>
+                <!-- <td>{{$khs->password}}</td> -->
                 <td>{{$khs->user_id}}</td>
 
                 <td>
-                <a href="{{ route('admin.edit.tkbn', ['id' => $khs->id]) }}" class="active styling-edit" ui-toggle-class="">
-                  <i class="fa fa-pencil-square-o text-success text-active"></i></a>
+                <!-- <a href="{{ route('admin.edit.tkbn', ['id' => $khs->id]) }}" class="active styling-edit" ui-toggle-class="">
+                  <i class="fa fa-pencil-square-o text-success text-active"></i></a> -->
                 <a onclick="return confirm('Bạn có muốn xóa không?')" href="{{ route('admin.delete.tkbn', ['id' => $khs->id]) }}" class="active styling-edit" ui-toggle-class="" alt="Xóa đăng ký">
                   <i class="fa fa-times text-danger text"></i></a>
               </td>
@@ -134,6 +134,7 @@
     padding: 10px; /* Khoảng cách bên trong */
     border: 1px solid #dee2e6; /* Đường viền */
     color: #000 !important;
+    text-align: center;
 }
 
 /* Định dạng các biểu tượng sửa/xóa */

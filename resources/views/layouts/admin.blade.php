@@ -158,9 +158,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <span>Quản lý bệnh nhân</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="google_map.html">Thêm mới tài khoản bệnh nhân</a></li>
+                        <li><a href="{{ route('admin.add.tkbn') }}">Thêm mới tài khoản bệnh nhân</a></li>
                         <li><a href="{{route('admin.tkbn')}}">Danh sách tài khoản bệnh nhân</a></li>
-                        <li><a href="vector_map.html">Danh sách thông tin bệnh nhân</a></li>
+                        <li><a href="{{route('admin.bn')}}">Danh sách thông tin bệnh nhân</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
@@ -193,7 +193,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
  <!-- footer -->
 		  <div class="footer">
 			<div class="wthree-copyright">
-			  <p>© 2017 Visitors. All rights reserved | Design by <a href="http://w3layouts.com">W3layouts</a></p>
+			  <p>© Admin. All rights reserved | HealthCenter</a></p>
 			</div>
 		  </div>
   <!-- / footer -->
