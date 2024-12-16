@@ -31,4 +31,24 @@ class AdminController extends Controller
             return redirect()->route('admin_login')->withErrors(['email' => 'Đăng nhập không thành công']);
         }
     }
+    public function showstatistics() {
+        $adminUser = Auth::guard('admins')->user();
+        return view('admin.statistics', ['user' => $adminUser]);
+    }
+    // public function showdashboard() {
+    //     $adminUser = Auth::guard('admins')->user();
+    //     return view('admin.dashboard', ['user' => $adminUser]);
+    // }
+    public function dashboard(Request $request) {
+        $admin_email=$request->email;
+        $admin_password= bcrypt($request->password);
+        $result=DB::table('admins')->where ('email',$admin_email)->where('password',$admin_password)->first();
+        return view('admin.dashboard');
+        // $adminUser = Auth::guard('admins')->user();
+        // return view('admin.dashboard', ['user' => $adminUser]);
+    }
+    public function admin_logout() {
+        Auth::guard('admins')->logout();
+        return Redirect('admin/login');
+    }
 }
