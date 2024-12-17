@@ -14,6 +14,7 @@ use App\Http\Middleware\BN;
 use App\Http\Middleware\TKBN;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\Admin;
+use App\Http\Controllers\ChuyenKhoaController;
 
 Route::get('/', [CaptchaController::class, 'index']);
 Route::get('/reload-captcha', [CaptchaController::class, 'reloadCaptcha']);
@@ -117,3 +118,9 @@ Route::post('/admin/save-kq', [KQController::class, 'save_kq'])->name('admin.sav
 Route::get('/get-thong-tin-bn/{id}', [KQController::class, 'get_thong_tin_bn'])->name('get.tt.bn');
 
 
+//Quản lý chuyên khoa
+Route::get('/admin/all-chuyenkhoa', [ChuyenKhoaController::class, 'all_chuyenkhoa'])->name('admin.all.chuyenkhoa');
+Route::get('/admin/add-chuyenkhoa', [ChuyenKhoaController::class, 'add_chuyenkhoa'])->name('admin.add.chuyenkhoa');
+Route::post('/admin/save-chuyenkhoa', [ChuyenKhoaController::class, 'save_chuyenkhoa'])->name('admin.save.chuyenkhoa');
+Route::get('/admin/edit-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'edit_chuyenkhoa'])->name('admin.edit.chuyenkhoa');
+Route::get('/admin/delete-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'delete_chuyenkhoa'])->name('admin.delete.chuyenkhoa');

@@ -127,9 +127,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <i class="fa fa-tasks"></i>
                         <span>Quản lý chuyên khoa</span>
                     </a>
-                    <ul class="sub">
-                        <li><a href="form_component.html">Thêm mới chuyên khoa</a></li>
-                        <li><a href="form_validation.html">Danh sách chuyên khoa</a></li>
+                    <ul class="sub-menu">
+                        <li><a href="{{ route('admin.add.chuyenkhoa') }}">Thêm mới chuyên khoa</a></li>
+                        <li><a href="{{ route('admin.all.chuyenkhoa') }}">Danh sách chuyên khoa</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
