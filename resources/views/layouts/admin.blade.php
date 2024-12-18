@@ -127,9 +127,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <i class="fa fa-tasks"></i>
                         <span>Quản lý chuyên khoa</span>
                     </a>
-                    <ul class="sub">
-                        <li><a href="form_component.html">Thêm mới chuyên khoa</a></li>
-                        <li><a href="form_validation.html">Danh sách chuyên khoa</a></li>
+                    <ul class="sub-menu">
+                        <li><a href="{{ route('admin.add.chuyenkhoa') }}">Thêm mới chuyên khoa</a></li>
+                        <li><a href="{{ route('admin.all.chuyenkhoa') }}">Danh sách chuyên khoa</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
@@ -145,11 +145,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class=" fa fa-bar-chart-o"></i>
+                        <span>Quản lý loại xét nghiệm</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="{{ route('admin.add.kq') }}">Thêm mới loại xét nghiệm</a></li>
+                        <li><a href="flot_chart.html">Danh sách loại xét nghiệm</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class=" fa fa-bar-chart-o"></i>
                         <span>Quản lý kết quả khám</span>
                     </a>
                     <ul class="sub">
                         <li><a href="{{ route('admin.add.kq') }}">Thêm mới kết quả</a></li>
-                        <li><a href="flot_chart.html">Danh sách kết quả</a></li>
+                        <li><a href="{{ route('admin.kq') }}">Danh sách kết quả</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">

@@ -5,9 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Auth;
 
-class BN
+class Chuyenkhoa
 {
     /**
      * Handle an incoming request.
@@ -16,13 +15,10 @@ class BN
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::guard('info_patients') -> check() ) {
+        if (Auth::guard('specialties') -> check() ) {
             return $next($request);
         } else {
             return Redirect('/log-in');
         }
-
     }
-
-
 }

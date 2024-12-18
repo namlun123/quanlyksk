@@ -12,10 +12,12 @@ use App\Http\Controllers\CaptchaController;
 use App\Http\Controllers\TKBNController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\KQController;
+use App\Http\Controllers\EnrollController;
 use App\Http\Middleware\BN;
 use App\Http\Middleware\TKBN;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\Admin;
+use App\Http\Controllers\ChuyenKhoaController;
 
 Route::get('/', [CaptchaController::class, 'index']);
 Route::get('/reload-captcha', [CaptchaController::class, 'reloadCaptcha']);
@@ -32,6 +34,13 @@ Route::get('/dang-xuat', [UserController::class, 'sign_out'])->name('dang-xuat')
 //sửa thông tin
 Route::get('/user-profile', [UserController::class, 'user_profile'])->name('user-profile');
 Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'])->name('user.update.profile');
+// lịch sử khám
+Route::get('/enroll-history', [UserController::class, 'enroll_history'])->name('enroll.history');
+Route::get('user/enroll/{id}/edit', [UserController::class, 'edit_enroll'])->name('user.edit.enroll');
+Route::post('user/enroll/{id}/update', [UserController::class, 'update_enroll'])->name('user.update.enroll');
+Route::get('user/enroll/{id}/delete', [UserController::class, 'delete_enroll'])->name('user.delete.enroll');
+Route::get('/user/showPdf/{id}', [UserController::class, 'showPdf'])->name('user.showPdf');
+
 //đổi mật khẩu
 Route::get('/change-password', [UserController::class, 'showChangePasswordForm'])->name('show.change.password');
 Route::post('/change-password', [UserController::class, 'changePassword'])->name('user.change.password');
@@ -64,6 +73,17 @@ Route::middleware([BN::class])->group(function () {
     Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'])->name('user.update.profile');
     Route::get('/enroll-history', [UserController::class, 'enroll_history'])->name('enroll.history');
 });
+//View thông tin hướng dẫn khám
+Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huongdankham');      
+
+// Route::middleware([BN::class])->group(function () {
+//     Route::get('/lichthi', [UserController::class, 'lichthi'])->name('lich-thi');
+//     Route::get('/diadiemthi', [UserController::class, 'diadiemthi'])->name('dia-diem-thi');
+//     Route::get('/dangkythi/{baithi_id}', [UserController::class, 'dangkythi'])->name('dang-ky-thi');
+//     Route::get('/user-profile', [UserController::class, 'user_profile'])->name('user-profile');
+//     Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'])->name('user.update.profile');
+//     Route::get('/enroll-history', [UserController::class, 'enroll_history'])->name('enroll.history');
+// });
 
 
 // View Admin
@@ -74,10 +94,6 @@ Route::get('/admin/logout', [AdminController::class, 'admin_logout'])->name('adm
 //trang thống kê
 Route::middleware([Admin::class])->group(function () {
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-
-//View thông tin hướng dẫn khám
-Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huongdankham');      
-
 
 //Nút Profile Admin
 Route::get('/admin/info-admin', [ManageAdminController::class, 'info_admin'])->name('admin.info.admin');
@@ -119,8 +135,29 @@ Route::get('/admin/all-bn', [TKBNController::class, 'all_bn'])->name('admin.bn')
 
 //quản lý kết quả
 Route::get('/admin/add-kq', [KQController::class, 'add_kq'])->name('admin.add.kq');
+Route::post('/admin/add-kq/store', [KQController::class, 'store'])->name('admin.add.kq.store');
 Route::get('/admin/all-kq', [KQController::class, 'all_kq'])->name('admin.kq');
 Route::post('/admin/save-kq', [KQController::class, 'save_kq'])->name('admin.save.kq');
+Route::get('admin/kq/{id}/details', [KQController::class, 'kq_details'])->name('admin.view.kq');
+
+Route::get('admin/kq/{id}/edit', [KQController::class, 'edit_kq'])->name('admin.edit.kq');
+Route::put('admin/kq/{id}/update', [KQController::class, 'update_kq'])->name('admin.update.kq');
+Route::get('admin/kq/{id}/delete', [KQController::class, 'delete_kq'])->name('admin.delete.kq');
+Route::get('/admin/export-pdf/{enrollId}', [KQController::class, 'exportPdf'])->name('admin.export.pdf');
+// trong tệp routes/web.php
+Route::get('admin/result/{id}', [KQController::class, 'showResult'])->name('pdf.result');
+
+// Route::get('admin/tkbn/{id}/delete', [TKBNController::class, 'delete_tkbn'])->name('admin.delete.tkbn');
+
 Route::get('/get-thong-tin-bn/{id}', [KQController::class, 'get_thong_tin_bn'])->name('get.tt.bn');
+Route::get('/get-ten-xetnghiem/{id}', [KQController::class, 'getTenXetNghiem']);
 
 
+
+//Quản lý chuyên khoa
+Route::get('/admin/all-chuyenkhoa', [ChuyenKhoaController::class, 'all_chuyenkhoa'])->name('admin.all.chuyenkhoa');
+Route::get('/admin/add-chuyenkhoa', [ChuyenKhoaController::class, 'add_chuyenkhoa'])->name('admin.add.chuyenkhoa');
+Route::post('/admin/save-chuyenkhoa', [ChuyenKhoaController::class, 'save_chuyenkhoa'])->name('admin.save.chuyenkhoa');
+Route::get('/admin/edit-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'edit_chuyenkhoa'])->name('admin.edit.chuyenkhoa');
+Route::get('/admin/delete-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'delete_chuyenkhoa'])->name('admin.delete.chuyenkhoa');
+Route::post('/admin/update-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'update_chuyenkhoa'])->name('admin.update.chuyenkhoa');
