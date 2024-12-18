@@ -55,7 +55,7 @@ class ChuyenKhoaController extends Controller
     $adminUser = Auth::guard('admins')->user();
 
     // Fetch the specialty by its ID
-    $chuyenkhoa = Chuyenkhoa::find($id);
+    $chuyenkhoa = Chuyenkhoa::where('specialty_id', $id)->first();
 
     if (!$chuyenkhoa) {
         return back()->withErrors(['message' => 'Không tìm thấy chuyên khoa']);
