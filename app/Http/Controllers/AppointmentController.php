@@ -192,4 +192,34 @@ private function isTimeOverlap($slotStart, $slotEnd, $enrollStart, $totalTime)
         // Chuyển hướng tới trang thanh toán và truyền thông tin cần thiết
         return redirect()->route('payment.page', ['enroll_id' => $enroll->id]);
     }
+    public function edit_appointment($id)
+    {
+        // Lấy thông tin người dùng hiện tại từ bảng 'patients'
+        $user = Auth::guard('patients')->user();  // Lấy thông tin người dùng hiện tại từ guard 'patients'
+        $id = $user->id;
+
+        // Truy vấn thông tin chi tiết người bệnh từ bảng 'infor_patients' bằng cách sử dụng user_id
+        $patientInfo = DB::table('info_patients')
+            ->where('id', $user->user_id)  // Liên kết bảng 'patients' với bảng 'infor_patients' thông qua user_id
+            ->first();
+
+        // Truy vấn tất cả các bệnh viện/phòng khám từ CSDL
+        $locations = DB::table('locations')->get();
+
+        // Truy vấn tất cả các chuyên khoa từ CSDL
+        $specialties = DB::table('specialties')->get();
+
+        // Truy vấn tất cả các bác sĩ từ CSDL
+        $doctors = DB::table('doctors')->get();
+
+        // Truy vấn thời gian khám từ bảng cakham cho ngày hôm nay trở đi
+        $today = date('Y-m-d');  // Lấy ngày hôm nay
+        $timeslots = DB::table('cakham')
+            ->where('date', '>=', $today)
+            ->orderBy('date')  // Sắp xếp theo ngày
+            ->get();
+
+        // Trả về view với dữ liệu
+        return view('pages.appointment.edit', compact('user', 'locations', 'specialties', 'id', 'doctors', 'timeslots', 'patientInfo'));
+    }
 }

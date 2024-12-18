@@ -1,7 +1,6 @@
 @extends('layout')
 
 @section('content')
-
 <style>
     .appointment-form {
         width: 80%; /* Điều chỉnh độ rộng của form */
@@ -368,43 +367,53 @@
         margin-top: 0; /* Đảm bảo không có khoảng cách thừa giữa h3 và label */
     }
 </style>
-
 <div class="appointment-form">
-    <h2>ĐĂNG KÍ KHÁM THEO YÊU CẦU</h2>
+    <h2>SỬA ĐĂNG KÍ KHÁM</h2>
 
-    <form action="{{ route('appointment.store', ['id' => $user->id]) }}" method="POST">
+    <form action="{{ route('appointment.update', ['id' => $user->id, 'appointment_id' => $appointment->id]) }}" method="POST">
         @csrf
+        @method('PUT') <!-- Specifies that the form should use the PUT method for updating -->
 
         <div class="row">
             <!-- Bên trái (8 phần) -->
             <div class="col-8 left-panel">
                 <h3>Thông tin đăng kí</h3>
+
                 <!-- Bệnh viện/phòng khám -->
                 <label for="location">Bệnh viện Health Center <span style="color: red;">*</span></label>
                 <select name="location_id" id="location" required>
                     <option value="">Chọn Bệnh viện/phòng khám</option>
                     @foreach($locations as $location)
-                        <option value="{{ $location->location_id }}">{{ $location->location_name }}</option>
+                        <option value="{{ $location->location_id }}" 
+                            @if($appointment->location_id == $location->location_id) selected @endif>
+                            {{ $location->location_name }}
+                        </option>
                     @endforeach
                 </select>
 
                 <!-- Chuyên khoa -->
                 <label for="specialization">Chuyên khoa <span style="color: red;">*</span></label>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <input type="text" id="specialization-display" placeholder="Hãy chọn chuyên khoa" readonly>
+                    <input type="text" id="specialization-display" value="{{ $appointment->specialization_name }}" readonly>
                     <button type="button" id="chooseSpecializationBtn">Chọn chuyên khoa</button>
                 </div>
-                <input type="hidden" id="specialization" name="specialization_id">
+                <input type="hidden" id="specialization" name="specialization_id" value="{{ $appointment->specialization_id }}">
 
                 <!-- Chọn bác sĩ -->
                 <label for="doctor">Bác sĩ <span style="color: red;">*</span></label>
                 <select name="doctor_id" id="doctor" required>
                     <option value="">Chọn Bác sĩ</option>
+                    @foreach($doctors as $doctor)
+                        <option value="{{ $doctor->id }}" 
+                            @if($appointment->doctor_id == $doctor->id) selected @endif>
+                            {{ $doctor->HoTen }} - {{ $doctor->ChucVu }}
+                        </option>
+                    @endforeach
                 </select>
 
                 <!-- Lý do khám -->
                 <label for="reason">Lý do khám</label>
-                <textarea name="reason" id="reason" rows="4"></textarea>
+                <textarea name="reason" id="reason" rows="4">{{ $appointment->reason }}</textarea>
             </div>
 
             <!-- Bên phải (4 phần) -->
@@ -439,24 +448,24 @@
                 <div id="date_picker" style="display: flex; gap: 10px;"></div>
 
                 <!-- Trường ẩn để chứa giá trị ngày -->
-                <input type="hidden" name="date" id="selected_date">
+                <input type="hidden" name="date" id="selected_date" value="{{ $appointment->date }}">
 
                 <!-- Time Slots -->
                 <div id="time_table" class="flex list_date" style="margin-top: 15px;">
                     <!-- Time slots will be populated here by JavaScript -->
                 </div>
-                <input type="hidden" name="time_slot" id="selected_time_slot">
+                <input type="hidden" name="time_slot" id="selected_time_slot" value="{{ $appointment->time_slot }}">
             </div>
 
             <!-- Bên phải (4 phần) -->
             <div class="col-4 right-panel">
                 <hr class="separator">
                 <div id="cost_details"></div>
-                <input type="hidden" name="total_cost" id="total_cost">
+                <input type="hidden" name="total_cost" id="total_cost" value="{{ $appointment->total_cost }}">
             </div>
         </div>
 
-        <button type="submit">Đặt lịch</button>
+        <button type="submit">Cập nhật lịch</button>
     </form>
 </div>
 
@@ -476,11 +485,12 @@
                             <button class="select-specialty-btn">Chọn</button>
                         </div>
                     @endforeach
-                    </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-<script>
+    <script>
     document.addEventListener('DOMContentLoaded', function () {
     renderDays(); // Gọi hàm render ngày khi DOM đã sẵn sàng
     });

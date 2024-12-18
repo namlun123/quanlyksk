@@ -15,6 +15,7 @@ use App\Http\Middleware\BN;
 use App\Http\Middleware\TKBN;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\Admin;
+use App\Http\Controllers\ChuyenKhoaController;
 
 Route::get('/', [CaptchaController::class, 'index']);
 Route::get('/reload-captcha', [CaptchaController::class, 'reloadCaptcha']);
@@ -52,6 +53,7 @@ Route::get('quanlyksk/payment/{enroll_id}', [SepayController::class, 'showPaymen
 Route::post('/payment', [SepayController::class, 'createPayment'])->name('payment.create'); // Tạo giao dịch
 Route::get('/payment-success', [SepayController::class, 'paymentSuccess'])->name('payment.success'); // Thành công
 Route::post('/payment-webhook', [SepayController::class, 'handleWebhook'])->name('payment.webhook'); // Webhook
+Route::get('/appointment/{id}/edit', [AppointmentController::class, 'edit_appointment'])->name('appointment.edit');
 //View thông tin hướng dẫn khám
 Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huongdankham');      
 
@@ -133,3 +135,10 @@ Route::get('/get-ten-xetnghiem/{id}', [KQController::class, 'getTenXetNghiem']);
 
 
 
+//Quản lý chuyên khoa
+Route::get('/admin/all-chuyenkhoa', [ChuyenKhoaController::class, 'all_chuyenkhoa'])->name('admin.all.chuyenkhoa');
+Route::get('/admin/add-chuyenkhoa', [ChuyenKhoaController::class, 'add_chuyenkhoa'])->name('admin.add.chuyenkhoa');
+Route::post('/admin/save-chuyenkhoa', [ChuyenKhoaController::class, 'save_chuyenkhoa'])->name('admin.save.chuyenkhoa');
+Route::get('/admin/edit-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'edit_chuyenkhoa'])->name('admin.edit.chuyenkhoa');
+Route::get('/admin/delete-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'delete_chuyenkhoa'])->name('admin.delete.chuyenkhoa');
+Route::post('/admin/update-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'update_chuyenkhoa'])->name('admin.update.chuyenkhoa');
