@@ -124,4 +124,4 @@ Route::get('/admin/add-chuyenkhoa', [ChuyenKhoaController::class, 'add_chuyenkho
 Route::post('/admin/save-chuyenkhoa', [ChuyenKhoaController::class, 'save_chuyenkhoa'])->name('admin.save.chuyenkhoa');
 Route::get('/admin/edit-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'edit_chuyenkhoa'])->name('admin.edit.chuyenkhoa');
 Route::get('/admin/delete-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'delete_chuyenkhoa'])->name('admin.delete.chuyenkhoa');
-Route::get('/admin/update-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'update_chuyenkhoa'])->name('admin.update.chuyenkhoa');
+Route::post('/admin/update-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'update_chuyenkhoa'])->name('admin.update.chuyenkhoa');

@@ -48,7 +48,7 @@ class ChuyenKhoaController extends Controller
         $chuyenkhoa->save();
 
         // Redirect sau khi lưu thành công
-        return redirect()->route('admin.chuyenkhoa.all_chuyenkhoa')->with('success', 'Chuyên khoa đã được thêm thành công!');
+        return redirect()->route('admin.all.chuyenkhoa')->with('success', 'Chuyên khoa đã được thêm thành công!');
     }
     public function edit_chuyenkhoa($id)
 {
@@ -88,7 +88,7 @@ public function update_chuyenkhoa(Request $request, $id)
     session()->put('message', 'Cập nhật thông tin chuyên khoa thành công');
 
     // Chuyển hướng về trang danh sách
-    return redirect()->route('admin.chuyenkhoa.all_chuyenkhoa');
+    return redirect()->route('admin.all.chuyenkhoa');
 }
     public function delete_chuyenkhoa($specialty_id) 
     {
@@ -104,9 +104,9 @@ public function update_chuyenkhoa(Request $request, $id)
         $adminId = Auth::guard('admins')->id();
 
         // Update the record to log the admin who deleted it
-        DB::table('specialties')
-            ->where('specialty_id', $specialty_id)
-            ->update(['deleted_by' => $adminId]);
+        // DB::table('specialties')
+        //     ->where('specialty_id', $specialty_id)
+        //     ->update(['deleted_by' => $adminId]);
 
         // Perform the actual deletion
         DB::table('specialties')->where('specialty_id', $specialty_id)->delete();
@@ -115,6 +115,6 @@ public function update_chuyenkhoa(Request $request, $id)
         session()->put('message', 'Xóa chuyên khoa thành công bởi admin ID: ' . $adminId);
 
         // Redirect to the specialties list
-        return redirect()->route('admin.chuyenkhoa.all_chuyenkhoa');
+        return redirect()->route('admin.all.chuyenkhoa');
     }
 }
