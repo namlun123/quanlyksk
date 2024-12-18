@@ -20,5 +20,7 @@ class Enroll extends Model
         'reason',
         'ketqua_id',
         'created_at',
+        'updated_at',
+        'updated_by_user',
     ];
 }

@@ -366,16 +366,78 @@
     h3 + label {
         margin-top: 0; /* Đảm bảo không có khoảng cách thừa giữa h3 và label */
     }
+    /* Phong cách chung cho phần chi tiết thời gian khám */
+.appointment-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 0 auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-title {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.appointment-info-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.appointment-label {
+    font-weight: bold;
+    font-size: 1em;
+    color: #555;
+    flex-basis: 40%;
+}
+
+.appointment-info {
+    flex-basis: 55%;
+    margin-top: 10px;
+}
+
+.appointment-value {
+    font-size: 1.1em;
+    color: #333;
+}
+
+.required {
+    color: red;
+}
+
+.edit-btn-container {
+    text-align: center;
+    margin-top: 15px;
+    width: 150px;
+}
+
+.edit-time-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px; /* Giảm padding để nút ngắn hơn */
+    font-size: 1em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-time-btn:hover {
+    background-color: #0056b3;
+}
+
 </style>
 <div class="appointment-form">
     <h2>SỬA ĐĂNG KÍ KHÁM</h2>
 
-    <form action="{{ route('appointment.update', ['id' => $user->id, 'appointment_id' => $appointment->id]) }}" method="POST">
+    <form action="{{ route('appointment.update', ['appointment_id' => $appointment->id]) }}" method="POST">
         @csrf
         @method('PUT') <!-- Specifies that the form should use the PUT method for updating -->
 
         <div class="row">
-            <!-- Bên trái (8 phần) -->
             <div class="col-8 left-panel">
                 <h3>Thông tin đăng kí</h3>
 
@@ -384,8 +446,7 @@
                 <select name="location_id" id="location" required>
                     <option value="">Chọn Bệnh viện/phòng khám</option>
                     @foreach($locations as $location)
-                        <option value="{{ $location->location_id }}" 
-                            @if($appointment->location_id == $location->location_id) selected @endif>
+                        <option value="{{ $location->location_id }}" {{ $appointment->location_id == $location->location_id ? 'selected' : '' }}>
                             {{ $location->location_name }}
                         </option>
                     @endforeach
@@ -394,18 +455,18 @@
                 <!-- Chuyên khoa -->
                 <label for="specialization">Chuyên khoa <span style="color: red;">*</span></label>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <input type="text" id="specialization-display" value="{{ $appointment->specialization_name }}" readonly>
+                    <input type="text" id="specialization-display" placeholder="Hãy chọn chuyên khoa" readonly
+                        value="{{ $appointment->specialty_id ? $specialties->firstWhere('specialty_id', $appointment->specialty_id)->specialty : '' }}">
                     <button type="button" id="chooseSpecializationBtn">Chọn chuyên khoa</button>
                 </div>
-                <input type="hidden" id="specialization" name="specialization_id" value="{{ $appointment->specialization_id }}">
+                <input type="hidden" id="specialization" name="specialization_id" value="{{ $appointment->specialty_id }}">
 
                 <!-- Chọn bác sĩ -->
                 <label for="doctor">Bác sĩ <span style="color: red;">*</span></label>
                 <select name="doctor_id" id="doctor" required>
                     <option value="">Chọn Bác sĩ</option>
                     @foreach($doctors as $doctor)
-                        <option value="{{ $doctor->id }}" 
-                            @if($appointment->doctor_id == $doctor->id) selected @endif>
+                        <option value="{{ $doctor->id }}" {{ $appointment->doctor_id == $doctor->id ? 'selected' : '' }}>
                             {{ $doctor->HoTen }} - {{ $doctor->ChucVu }}
                         </option>
                     @endforeach
@@ -416,7 +477,6 @@
                 <textarea name="reason" id="reason" rows="4">{{ $appointment->reason }}</textarea>
             </div>
 
-            <!-- Bên phải (4 phần) -->
             <div class="col-4 right-panel">
                 <h3>Thông tin khách hàng</h3>
 
@@ -439,35 +499,72 @@
         </div>
 
         <div class="row">
-            <!-- Bên trái (8 phần) -->
             <div class="col-8 left-panel">
-                <label for="specialization">Thời gian khám <span style="color: red;">*</span></label>
+                <!-- Phần hiển thị ngay ban đầu, ẩn sau khi ấn button -->
+                <div id="appointment_details" class="appointment-details">
+                    <div class="appointment-info-row">
+                        <label for="specialization" class="appointment-label">Thời gian khám đã đặt <span class="required">*</span></label>
+                        <div id="current_date_slot" class="appointment-info">
+                            <p id="current_date_time" class="appointment-value">
+                                {{ $appointment->date }}
+                            </p>
+                        </div>
+                    </div>
 
-                <!-- Chọn ngày -->
-                <label for="date_picker">Ngày khám</label>
-                <div id="date_picker" style="display: flex; gap: 10px;"></div>
+                    <div class="appointment-info-row">
+                        <label for="selected_time_slot" class="appointment-label">Thời gian khám đã chọn</label>
+                        <div id="current_time_display" class="appointment-info">
+                            <p id="current_time_slot" class="appointment-value">
+                                {{ $appointment->time_slot }}
+                            </p>
+                        </div>
+                    </div>
 
-                <!-- Trường ẩn để chứa giá trị ngày -->
-                <input type="hidden" name="date" id="selected_date" value="{{ $appointment->date }}">
-
-                <!-- Time Slots -->
-                <div id="time_table" class="flex list_date" style="margin-top: 15px;">
-                    <!-- Time slots will be populated here by JavaScript -->
+                    <div class="appointment-info-row">
+                        <label for="selected_total_cost" class="appointment-label">Tổng phí của đơn đăng ký</label>
+                        <div id="current_total_cost_display" class="appointment-info">
+                            <p id="current_total_cost" class="appointment-value">
+                                {{ $appointment->total_cost }}
+                            </p>
+                        </div>
                 </div>
-                <input type="hidden" name="time_slot" id="selected_time_slot" value="{{ $appointment->time_slot }}">
-            </div>
+                <div class="edit-btn-container">
+                    <button type="button" id="edit_time_btn" class="edit-time-btn">Sửa thời gian</button>
+                </div>
+                </div>
+                <!-- Phần ẩn ban đầu, hiện sau khi ấn button -->
+                <div id="edit_time_section" style="display: none;">
+                    <div class="col-8 left-panel">
+                        <label for="specialization">Thời gian khám <span style="color: red;">*</span></label>
 
-            <!-- Bên phải (4 phần) -->
-            <div class="col-4 right-panel">
-                <hr class="separator">
-                <div id="cost_details"></div>
-                <input type="hidden" name="total_cost" id="total_cost" value="{{ $appointment->total_cost }}">
+                        <!-- Chọn ngày -->
+                        <label for="date_picker">Ngày khám</label>
+                        <div id="date_picker" style="display: flex; gap: 10px;"></div>
+
+                        <!-- Trường ẩn để chứa giá trị ngày -->
+                        <input type="hidden" name="date" id="selected_date">
+
+                        <label for="date_picker">Giờ khám</label>
+                        <!-- Time Slots -->
+                        <div id="time_table" class="flex list_date" style="margin-top: 15px;">
+                            <!-- Time slots will be populated here by JavaScript -->
+                        </div>
+                        <input type="hidden" name="time_slot" id="selected_time_slot">
+                    </div>
+                    <div class="col-4 right-panel">
+                        <hr class="separator">
+                        <div id="cost_details"></div>
+                        <input type="hidden" name="total_cost" id="total_cost" value="{{ $appointment->total_cost }}">
+                    </div>
+                </div>
             </div>
         </div>
-
+        <!-- Nút submit nằm trong form -->
         <button type="submit">Cập nhật lịch</button>
     </form>
 </div>
+
+
 
 <!-- Modal -->
 <div id="specializationModal" class="modal-overlay" style="display: none;">
@@ -494,6 +591,70 @@
     document.addEventListener('DOMContentLoaded', function () {
     renderDays(); // Gọi hàm render ngày khi DOM đã sẵn sàng
     });
+    document.addEventListener('DOMContentLoaded', function() {
+    const editTimeBtn = document.getElementById('edit_time_btn');
+    const editTimeSection = document.getElementById('edit_time_section');
+    const appointmentDetails = document.getElementById('appointment_details');
+    const doctorPicker = document.getElementById('doctor'); // Dropdown chọn bác sĩ
+
+    // Các phần tử cần ẩn khi nhấn nút "Sửa thời gian"
+    const currentDateSlot = document.getElementById('current_date_slot');  // Phần hiển thị ngày
+    const currentTimeSlot = document.getElementById('current_time_slot');  // Phần hiển thị thời gian
+    const currentDateLabel = document.querySelector('label[for="selected_time_slot"]');  // Label "Ngày khám đã đặt"
+    const currentTimeLabel = document.querySelector('label[for="selected_time_slot"]');  // Label "Thời gian khám đã chọn"
+    const timeDisplay = document.getElementById('current_time_display');  // Phần hiển thị thời gian đã chọn
+    
+    const datePicker = document.getElementById('date_picker');
+    const timeTable = document.getElementById('time_table');
+    const selectedDate = document.getElementById('selected_date');
+    const selectedTimeSlot = document.getElementById('selected_time_slot');
+
+    // Khi nhấn vào nút "Sửa thời gian"
+    editTimeBtn.addEventListener('click', function() {
+        // Ẩn các phần đã đặt
+
+        appointmentDetails.style.display = 'none'; 
+
+        // Hiển thị phần chỉnh sửa
+        editTimeSection.style.display = 'block'; 
+    });
+
+    // Khi thay đổi bác sĩ từ dropdown
+    doctorPicker.addEventListener('change', function() {
+        // Ẩn các phần đã đặt
+
+        appointmentDetails.style.display = 'none'; 
+
+        // Hiển thị phần chỉnh sửa
+        editTimeSection.style.display = 'block'; 
+    });
+
+
+    const totalCostElement = document.getElementById('current_total_cost');
+    
+    // Giả sử `total_cost` là giá trị số từ backend
+    const totalCost = {{ $appointment->total_cost }};
+    
+    // Định dạng tiền tệ (ở đây dùng VND)
+    const formattedCost = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    }).format(totalCost);
+    
+    // Cập nhật giá trị đã định dạng vào phần tử HTML
+    totalCostElement.textContent = formattedCost;
+
+    // Khi chọn ngày, cập nhật giá trị vào trường ẩn
+    datePicker.addEventListener('change', function(e) {
+        selectedDate.value = e.target.value;
+    });
+});
+
+
+
+
+
+
 
     document.addEventListener("DOMContentLoaded", function () {
     const openBtn = document.getElementById("chooseSpecializationBtn");
@@ -631,7 +792,7 @@
             dayDiv.setAttribute('data-id', day.date); // Lưu ngày đúng vào data-id
             dayDiv.innerHTML = `<strong>${day.display}</strong><br>${day.dayOfWeek}`;
 
-            if (index === 0) dayDiv.classList.add('active'); // Chọn mặc định
+            //if (index === 0) dayDiv.classList.add('active'); // Chọn mặc định
 
             dayDiv.addEventListener('click', function () {
                 document.querySelectorAll('.item_date').forEach(i => i.classList.remove('active'));
@@ -686,7 +847,7 @@
 
         console.log("Ngày chọn: ", selectedDate); // Debug
         if (locationId && doctorId && selectedDate) {
-            fetch(`quanlyksk/get-timeslots/${locationId}/${doctorId}/${selectedDate}`)
+            fetch(`/quanlyksk/get-timeslots/${locationId}/${doctorId}/${selectedDate}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Không tìm thấy lịch khám hợp lệ.'); // Nếu không có dữ liệu hợp lệ
@@ -730,6 +891,8 @@
                     // Cập nhật giá trị time_slot vào form ẩn
                     document.getElementById('selected_time_slot').value = `${slot.timeStart} - ${slot.timeFinish}`;
 
+                    console.log(selected_time_slot);
+
                     // Hiển thị phí khi chọn giờ
                     showCostDetails(slot);
                 });
@@ -739,8 +902,6 @@
         });
     }
 
-    // Hiển thị phí và tổng tiền với định dạng tiền tệ
-    // Hiển thị phí và tổng tiền với định dạng tiền tệ
 // Hiển thị phí và tổng tiền với định dạng tiền tệ
 function showCostDetails(slot) {
     let costDetails = document.getElementById('cost_details');
@@ -775,58 +936,64 @@ function showCostDetails(slot) {
         timeTable.innerHTML = `<div class="error-message">${message}</div>`;
     }
 
-    function updateDoctors() {
-        let locationId = document.getElementById('location').value;
-        let specializationId = document.getElementById('specialization').value;
+function updateDoctors(resetDoctor = false) {
+    let locationId = document.getElementById('location').value;
+    let specializationId = document.getElementById('specialization').value;
+    const doctorSelect = document.getElementById('doctor');
 
-        console.log("Location ID: ", locationId);
-        console.log("Specialization ID: ", specializationId);
+    // Lưu lựa chọn hiện tại nếu không reset
+    const currentDoctorId = resetDoctor ? '' : doctorSelect.value;
 
+    if (locationId && specializationId) {
+        fetch(`/quanlyksk/get-doctors/${locationId}/${specializationId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                doctorSelect.innerHTML = '<option value="">Chọn Bác sĩ</option>'; // Reset dropdown
 
-        if (locationId && specializationId) {
-            // Gửi AJAX request đến route lấy danh sách bác sĩ
-            fetch(`get-doctors/${locationId}/${specializationId}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                data.forEach(doctor => {
+                    let option = document.createElement('option');
+                    option.value = doctor.id;
+                    option.textContent = doctor.HoTen + ' - ' + doctor.ChucVu;
+
+                    // Giữ lại lựa chọn hiện tại nếu không reset
+                    if (doctor.id == currentDoctorId) {
+                        option.selected = true; // Đặt option được chọn
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    let doctorSelect = document.getElementById('doctor');
-                    doctorSelect.innerHTML = '<option value="">Chọn Bác sĩ</option>'; // Xóa các option cũ
 
-                    // Duyệt qua danh sách bác sĩ và thêm vào dropdown
-                    data.forEach(doctor => {
-                        let option = document.createElement('option');
-                        // Kết hợp tên và chức vụ để hiển thị trong dropdown
-                        option.value = doctor.id;
-                        option.textContent = doctor.HoTen + ' - ' + doctor.ChucVu;  // Hiển thị tên và chức vụ
-                        doctorSelect.appendChild(option);
-                    });
-                    console.log(data);
-
-                })
-                .catch(error => {
-                    console.error('Có lỗi xảy ra khi tải bác sĩ:', error);
+                    doctorSelect.appendChild(option);
                 });
-        } else {
-            // Nếu không có giá trị locationId và specializationId
-            console.log('Vui lòng chọn Bệnh viện và Chuyên khoa');
-        }
+            })
+            .catch(error => {
+                console.error('Có lỗi xảy ra khi tải bác sĩ:', error);
+            });
+    } else {
+        console.log('Vui lòng chọn Bệnh viện và Chuyên khoa');
     }
+}
 
-    // Gọi updateDoctors khi thay đổi địa điểm hoặc chuyên khoa
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Trang đã tải xong');
+    updateDoctors(); // Chạy khi trang tải nhưng không reset lựa chọn bác sĩ
+
     document.getElementById('location').addEventListener('change', function() {
-        console.log('Địa điểm đã được thay đổi');
-        updateDoctors();
+        console.log('Địa điểm đã thay đổi, reset bác sĩ');
+        updateDoctors(true); // Reset bác sĩ khi thay đổi địa điểm
     });
 
     document.getElementById('specialization').addEventListener('change', function() {
-        console.log('Chuyên khoa đã được thay đổi');
-        updateDoctors();
+        console.log('Chuyên khoa đã thay đổi, reset bác sĩ');
+        updateDoctors(true); // Reset bác sĩ khi thay đổi chuyên khoa
     });
+});
+
+
     console.log('Mã JavaScript đã được tải');
 </script>
+
 
 @endsection

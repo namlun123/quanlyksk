@@ -5,10 +5,12 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\SepayController;
+use App\Http\Controllers\VNPAYController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ManageAdminController;
 use App\Http\Controllers\CaptchaController;
 use App\Http\Controllers\TKBNController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\KQController;
 use App\Http\Middleware\BN;
 use App\Http\Middleware\TKBN;
@@ -38,15 +40,20 @@ Route::post('/change-password', [UserController::class, 'changePassword'])->name
 Route::get('/dangkykham', [AppointmentController::class, 'create_appointment'])->name('appointment.create');
 Route::post('/appointment/store/{id}', [AppointmentController::class, 'store_appointment'])->name('appointment.store');
 Route::get('/get-doctors/{locationId}/{specializationId}', [AppointmentController::class, 'getDoctors']);
-Route::get('quanlyksk/get-timeslots/{locationId}/{doctorId}/{date}', [AppointmentController::class, 'getTimeSlots']);
-Route::get('quanlyksk/get-timeslots/{locationId}/{doctorId}/{selectedDate}', [AppointmentController::class, 'getTimeSlots']);
-Route::get('quanlyksk/payment/{enroll_id}', [SepayController::class, 'showPaymentPage'])->name('payment.page'); // Trang thanh toán
-Route::post('/payment', [SepayController::class, 'createPayment'])->name('payment.create'); // Tạo giao dịch
-Route::get('/payment-success', [SepayController::class, 'paymentSuccess'])->name('payment.success'); // Thành công
-Route::post('/payment-webhook', [SepayController::class, 'handleWebhook'])->name('payment.webhook'); // Webhook
+Route::get('/get-timeslots/{locationId}/{doctorId}/{date}', [AppointmentController::class, 'getTimeSlots']);
+Route::get('/get-timeslots/{locationId}/{doctorId}/{selectedDate}', [AppointmentController::class, 'getTimeSlots']);
 Route::get('/appointment/{id}/edit', [AppointmentController::class, 'edit_appointment'])->name('appointment.edit');
+Route::put('/appointment/{appointment_id}/update', [AppointmentController::class, 'update_appointment'])->name('appointment.update');
+//Route::post('/appointment/update/{appointment_id}', [AppointmentController::class, 'update_appointment'])->name('appointment.update');
 
+Route::get('/chatbot', [ChatbotController::class, 'showChatbot']);
+Route::post('/chatbot/request', [ChatbotController::class, 'handleRequest'])->name('chatbot.request');
 
+// Route cho trang thanh toán
+Route::get('/vnpay/payment/{enroll_id}', [VNPAYController::class, 'createPayment'])->name('appointment.payment');
+
+// Route cho trang trả kết quả từ VNPAY
+Route::get('/vnpay/return', [VNPAYController::class, 'handleReturn'])->name('appointment.return');
 
 
 Route::middleware([BN::class])->group(function () {
