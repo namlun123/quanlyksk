@@ -145,11 +145,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class=" fa fa-bar-chart-o"></i>
+                        <span>Quản lý loại xét nghiệm</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="{{ route('admin.add.kq') }}">Thêm mới loại xét nghiệm</a></li>
+                        <li><a href="flot_chart.html">Danh sách loại xét nghiệm</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class=" fa fa-bar-chart-o"></i>
                         <span>Quản lý kết quả khám</span>
                     </a>
                     <ul class="sub">
                         <li><a href="{{ route('admin.add.kq') }}">Thêm mới kết quả</a></li>
-                        <li><a href="flot_chart.html">Danh sách kết quả</a></li>
+                        <li><a href="{{ route('admin.kq') }}">Danh sách kết quả</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
