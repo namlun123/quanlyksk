@@ -81,7 +81,8 @@ label.required:after {
                     <form action="{{ route('admin.add.kq.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <h4 class="text-uppercase text-center text-title-form" style="margin-bottom: 30px; font-size: 26px;">THÔNG TIN KẾT QUẢ KHÁM</h4>
+                            <h4 class="text-uppercase text-center text-title-form" style="margin-bottom: 10px; font-size: 26px;">THÔNG TIN KẾT QUẢ KHÁM</h4>
+                            <p class="text-muted text-center" style="margin-bottom: 20px; font-size: 14px; color: #888; font-style:italic;">(Chỉ hiển thị những bệnh nhân đã có hồ sơ khám)</p>
 
                             <div class="col-lg-5">
                                 <div class="row col-lg-12 d-flex justify-content-center align-items-center">
@@ -89,11 +90,55 @@ label.required:after {
                                         <!-- Chọn bệnh nhân -->
                                         <label class="form-label mb-1 text-2 required">Chọn bệnh nhân</label>
                                         @php
-                                            $all_infor = DB::table('info_patients')
-                                                ->join('patients', 'info_patients.id', '=', 'patients.user_id')
-                                                ->select('info_patients.id as bn_id', 'info_patients.*', 'patients.*')
-                                                ->get();
-                                        @endphp
+                                        $all_infor = DB::table('info_patients')
+                                            ->join('patients', 'info_patients.id', '=', 'patients.user_id')
+                                            ->join('enrolls', 'patients.user_id', '=', 'enrolls.patient_id') // Joins with enrolls to check if a patient has any records
+                                            ->select(
+                                                'info_patients.id as bn_id',
+                                                'info_patients.*',
+                                                'patients.*',
+                                                'info_patients.DiaChi',
+                                                DB::raw('MAX(info_patients.province) as province'), // Hoặc MIN hoặc bất kỳ hàm tổng hợp nào
+                                                'info_patients.district', 
+                                                'info_patients.ward',
+                                                'info_patients.sdt',
+                                                'info_patients.created_at',
+                                                'info_patients.updated_at',
+                                                'info_patients.created_by',
+                                                'patients.id as patient_id',
+                                                'patients.email',
+                                                'patients.password',
+                                                'patients.user_id',
+                                                'patients.created_at as patient_created_at',
+                                                'patients.updated_at as patient_updated_at',
+                                                'patients.created_by as patient_created_by'
+                                            )
+                                            ->groupBy(
+                                                'info_patients.id', 
+                                                'info_patients.HoTen', 
+                                                'info_patients.NgaySinh', 
+                                                'info_patients.GioiTinh', 
+                                                'info_patients.DiaChi', 
+                                                'info_patients.province', 
+                                                'info_patients.district', 
+                                                'info_patients.ward', 
+                                                'info_patients.sdt', 
+                                                'info_patients.created_at', 
+                                                'info_patients.updated_at', 
+                                                'info_patients.created_by',
+                                                'patients.id', 
+                                                'patients.email', 
+                                                'patients.password', 
+                                                'patients.user_id', 
+                                                'patients.created_at', 
+                                                'patients.updated_at', 
+                                                'patients.created_by'
+                                            )
+                                            ->get();
+                                    @endphp
+
+
+
                                         <select class="form-select form-control h-auto py-2" id="bn" name="bn" required data-msg-required="Vui lòng chọn bệnh nhân">
                                             <option value="0" selected>Chọn bệnh nhân</option>
                                             @foreach($all_infor as $infor)
@@ -109,12 +154,13 @@ label.required:after {
                                     @endphp
                                     <div class="form-group col-lg-12">
                                         <label for="hs">Mã hồ sơ</label>
-                                        <select name="hs" id="hs" class="form-control">
+                                        <select name="hs" id="hs" class="form-control" required>
                                             <option value="0" selected>Chọn mã hồ sơ</option>
                                             @foreach($hoso as $hs)
                                                 <option value="{{ $hs->hoso_id }}">{{ $hs->hoso_id }}</option>
                                             @endforeach
                                         </select>
+                                        <span id="error-message" style="color: red; display: none;">Bệnh nhân này chưa có hồ sơ khám.</span>
                                     </div>
                                     <div class="form-group col-lg-12">
                                         <label class="form-label mb-1 text-2 required">Họ và tên bệnh nhân</label>
@@ -183,9 +229,9 @@ label.required:after {
                         </div>
 
                         <!-- Nút mở Modal -->
-                        <button type="button" style ="background-color: #992929C4; margin-bottom: 10px;" class="btn btn-info" data-toggle="modal" data-target="#addKqModal">
-                            Thêm mới kết quả xét nghiệm
-                        </button>
+                            <button type="button" style ="background-color: #992929C4; margin-bottom: 10px;" class="btn btn-info" data-toggle="modal" data-target="#addKqModal">
+                                Thêm mới kết quả xét nghiệm
+                            </button>
 
                         <!-- Bảng Chi Tiết -->
                         <div class="table-responsive mt-4">
@@ -415,4 +461,16 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 </script>
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        var hs = document.getElementById('hs').value;
+        if (hs === '0') {
+            event.preventDefault();
+            document.getElementById('error-message').style.display = 'block';
+        } else {
+            document.getElementById('error-message').style.display = 'none';
+        }
+    });
+</script>
+
 @endsection

@@ -61,6 +61,7 @@
     <h1>Thông tin đăng ký khám</h1>
     <p><strong>Mã hồ sơ:</strong> {{ $enroll->id }}</p>
     <p><strong>Họ tên:</strong> {{ $patient->HoTen }}</p>
+    <p><strong>Số điện thoại:</strong> {{$patient->sdt}}</p>
     <p><strong>Giới tính:</strong> 
         @if ($patient->GioiTinh == 1)
             Nam

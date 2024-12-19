@@ -96,10 +96,18 @@ class KQController extends Controller
         ->join('patients', 'info_patients.id', '=', 'patients.user_id')
         ->join('enrolls', 'patients.user_id', '=', 'enrolls.patient_id')
         ->join('ketqua', 'enrolls.id', '=', 'ketqua.hoso_id') // Join bảng ketqua
-        ->select('enrolls.*', 'info_patients.HoTen as ht', 'patients.user_id as mabn', 'enrolls.id as mahs', 'ketqua.xn_id') // Lấy tất cả các cột từ 3 bảng
+        ->select(
+            'enrolls.id as mahs',                 // Mã hồ sơ
+            DB::raw('MAX(info_patients.HoTen) as ht'), // Tên bệnh nhân (dùng MAX hoặc bất kỳ hàm tổng hợp nào vì giá trị đã nhóm)
+            'patients.user_id as mabn',          // Mã bệnh nhân
+            DB::raw('GROUP_CONCAT(ketqua.xn_id) as xn_ids'), // Danh sách các xn_id
+            'enrolls.status',                    // Trạng thái
+            'enrolls.date'                       // Ngày khám
+        )
         ->whereNotNull('ketqua.xn_id') // Chỉ lấy hồ sơ có kết quả xét nghiệm
-        ->orderBy('enrolls.id', 'asc') // Sắp xếp theo ID giảm dần
-        ->get(); // Lấy tất cả các dữ liệu
+        ->groupBy('enrolls.id', 'patients.user_id', 'enrolls.status', 'enrolls.date') // Nhóm theo các cột cần thiết
+        ->orderBy('enrolls.id', 'asc') // Sắp xếp theo ID tăng dần
+        ->get();
         return view('admin.ketqua.all_kq', ['user'=>$adminUser], ['all_kq'=>$all_kq]);
     }
    

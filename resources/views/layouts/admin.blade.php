@@ -61,11 +61,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </li>
         <!-- user login dropdown start-->
         <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <img alt="" src="{{asset('public/backend/images/2.png')}}">
-                <span class="username">John Doe</span>
-                <b class="caret"></b>
-            </a>
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+    <img alt="" src="{{asset('public/backend/images/2.png')}}">
+    <span class="username">
+        @if (Auth::guard('admins')->check())
+            @php
+                $admin = DB::table('info_admins')->where('id', Auth::guard('admins')->user()->id)->first();
+            @endphp
+            {{ $admin->HoTen }} <!-- Hiển thị tên admin từ bảng info_admins -->
+        @else
+            John Doe
+        @endif
+    </span>
+    <b class="caret"></b>
+</a>
             <ul class="dropdown-menu extended logout">
                 <li><a href="{{URL::to('admin/info-admin')}}"><i class=" fa fa-suitcase"></i>Profile
               </a></li>

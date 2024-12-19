@@ -10,52 +10,81 @@
 
 <div class="table-agile-info">
     <h3 class="text-center mt-3">DANH SÁCH KẾT QUẢ</h3>
+    <p class="text-muted text-center" style="margin:10px 10px; font-size: 14px; color: #888; font-style:italic;">(Chỉ hiển thị những hồ sơ đã có kết quả xét nghiệm)</p>
     <div class="panel panel-default">
         
     <div class="row mb-4">
-    <form action="" method="get" class="w-100">
-        <div class="d-flex justify-content-between align-items-center">
-        <div class="col-sm-6 d-flex flex-column">
-            <!-- <label for="keyword" class="form-label">Tìm kiếm</label> -->
-            <input type="search" id="keyword" name="keyword" class="form-control" style = "width:50%" placeholder="Nhập Email hoặc Mã bệnh nhân" value="{{ request()->keyword }}">
-            <button type="submit" id="apply_button" class="btn btn-primary ml-2">Lọc</button>
-        </div>
-
-        </div>
-    </form>
-    </div>
-
-
-      <!-- <div class="row w3-res-tb">
-        <form action="" method="get" class="w-100">
-          <div class="d-flex justify-content-start mb-3">
-            <div class="col-sm-6">
-              <div class="input-group">
-                <input type="search" name="keyword" class="form-control" placeholder="Tìm theo Email hoặc Mã thí sinh" value="{{ request()->keyword }}">
-                <div class="input-group-append">
-                  <button type="submit" id="apply_button" class="btn btn-primary">Lọc</button>
-                </div>
+      <form action="" method="get" class="w-100">
+      <div class="d-flex justify-content-between align-items-center">
+          <div class="col-sm-6 d-flex flex-column">
+              <label for="filter" class="form-label">Lọc theo</label>
+              <div class="d-flex">
+                  <select id="filter" name="filter" class="form-control" style="width:80%; margin-left:10px;">
+                      <option value="id" {{ request('filter') == 'id' ? 'selected' : '' }}>Mã hồ sơ</option>
+                      <option value="patient_id" {{ request('filter') == 'patient_id' ? 'selected' : '' }}>Mã bệnh nhân</option>
+                  </select>
               </div>
-            </div>
+              <label for="keyword" class="form-label mt-2">Từ khóa</label>
+              <div class="d-flex">
+                  <input type="search" id="keyword" name="keyword" class="form-control" style="width:80%; margin-left:10px;" value="{{ request()->keyword ?? '' }}">
+              </div>
+              <button type="submit" id="apply_button" class="btn btn-primary mt-2">Lọc</button>
           </div>
-        </form>
-      </div> -->
+      </div>
+  </form>
 
-    
+
+    </div>
+    @php
+$all_kq = DB::table('info_patients')
+    ->join('patients', 'info_patients.id', '=', 'patients.user_id')
+    ->join('enrolls', 'patients.user_id', '=', 'enrolls.patient_id')
+    ->join('ketqua', 'enrolls.id', '=', 'ketqua.hoso_id') // Join bảng ketqua
+    ->select(
+        'enrolls.id as mahs',                 // Mã hồ sơ
+        DB::raw('MAX(info_patients.HoTen) as ht'), // Tên bệnh nhân (dùng MAX hoặc bất kỳ hàm tổng hợp nào vì giá trị đã nhóm)
+        'patients.user_id as mabn',          // Mã bệnh nhân
+        DB::raw('GROUP_CONCAT(ketqua.xn_id) as xn_ids'), // Danh sách các xn_id
+        'enrolls.status',                    // Trạng thái
+        'enrolls.date'                       // Ngày khám
+    )
+    ->whereNotNull('ketqua.xn_id') // Chỉ lấy hồ sơ có kết quả xét nghiệm
+    ->groupBy('enrolls.id', 'patients.user_id', 'enrolls.status', 'enrolls.date') // Nhóm theo các cột cần thiết
+    ->orderBy('enrolls.id', 'asc') // Sắp xếp theo ID tăng dần
+    ->when(request()->has('keyword') && !empty(request()->keyword), function ($query) {
+        $keyword = '%' . request()->keyword . '%';
+        $filter = request('filter'); // Giá trị filter từ request
+
+        if ($filter === 'id') {
+            $query->where('enrolls.id', 'like', $keyword);
+        } elseif ($filter === 'patient_id') {
+            $query->where('patients.user_id', 'like', $keyword);
+        } elseif ($filter === 'all') {
+            // Điều kiện lọc cả 'mã bệnh nhân' và 'mã hồ sơ'
+            $query->where(function($query) use ($keyword) {
+                $query->where('enrolls.id', 'like', $keyword)
+                      ->orWhere('patients.user_id', 'like', $keyword);
+            });
+        }
+    })
+    ->paginate(5);
+@endphp
+
       <div class="table-responsive">
         <table class="table table-hover table-bordered align-middle">
           <thead>
             <tr  class="text-center table-primary">
               <th>Mã hồ sơ</th>
               <th>Mã bệnh nhân</th>
-              <!-- <th>Mật khẩu</th> -->
               <th>Tên bệnh nhân</th>
               <th>Ngày khám</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
+
             @foreach($all_kq as $key => $khs)
+            
             <tr>
                 <td>{{$khs->mahs}}</td>
                 <td>{{$khs->mabn}}</td>

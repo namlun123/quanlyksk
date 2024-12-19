@@ -16,8 +16,8 @@
     <form action="" method="get" class="w-100">
         <div class="d-flex justify-content-between align-items-center">
         <div class="col-sm-6 d-flex flex-column">
-            <!-- <label for="keyword" class="form-label">Tìm kiếm</label> -->
-            <input type="search" id="keyword" name="keywords" class="form-control" style = "width:50%" placeholder="Nhập Email hoặc Mã bệnh nhân" value="{{ request()->keywords }}">
+            <label for="keyword" class="form-label">Nhập tên bệnh nhân</label> 
+            <input type="search" id="keyword" name="keywords" class="form-control" style = "width:50%; margin-left: 10px;" placeholder="Nhập Email hoặc Mã bệnh nhân" value="{{ request()->keywords }}">
             <button type="submit" id="apply_button" class="btn btn-primary ml-2">Lọc</button>
         </div>
 
