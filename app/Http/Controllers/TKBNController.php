@@ -29,7 +29,7 @@ class TKBNController extends Controller
     {
         $adminId = session('admin_id');
         $validatedData = $request->validate([
-            'email' => 'required|email|unique:patients|max:255',
+            'email' => 'required|email:rfc,dns|unique:patients|max:255',
             'password' => 'required|min:1|max:100',
             'hoten' => 'required|string|max:255',
             'ngaysinh' => 'required|date|before:today',

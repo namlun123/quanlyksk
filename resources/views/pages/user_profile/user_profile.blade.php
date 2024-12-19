@@ -142,6 +142,15 @@
                 </div>
             </div>
         </section>
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
         <div class="container py-2">
         @php
@@ -161,7 +170,7 @@
                     <div class="form-group col-lg-6">
                         <label class="form-label mb-1 text-2 required">Ngày sinh</label>
                         <div class="input-group">
-                            <input type="text" class="form-control text-3 h-auto py-2 type-date"
+                            <input type="date" class="form-control text-3 h-auto py-2 type-date"
                                    name="ngaysinh" id="BirthDay" placeholder="YYYY/MM/DD" value="{{$infor->NgaySinh}}" >
                             <label class="input-group-text" for="BirthDay"><i
                                     class="fas fa-calendar-alt"></i></label>

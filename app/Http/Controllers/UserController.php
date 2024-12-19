@@ -126,25 +126,58 @@ class UserController extends Controller
     }
     public function update_profile(Request $request, $id) {
         $user = Auth::guard('patients')->user();
-        $user_id = DB::table('patients')->where('id', $id)->value('user_id');
-        $bn = ModelsBN::find($user_id);
-        if ($bn) {
-            // Cập nhật thông tin của `thisinhs`
-            $bn->HoTen = $request->input('hoten');
-            $bn->NgaySinh = $request->input('ngaysinh');
-            $bn->GioiTinh  = $request->input('gioitinh');
-            $bn->DiaChi = $request->input('diachi');
-            $bn->province  = $request->input('province');
-            $bn->district = $request->input('district');
-            $bn->ward = $request->input('ward');
-            $bn->sdt  = $request->input('sdt');
-            $bn->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-            $bn->save();  // Lưu các thay đổi vào cơ sở dữ liệu
-
-            Session()->put('message', 'Cập nhật thông tin cá nhân thành công');
+        $user_id = DB::table('patients')
+            ->where('id', $id)
+            ->value('user_id'); // Lấy user_id từ bảng patients
+    
+        // Thêm điều kiện validate ngày sinh
+        $request->validate([
+            'ngaysinh' => 'required|date|before:today', // Ngày sinh phải là ngày hợp lệ và trước ngày hiện tại
+            'email' => 'required|email:rfc,dns', // Kiểm tra email hợp lệ
+        ], [
+            'ngaysinh.before' => 'Ngày sinh phải nhỏ hơn ngày hiện tại.',
+            'ngaysinh.required' => 'Vui lòng nhập ngày sinh.',
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Định dạng email không hợp lệ.',
+        ]);
+    
+        // Lấy thông tin `info_patients` và `email` thông qua join
+        $info = DB::table('info_patients')
+            ->join('patients', 'info_patients.id', '=', 'patients.user_id')
+            ->select('info_patients.*', 'patients.email')
+            ->where('info_patients.id', $user_id)
+            ->first(); // Lấy thông tin đầu tiên thỏa điều kiện
+    
+        if ($info) {
+            // Tìm và cập nhật thông tin `info_patients`
+            $bn = ModelsBN::find($user_id);
+            if ($bn) {
+                $bn->HoTen = $request->input('hoten');
+                $bn->NgaySinh = $request->input('ngaysinh');
+                $bn->GioiTinh = $request->input('gioitinh');
+                $bn->DiaChi = $request->input('diachi');
+                $bn->province = $request->input('province');
+                $bn->district = $request->input('district');
+                $bn->ward = $request->input('ward');
+                $bn->sdt = $request->input('sdt');
+                $bn->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+                $bn->save(); // Lưu các thay đổi vào cơ sở dữ liệu
+            }
+    
+            // Cập nhật thông tin `email` nếu cần
+            DB::table('patients')
+                ->where('user_id', $user_id)
+                ->update(['email' => $request->input('email')]);
+    
+            // Ghi nhận thông báo thành công
+            Session()->put('message', 'Cập nhật thông tin cá nhân và email thành công');
+            return Redirect::to('/user-profile');
+        } else {
+            Session()->put('message', 'Không tìm thấy thông tin bệnh nhân');
             return Redirect::to('/user-profile');
         }
     }
+    
     public function showChangePasswordForm()
     {
         $user = Auth::guard('patients')->user();
