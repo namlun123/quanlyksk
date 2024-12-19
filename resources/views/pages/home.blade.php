@@ -47,11 +47,16 @@
 
                     <div class="col-md-6 col-sm-6">
                          <div class="about-info">
-                              <h2 class="wow fadeInUp" data-wow-delay="0.6s">Welcome to Your <i class="fa fa-h-square"></i>ealth Center</h2>
-                              <div class="wow fadeInUp" data-wow-delay="0.8s">
-                                   <p>Aenean luctus lobortis tellus, vel ornare enim molestie condimentum. Curabitur lacinia nisi vitae velit volutpat venenatis.</p>
-                                   <p>Sed a dignissim lacus. Quisque fermentum est non orci commodo, a luctus urna mattis. Ut placerat, diam a tempus vehicula.</p>
-                              </div>
+                              <h2 class="wow fadeInUp" data-wow-delay="0.6s">Welcome to <i class="fa fa-h-square"></i>ealth Center</h2>
+                              <div class="wow fadeInUp" data-wow-delay="0.8s" style="text-align: justify;">
+    <p>Health Center là một bệnh viện đa khoa hiện đại, cung cấp các dịch vụ y tế toàn diện từ chăm sóc sức khỏe tổng quát đến các chuyên khoa sâu. Với cơ sở vật chất hiện đại, đội ngũ y bác sĩ giàu kinh nghiệm và tâm huyết với nghề, chúng tôi cam kết mang đến cho bệnh nhân những dịch vụ chăm sóc sức khỏe chất lượng cao và hiệu quả.</p>
+
+    <p>Chúng tôi luôn chú trọng đến sự an toàn và thoải mái của bệnh nhân, với các trang thiết bị tiên tiến, môi trường sạch sẽ và thân thiện. Đội ngũ nhân viên y tế của chúng tôi luôn tận tâm lắng nghe và thấu hiểu từng nhu cầu của bệnh nhân để đưa ra những phương pháp điều trị phù hợp và hiệu quả nhất.</p>
+
+    <p>Health Center không chỉ là nơi khám chữa bệnh mà còn là điểm đến đáng tin cậy cho sức khỏe của bạn và gia đình. Hãy đến với chúng tôi để được chăm sóc sức khỏe tốt nhất và đảm bảo một cuộc sống khỏe mạnh hơn.</p>
+
+</div>
+
                               <figure class="profile wow fadeInUp" data-wow-delay="1s">
                                    <img src="{{ asset('public/frontend/images/author-image.jpg') }}" class="img-responsive" alt="">
                                    <figcaption>
@@ -226,7 +231,7 @@
      </section>
 
      <!-- MAKE AN APPOINTMENT -->
-     <section id="appointment" data-stellar-background-ratio="3">
+     <!-- <section id="appointment" data-stellar-background-ratio="3">
           <div class="container">
                <div class="row">
 
@@ -235,10 +240,10 @@
                     </div>
 
                     <div class="col-md-6 col-sm-6">
-                         <!-- CONTACT FORM HERE -->
+                         <!-- CONTACT FORM HERE --
                          <form id="appointment-form" role="form" method="post" action="#">
 
-                              <!-- SECTION TITLE -->
+                              <!-- SECTION TITLE --
                               <div class="section-title wow fadeInUp" data-wow-delay="0.4s">
                                    <h2>Make an appointment</h2>
                               </div>
@@ -282,7 +287,7 @@
 
                </div>
           </div>
-     </section>
+     </section> -->
 
 
      <!-- GOOGLE MAP -->

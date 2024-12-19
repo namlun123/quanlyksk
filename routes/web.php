@@ -65,25 +65,11 @@ Route::get('/vnpay/payment/{enroll_id}', [VNPAYController::class, 'createPayment
 Route::get('/vnpay/return', [VNPAYController::class, 'handleReturn'])->name('appointment.return');
 
 
-Route::middleware([BN::class])->group(function () {
-    Route::get('/lichthi', [UserController::class, 'lichthi'])->name('lich-thi');
-    Route::get('/diadiemthi', [UserController::class, 'diadiemthi'])->name('dia-diem-thi');
-    Route::get('/dangkythi/{baithi_id}', [UserController::class, 'dangkythi'])->name('dang-ky-thi');
-    Route::get('/user-profile', [UserController::class, 'user_profile'])->name('user-profile');
-    Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'])->name('user.update.profile');
-    Route::get('/enroll-history', [UserController::class, 'enroll_history'])->name('enroll.history');
-});
+
 //View thông tin hướng dẫn khám
 Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huongdankham');      
 
-// Route::middleware([BN::class])->group(function () {
-//     Route::get('/lichthi', [UserController::class, 'lichthi'])->name('lich-thi');
-//     Route::get('/diadiemthi', [UserController::class, 'diadiemthi'])->name('dia-diem-thi');
-//     Route::get('/dangkythi/{baithi_id}', [UserController::class, 'dangkythi'])->name('dang-ky-thi');
-//     Route::get('/user-profile', [UserController::class, 'user_profile'])->name('user-profile');
-//     Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'])->name('user.update.profile');
-//     Route::get('/enroll-history', [UserController::class, 'enroll_history'])->name('enroll.history');
-// });
+
 
 
 // View Admin
