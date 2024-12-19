@@ -29,7 +29,7 @@ class TKBNController extends Controller
     {
         $adminId = session('admin_id');
         $validatedData = $request->validate([
-            'email' => 'required|email|unique:patients|max:255',
+            'email' => 'required|email:rfc,dns|unique:patients|max:255',
             'password' => 'required|min:1|max:100',
             'hoten' => 'required|string|max:255',
             'ngaysinh' => 'required|date|before:today',
@@ -71,7 +71,7 @@ class TKBNController extends Controller
         $userId = $khs->user_id;
         DB::table('patients')->where('id', $id)->delete();
         DB::table('info_patients')->where('id', $userId)->delete();
-        Session()->put('message', 'Xóa thí sinh thành công');
+        Session()->put('message', 'Xóa bệnh nhân thành công');
         return Redirect::to('admin/all-tkbn');
     }
     public function all_bn() {
@@ -100,18 +100,18 @@ class TKBNController extends Controller
         $request->request->remove('gioitinh');
     }
     DB::table('info_patients')->where('id', $id)->update($validatedData);
-    Session()->put('message', 'Cập nhật thông tin thí sinh thành công');
+    Session()->put('message', 'Cập nhật thông tin bệnh nhân thành công');
     return Redirect::to('admin/all-bn');
     }
     public function delete_bn($id) {
         $bn = DB::table('info_patients')->where('id', $id)->first();
         if (!$bn) {
-            return back()->withErrors(['message' => 'Không tìm thấy thí sinh']);
+            return back()->withErrors(['message' => 'Không tìm thấy bệnh nhân']);
         }
         $userId = $bn->id;
         DB::table('patients')->where('user_id', $userId)->delete();
         DB::table('info_patients')->where('id', $id)->delete();
-        Session()->put('message', 'Xóa thí sinh thành công');
+        Session()->put('message', 'Xóa bệnh nhân thành công');
         return Redirect::to('admin/all-bn');
     }
 }

@@ -25,7 +25,7 @@
                         </div>
                         <div class="form-group mb-3 d-flex align-items-center">
                             <div class="captcha-img">
-                                <img src="{{ captcha_src() }}" alt="Captcha">
+                                <img src="{{ captcha_src('math') }}" alt="Captcha">
                             </div>
                             <input type="text" name="captcha" class="form-control" placeholder="Nhập Captcha" required>
                         </div>

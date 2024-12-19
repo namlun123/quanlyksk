@@ -126,7 +126,15 @@ http://www.tooplate.com/view/2098-health
                          <!-- <li><a href="#news" class="smoothScroll">Tra cứu kết quả khám</a></li> -->
                          <li><a href="{{ route('huongdankham') }}" class="smoothScroll">Hướng dẫn khám</a></li>
                          <li><a href="#google-map" class="smoothScroll">Liên hệ</a></li>
-                         <li class="appointment-btn"><a href="{{ route('appointment.create') }}">Đăng ký khám</a></li>
+                         <li class="appointment-btn">
+                         <a 
+                              href="{{ Auth::guard('patients')->check() ? route('appointment.create') : URL::to('/log-in') }}" 
+                              onclick="{{ !Auth::guard('patients')->check() ? 'return confirm(\'Bạn cần đăng nhập để tiếp tục.\')' : '' }}"
+                              class="btn-login"
+                         >
+                                   Đăng ký khám
+                              </a>
+                         </li>                    
                     </ul>
 
                </div>

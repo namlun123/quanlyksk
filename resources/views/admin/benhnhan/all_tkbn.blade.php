@@ -13,16 +13,34 @@
     <div class="panel panel-default">
         
     <div class="row mb-4">
-    <form action="" method="get" class="w-100">
+    <!-- <form action="" method="get" class="w-100">
         <div class="d-flex justify-content-between align-items-center">
         <div class="col-sm-6 d-flex flex-column">
-            <!-- <label for="keyword" class="form-label">Tìm kiếm</label> -->
+            <!- <label for="keyword" class="form-label">Tìm kiếm</label> --
             <input type="search" id="keyword" name="keyword" class="form-control" style = "width:50%" placeholder="Nhập Email hoặc Mã bệnh nhân" value="{{ request()->keyword }}">
             <button type="submit" id="apply_button" class="btn btn-primary ml-2">Lọc</button>
         </div>
 
         </div>
-    </form>
+    </form> -->
+    <form action="" method="get" class="w-100">
+      <div class="d-flex justify-content-between align-items-center">
+          <div class="col-sm-6 d-flex flex-column">
+              <label for="filter" class="form-label">Lọc theo</label>
+              <div class="d-flex">
+                  <select id="filter" name="filter" class="form-control" style="width:80%; margin-left:10px;">
+                  <option value="email" {{ request('filter') == 'email' ? 'selected' : '' }}>Email</option>
+                  <option value="user_id" {{ request('filter') == 'user_id' ? 'selected' : '' }}>Mã bệnh nhân</option>
+                  </select>
+              </div>
+              <label for="keyword" class="form-label mt-2">Từ khóa</label>
+              <div class="d-flex">
+                  <input type="search" id="keyword" name="keyword" class="form-control" style="width:80%; margin-left:10px;" value="{{ request()->keyword }}">
+              </div>
+              <button type="submit" id="apply_button" class="btn btn-primary mt-2">Lọc</button>
+          </div>
+      </div>
+  </form>
     </div>
 
 
@@ -52,27 +70,25 @@
           });
       }
 
-      $all_tkbn = $query->paginate(10);
+      $all_tkbn = $query->paginate(5);
       @endphp
      
       <div class="table-responsive">
         <table class="table table-hover table-bordered align-middle">
           <thead>
             <tr  class="text-center table-primary">
-              <th>ID</th>
+            <th>Mã bệnh nhân</th>
               <th>Email</th>
               <!-- <th>Mật khẩu</th> -->
-              <th>Mã bệnh nhân</th>
               <th>Thao tác</th>
             </tr>
           </thead>
           <tbody>
             @foreach($all_tkbn as $key => $khs)
             <tr>
-                <td>{{$khs->id}}</td>
-                <td>{{$khs->email}}</td>
+            <td>{{$khs->user_id}}</td>
+            <td>{{$khs->email}}</td>
                 <!-- <td>{{$khs->password}}</td> -->
-                <td>{{$khs->user_id}}</td>
 
                 <td>
                 <!-- <a href="{{ route('admin.edit.tkbn', ['id' => $khs->id]) }}" class="active styling-edit" ui-toggle-class="">

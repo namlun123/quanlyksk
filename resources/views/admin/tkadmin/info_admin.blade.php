@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="form-group col-lg-12">
-            <button type="submit" name="update_tkadmin" class="btn btn-info">Cập nhật thông tin</button>
+            <!-- <button type="submit" name="update_tkadmin" class="btn btn-info">Cập nhật thông tin</button> -->
             <!-- Nút đổi mật khẩu -->
             <a href="{{ route('admin.change-password') }}" class="btn btn-warning ml-2">Đổi mật khẩu</a>
         </div>

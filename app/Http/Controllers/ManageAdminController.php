@@ -28,7 +28,7 @@ class ManageAdminController extends Controller
     {
 
         $validatedData = $request->validate([
-            'email' => 'required|email|unique:admins|max:255',
+            'email' => 'required|email:rfc,dns|unique:admins|max:255',
             'password' => 'required|min:1|max:100',
             'hoten' => 'required|string|max:255',
             'ngaysinh' => 'required|date|before:today',

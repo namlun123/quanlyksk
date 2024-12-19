@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Models\Benhnhan as ModelsBN;
 use App\Models\TKbenhnhan as ModelsTKBN;
 use App\Models\User as ModelsUser;
+use App\Models\Enroll;
+
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
@@ -35,7 +37,8 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => 'required|max:100',
             'email' => 'required|unique:patients|max:100',
-            'password' => 'required|required_with:password_confirmed|same:password|max:100',
+            'password' => 'required||max:100',
+             'password_confirmation' => 'required|same:new_password',
             'ngaysinh' => 'required|before:today',
             'gioitinh' => 'required',
             'diachi' => 'required',
@@ -44,17 +47,27 @@ class UserController extends Controller
             'ward' => 'required',
             'sdt' => 'required|unique:info_patients|max:10',
         ], [
-            'email.unique' => 'Email không hợp lệ',
-            'name.required' => 'Phải có tên',
-            'email.required' => 'Phải có Email',
-            'password.required' => 'Phải có mật khẩu',
-            'ngaysinh.required' => 'Phải nhập ngày sinh',
-            'gioitinh.required' => 'Phải chọn giới tính',
-            'diachi.required' => 'Phải nhập địa chỉ',
-            'province.required' => 'Phải chọn tỉnh/thành phố',
-            'district.required' => 'Phải chọn quận/huyện',
-            'ward.required' => 'Phải chọn phường/xã',
-            'sdt.required' => 'Phải nhập số điện thoại',
+            'name.required' => 'Tên không được để trống.',
+            'name.max' => 'Tên không được vượt quá 100 ký tự.',
+            'email.required' => 'Email không được để trống.',
+            'email.email' => 'Email không đúng định dạng.',
+            'email.unique' => 'Email đã được sử dụng.',
+            'email.max' => 'Email không được vượt quá 100 ký tự.',
+            'password.required' => 'Mật khẩu không được để trống.',
+            'password.confirmed' => 'Mật khẩu nhập lại không khớp.',
+            'password_confirmation.required' => 'Mật khẩu nhập lại không khớp',
+            'password.max' => 'Mật khẩu không được vượt quá 100 ký tự.',
+            'ngaysinh.required' => 'Ngày sinh không được để trống.',
+            'ngaysinh.date' => 'Ngày sinh không hợp lệ.',
+            'ngaysinh.before' => 'Ngày sinh phải trước ngày hôm nay.',
+            'gioitinh.required' => 'Giới tính không được để trống.',
+            'diachi.required' => 'Địa chỉ không được để trống.',
+            'province.required' => 'Vui lòng chọn tỉnh/thành phố.',
+            'district.required' => 'Vui lòng chọn quận/huyện.',
+            'ward.required' => 'Vui lòng chọn phường/xã.',
+            'sdt.required' => 'Số điện thoại không được để trống.',
+            'sdt.digits' => 'Số điện thoại phải đúng 10 chữ số.',
+            'sdt.unique' => 'Số điện thoại đã được sử dụng.',
         ]);
 
         $bn = new ModelsBN();
@@ -68,13 +81,7 @@ class UserController extends Controller
         $bn->sdt  = $data['sdt'];
         $bn->created_at = Carbon::now('Asia/Ho_Chi_Minh');
         $bn->created_by = Auth::id() ?? 0;  // Hoặc NULL nếu không cần giá trị cụ thể
-        // Kiểm tra xem có bản ghi nào trong bảng admins
-        // $admin = DB::table('admins')->first();
-        // if ($admin) {
-        //     $bn->created_by = $admin->id;  // Liên kết với admin đã có
-        // } else {
-        //     $bn->created_by = NULL;  // Giá trị mặc định nếu không có admin nào
-        // }
+
         $bn->save();
 
         $user_id['user_id'] = $bn->id;
@@ -85,8 +92,7 @@ class UserController extends Controller
         $tkbn->created_by = $bn->created_by;
         $tkbn->save();
 
-        // return Redirect()->back()->with('status', 'Đăng ký thành công');
-        return Redirect::to('log-in');
+        return Redirect::to('log-in')->with('status', 'Đăng ký thành công!');
     }
 
     public function login_kh(Request $request) {
@@ -120,25 +126,58 @@ class UserController extends Controller
     }
     public function update_profile(Request $request, $id) {
         $user = Auth::guard('patients')->user();
-        $user_id = DB::table('patients')->where('id', $id)->value('user_id');
-        $bn = ModelsBN::find($user_id);
-        if ($bn) {
-            // Cập nhật thông tin của `thisinhs`
-            $bn->HoTen = $request->input('hoten');
-            $bn->NgaySinh = $request->input('ngaysinh');
-            $bn->GioiTinh  = $request->input('gioitinh');
-            $bn->DiaChi = $request->input('diachi');
-            $bn->province  = $request->input('province');
-            $bn->district = $request->input('district');
-            $bn->ward = $request->input('ward');
-            $bn->sdt  = $request->input('sdt');
-            $bn->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-            $bn->save();  // Lưu các thay đổi vào cơ sở dữ liệu
-
-            Session()->put('message', 'Cập nhật thông tin cá nhân thành công');
+        $user_id = DB::table('patients')
+            ->where('id', $id)
+            ->value('user_id'); // Lấy user_id từ bảng patients
+    
+        // Thêm điều kiện validate ngày sinh
+        $request->validate([
+            'ngaysinh' => 'required|date|before:today', // Ngày sinh phải là ngày hợp lệ và trước ngày hiện tại
+            'email' => 'required|email:rfc,dns', // Kiểm tra email hợp lệ
+        ], [
+            'ngaysinh.before' => 'Ngày sinh phải nhỏ hơn ngày hiện tại.',
+            'ngaysinh.required' => 'Vui lòng nhập ngày sinh.',
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Định dạng email không hợp lệ.',
+        ]);
+    
+        // Lấy thông tin `info_patients` và `email` thông qua join
+        $info = DB::table('info_patients')
+            ->join('patients', 'info_patients.id', '=', 'patients.user_id')
+            ->select('info_patients.*', 'patients.email')
+            ->where('info_patients.id', $user_id)
+            ->first(); // Lấy thông tin đầu tiên thỏa điều kiện
+    
+        if ($info) {
+            // Tìm và cập nhật thông tin `info_patients`
+            $bn = ModelsBN::find($user_id);
+            if ($bn) {
+                $bn->HoTen = $request->input('hoten');
+                $bn->NgaySinh = $request->input('ngaysinh');
+                $bn->GioiTinh = $request->input('gioitinh');
+                $bn->DiaChi = $request->input('diachi');
+                $bn->province = $request->input('province');
+                $bn->district = $request->input('district');
+                $bn->ward = $request->input('ward');
+                $bn->sdt = $request->input('sdt');
+                $bn->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+                $bn->save(); // Lưu các thay đổi vào cơ sở dữ liệu
+            }
+    
+            // Cập nhật thông tin `email` nếu cần
+            DB::table('patients')
+                ->where('user_id', $user_id)
+                ->update(['email' => $request->input('email')]);
+    
+            // Ghi nhận thông báo thành công
+            Session()->put('message', 'Cập nhật thông tin cá nhân và email thành công');
+            return Redirect::to('/user-profile');
+        } else {
+            Session()->put('message', 'Không tìm thấy thông tin bệnh nhân');
             return Redirect::to('/user-profile');
         }
     }
+    
     public function showChangePasswordForm()
     {
         $user = Auth::guard('patients')->user();
@@ -169,7 +208,110 @@ class UserController extends Controller
     public function huongdankham()
     {   
         $user = Auth::guard('patients')->user();
-        return view('pages.information.huongdankham', ['user'=> $user]);
+        return view('pages.information.huongdankham', ['user'=>$user]);
+    }
+    public function enroll_history() {
+        $user = Auth::guard('patients')->user();
+        return view('pages.lichsukham.enroll_history', ['user'=>$user]);
+    }
+    public function showPdf($id)
+    {
+        // Truy vấn Enroll 
+        $enroll = Enroll::where('id', $id)->firstOrFail();
+
+        // Kiểm tra nếu có kết quả PDF và trả về
+        if ($enroll->result_pdf) {
+            $filePath = public_path($enroll->result_pdf); // Đường dẫn trong thư mục public
+            if (file_exists($filePath)) {
+                return response()->file($filePath);
+            } else {
+                return redirect()->back()->withErrors(['message' => 'File PDF không tồn tại']);
+            }
+        } else {
+            return redirect()->back()->withErrors(['message' => 'Không tìm thấy PDF']);
+        }
+    }
+
+    public function edit_enroll($enroll_id) {
+        // $user = Auth::guard('khs')->user();
+        // $all_location = DB::table('tbl_location')->get();
+        // $all_baithi = DB::table('tbl_bai_thi')->get();
+        // $all_lich_thi = DB::table('tbl_lich_thi')->get();
+        // $all_infor = DB::table('thisinhs')
+        //     ->join('enrolls', 'enrolls.user_id', '=', 'thisinhs.id')
+        //     ->join('khs', 'khs.user_id', '=', 'thisinhs.id')
+        //     ->select(
+        //         'enrolls.*',
+        //         'thisinhs.*',
+        //         'khs.*',
+        //         'enrolls.id as enroll_id',
+        //         'thisinhs.id as thisinhs_id',
+        //         'khs.id as khs_id'
+        //     )->where('enrolls.id', $enroll_id)->get();
+        // return view('pages.lichsuthi.edit_enroll', ['user' => $user], compact('all_infor', 'enroll_id', 'all_location', 'all_baithi', 'all_lich_thi'));
+    }
+
+    public function update_enroll(Request $request, $enroll_id) {
+        // $user_auth = Auth::guard('khs')->user();
+        // $user_id = DB::table('enrolls')->where('id', $enroll_id)->value('user_id');
+        // $khs_id = DB::table('enrolls')->join('khs', 'khs.user_id', '=', 'enrolls.user_id')->where('enrolls.user_id', $user_id)->value('khs.id');
+        // $ts_id = DB::table('enrolls')->join('thisinhs', 'enrolls.user_id', '=', 'thisinhs.id')->value('thisinhs.id');
+        // $trang_thai = DB::table('enrolls')->where('id', $enroll_id)->value('trangthai');
+        // $user = session('user_id');
+        // $data = array();
+        // $data_khs = array();
+        // $data_ts['hoten'] = $request->hoten;
+        // $data_ts['ngaysinh'] = $request->ngaysinh;
+        // $data_ts['gioitinh'] = $request->gioitinh;
+        // $data_ts['cccd'] = $request->cccd;
+        // $data_ts['ngaycccd'] = $request->ngaycccd;
+        // $data_ts['noicap'] = $request->noicap;
+        // $data_ts['diachi'] = $request->diachi;
+        // $data_ts['province'] = $request->province;
+        // $data_ts['district'] = $request->district;
+        // $data_ts['ward'] = $request->ward;
+        // $data_ts['sdt'] = $request->sdt;
+        // $data_khs['email'] = $request->email;
+        // $data_enroll['target'] = $request->target;
+        // $data_enroll['baithi_id'] = $request->baithi_id;
+        // $data_enroll['diadiemthi_id'] = $request->diadiemthi_id;
+        // $data_enroll['lichthi_id'] = $request->lichthi_id;
+        // $data_enroll['updated_at'] = Carbon::now('Asia/Ho_Chi_Minh');
+        // $data_enroll['updated_by_user'] = $user;
+
+        // $get_image = $request->file('anh');
+        // if ($get_image) {
+        //     $get_name_image = $get_image->getClientOriginalName();
+        //     $name_image = current(explode('.', $get_name_image));
+        //     $new_image = $name_image . rand(0, 99) . '.' . $get_image->getClientOriginalExtension();
+        //     $get_image->move('public/uploads/dangkythi', $new_image);
+        //     $data['anh'] = $new_image;
+        //     DB::table('enrolls')->where('id', $enroll_id)->update($data);
+        //     Session()->put('message', 'Cập nhật thông tin đăng ký thi thành công');
+        //     return Redirect::to('enroll-history');
+        // }
+
+        // if ($trang_thai != '1') {
+        //     DB::table('khs')->where('id', $khs_id)->update($data_khs);
+        //     DB::table('thisinhs')->where('id', $ts_id)->update($data_ts);
+        //     DB::table('enrolls')->where('id', $enroll_id)->update($data_enroll);
+        //     Session()->put('message', 'Cập nhật thông tin đăng ký thi thành công');
+        //     return Redirect::to('enroll-history');
+        // } else {
+        //     return back()->withInput()->withErrors(['enroll_id' => 'Bài thi đã được thanh toán, không thể sửa thông tin']);
+        // }
+    }
+
+    public function delete_enroll($enroll_id) {
+        // $user = Auth::guard('khs')->user();
+        // $trang_thai = DB::table('enrolls')->where('id', $enroll_id)->value('trangthai');
+        // if ($trang_thai != 1) {
+        //     DB::table('enrolls')->where('id', $enroll_id)->delete();
+        //     Session()->put('message', 'Xóa thông tin đăng ký thành công');
+        //     return Redirect::to('enroll-history');
+        // } else {
+        //     return back()->withInput()->withErrors(['enroll_id' => 'Bài thi đã được thanh toán, không thể xóa thông tin']);
+        // }
     }
 
 }

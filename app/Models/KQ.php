@@ -8,18 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Support\Facades\DB;
 
-class Benhnhan extends Model implements AuthenticatableContract
+class KQ extends Model implements AuthenticatableContract
 {
+    //
     use HasFactory;
     use Authenticatable;
-    protected $table = 'info_patients';
-    public function taiKhoan()
+    protected $table = 'ketqua';
+    public function enroll()
     {
-        return $this->belongsTo(TKbenhnhan::class, 'user_id', 'id');
+        return $this->belongsTo(Enroll::class, 'hoso_id', 'id');
     }
-    public function enrolls()
+    public function loaixn()
     {
-        return $this->hasMany(Enroll::class, 'patient_id', 'id');
+        return $this->belongsTo(LoaiXN::class, 'xn_id', 'xetnghiem_id');
     }
     
 }

@@ -61,11 +61,20 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         </li>
         <!-- user login dropdown start-->
         <li class="dropdown">
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                <img alt="" src="{{asset('public/backend/images/2.png')}}">
-                <span class="username">John Doe</span>
-                <b class="caret"></b>
-            </a>
+        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+    <img alt="" src="{{asset('public/backend/images/2.png')}}">
+    <span class="username">
+        @if (Auth::guard('admins')->check())
+            @php
+                $admin = DB::table('info_admins')->where('id', Auth::guard('admins')->user()->id)->first();
+            @endphp
+            {{ $admin->HoTen }} <!-- Hiển thị tên admin từ bảng info_admins -->
+        @else
+            John Doe
+        @endif
+    </span>
+    <b class="caret"></b>
+</a>
             <ul class="dropdown-menu extended logout">
                 <li><a href="{{URL::to('admin/info-admin')}}"><i class=" fa fa-suitcase"></i>Profile
               </a></li>
@@ -127,9 +136,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <i class="fa fa-tasks"></i>
                         <span>Quản lý chuyên khoa</span>
                     </a>
-                    <ul class="sub">
-                        <li><a href="form_component.html">Thêm mới chuyên khoa</a></li>
-                        <li><a href="form_validation.html">Danh sách chuyên khoa</a></li>
+                    <ul class="sub-menu">
+                        <li><a href="{{ route('admin.add.chuyenkhoa') }}">Thêm mới chuyên khoa</a></li>
+                        <li><a href="{{ route('admin.all.chuyenkhoa') }}">Danh sách chuyên khoa</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
@@ -145,11 +154,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <li class="sub-menu">
                     <a href="javascript:;">
                         <i class=" fa fa-bar-chart-o"></i>
+                        <span>Quản lý loại xét nghiệm</span>
+                    </a>
+                    <ul class="sub">
+                        <li><a href="{{ route('admin.add.kq') }}">Thêm mới loại xét nghiệm</a></li>
+                        <li><a href="flot_chart.html">Danh sách loại xét nghiệm</a></li>
+                    </ul>
+                </li>
+                <li class="sub-menu">
+                    <a href="javascript:;">
+                        <i class=" fa fa-bar-chart-o"></i>
                         <span>Quản lý kết quả khám</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="chartjs.html">Thêm mới kết quả</a></li>
-                        <li><a href="flot_chart.html">Danh sách kết quả</a></li>
+                        <li><a href="{{ route('admin.add.kq') }}">Thêm mới kết quả</a></li>
+                        <li><a href="{{ route('admin.kq') }}">Danh sách kết quả</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
@@ -174,12 +193,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <li><a href="{{ route('admin.admins') }}">Danh sách thông tin admin</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="login.html">
-                        <i class="fa fa-user"></i>
-                        <span>Login Page</span>
-                    </a>
-                </li>
+                
             </ul>            </div>
         <!-- sidebar menu end-->
     </div>

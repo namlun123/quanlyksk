@@ -18,4 +18,10 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+  # Quy tắc để truy cập thư mục public/storage từ URL /storage
+    RewriteBase /quanlyksk/
+
+    # Đảm bảo các tệp trong thư mục public/storage có thể truy cập công khai
+    RewriteRule ^storage/(.*)$ public/storage/$1 [L]
 </IfModule>

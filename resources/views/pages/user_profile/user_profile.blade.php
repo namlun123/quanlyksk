@@ -101,6 +101,28 @@
             background-color: #a5c422;
             border: none;
         }
+        .slider .item {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 450px;
+}
+
+.slider .caption h1 {
+    font-size: 50px;
+    color: #ffffff;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.slider .caption h3 {
+    font-size: 24px;
+    color: #dddddd;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
 
     </style>
     <section id="home" class="slider" data-stellar-background-ratio="0.5">
@@ -111,7 +133,7 @@
                                     <div class="caption">
                                             <div class="col-md-offset-1 col-md-10">
                                                 <h3>Let's make your life happier</h3>
-                                                <h1>THÔNG TIN BỆNH NHÂN</h1>
+                                                <h1 style ="color: white";>THÔNG TIN BỆNH NHÂN</h1>
                                             </div>
                                     </div>
                                 </div>
@@ -120,6 +142,15 @@
                 </div>
             </div>
         </section>
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
         <div class="container py-2">
         @php
@@ -133,14 +164,14 @@
                 <div class="row">
                     <div class="form-group col-lg-6">
                         <label class="form-label mb-1 text-2 required">Họ và tên bệnh nhân</label>
-                        <input type="text" value="{{$infor->HoTen}}" class="form-control text-3 h-auto py-2" name="hoten" placeholder="Nhập họ và tên bệnh nhân" readonly>
+                        <input type="text" value="{{$infor->HoTen}}" class="form-control text-3 h-auto py-2" name="hoten" placeholder="Nhập họ và tên bệnh nhân">
                     </div>
 
                     <div class="form-group col-lg-6">
                         <label class="form-label mb-1 text-2 required">Ngày sinh</label>
                         <div class="input-group">
-                            <input type="text" class="form-control text-3 h-auto py-2 type-date"
-                                   name="ngaysinh" id="BirthDay" placeholder="YYYY/MM/DD" value="{{$infor->NgaySinh}}" readonly>
+                            <input type="date" class="form-control text-3 h-auto py-2 type-date"
+                                   name="ngaysinh" id="BirthDay" placeholder="YYYY/MM/DD" value="{{$infor->NgaySinh}}" >
                             <label class="input-group-text" for="BirthDay"><i
                                     class="fas fa-calendar-alt"></i></label>
 
@@ -151,11 +182,11 @@
                                 <label class="form-label">Giới tính</label>
                                 <div class="d-flex align-items-center">
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="gioitinh" id="1" value="1" {{ $infor->GioiTinh == '1' ? 'checked' :  'disabled' }} >
+                                        <input class="form-check-input" type="radio" name="gioitinh" id="1" value="1" {{ $infor->GioiTinh == '1' ? 'checked':''  }} >
                                         <label class="form-check-label" for="1">Nam</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="gioitinh" id="0" value="0" {{ $infor->GioiTinh == '0' ? 'checked' : 'disabled' }} >
+                                        <input class="form-check-input" type="radio" name="gioitinh" id="0" value="0" {{ $infor->GioiTinh == '0' ? 'checked':'' }} >
                                         <label class="form-check-label" for="0">Nữ</label>
                                     </div>
                                 </div>
