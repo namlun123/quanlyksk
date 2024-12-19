@@ -123,8 +123,6 @@ class AppointmentController extends Controller
     
     
     
-    
-
 private function splitTimeSlots($timeStart, $timeFinish, $totalTime)
 {
     $startTime = strtotime($timeStart);
@@ -186,17 +184,20 @@ private function isTimeOverlap($slotStart, $slotEnd, $enrollStart, $totalTime)
             'location_id' => $validated['location_id'],
             'reason'  => $validated['reason'],
             'ketqua_id' => null,  // Khi tạo lịch hẹn, chưa có kết quả
-            'created_at' => now(),
+            'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
         ]);
 
         // Chuyển hướng tới trang thanh toán và truyền thông tin cần thiết
-        return redirect()->route('payment.page', ['enroll_id' => $enroll->id]);
+        return redirect()
+        ->back()
+        ->with('success', 'Đăng ký lịch hẹn thành công!')
+        ->with('enroll_id', $enroll->id);
     }
     public function edit_appointment($id)
     {
         // Lấy thông tin người dùng hiện tại từ bảng 'patients'
         $user = Auth::guard('patients')->user();  // Lấy thông tin người dùng hiện tại từ guard 'patients'
-        $id = $user->id;
+        $userId = $user->id;  // Lưu trữ id của người dùng hiện tại
 
         // Truy vấn thông tin chi tiết người bệnh từ bảng 'infor_patients' bằng cách sử dụng user_id
         $patientInfo = DB::table('info_patients')
@@ -219,7 +220,66 @@ private function isTimeOverlap($slotStart, $slotEnd, $enrollStart, $totalTime)
             ->orderBy('date')  // Sắp xếp theo ngày
             ->get();
 
+        // Truy vấn thông tin chi tiết cuộc hẹn từ bảng enrolls
+        $appointment = DB::table('enrolls')
+            ->where('id', $id)  // Lấy thông tin cuộc hẹn dựa trên id được truyền vào
+            ->first();
+
         // Trả về view với dữ liệu
-        return view('pages.appointment.edit', compact('user', 'locations', 'specialties', 'id', 'doctors', 'timeslots', 'patientInfo'));
+        return view('pages.appointment.edit', compact(
+            'user',
+            'locations',
+            'specialties',
+            'userId',
+            'doctors',
+            'timeslots',
+            'patientInfo',
+            'appointment'
+        ));
     }
+
+    public function update_appointment(Request $request, $appointment_id)
+{
+    // Lấy thông tin người dùng hiện tại từ bảng 'patients'
+    $user = Auth::guard('patients')->user();  // Lấy thông tin người dùng hiện tại từ guard 'patients'
+    $id = $user->id; // Lấy ID người dùng hiện tại
+
+    // Lấy thông tin lịch khám theo ID
+    $appointment = Enroll::find($appointment_id);
+
+    // Nếu không tìm thấy lịch khám, trả về lỗi
+    if (!$appointment) {
+        return redirect()->route('appointment.create')->with('error', 'Lịch khám không tồn tại.');
+    }
+
+    // Kiểm tra và in thông tin lịch khám trước khi cập nhật
+    /*dd([
+        'location_id' => $request->location_id,
+        'specialization_id' => $request->specialization_id,
+        'doctor_id' => $request->doctor_id,
+        'reason' => $request->reason,
+        'date' => $request->date,
+        'time_slot' => $request->time_slot,
+        'total_cost' => $request->total_cost,
+        'updated_by_user' => $id,
+        'updateAt' = Carbon::now('Asia/Ho_Chi_Minh');
+    ]);*/
+
+    // Cập nhật thông tin lịch khám
+    $appointment->update([
+        'location_id' => $request->location_id,
+        'specialization_id' => $request->specialization_id,
+        'doctor_id' => $request->doctor_id,
+        'reason' => $request->reason,
+        'date' => $request->date,
+        'time_slot' => $request->time_slot,
+        'total_cost' => $request->total_cost,
+        'updated_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+        'updated_by_user' => $id, // Cập nhật thông tin người dùng đã sửa
+    ]);
+
+    // Trả về kết quả sau khi cập nhật
+    return redirect()->route('appointment.create')->with('success', 'Cập nhật lịch khám thành công.');
+}
+
 }

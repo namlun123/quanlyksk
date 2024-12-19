@@ -38,8 +38,10 @@
     }
 
     .appointment-form button {
-        width: 100%;
+        width: 35%;
         padding: 10px;
+        display: block; /* Chuyển nút thành block để dễ căn giữa */
+        margin: 0 auto; /* Căn giữa theo chiều ngang */
         background-color: #4CAF50;
         color: white;
         border: none;
@@ -183,7 +185,7 @@
     }
 
     /* Khung giờ bị làm mờ */
-    .time-item.booked {
+    .time-item.booked, .time-item.past{
         background-color: #e9ecef;
         color: #6c757d;
         cursor: not-allowed;
@@ -313,18 +315,18 @@
 
 
     /* Định dạng chung cho chi tiết phí */
-    #cost_details {
-        display: none; /* Ẩn mặc định */
-        margin-top: 15px;
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background-color: #f9f9f9;
-        font-size: 14px;
+.show-cost-details {
+    display: block; /* Hiển thị phần tử */
+    border: 1px solid #ddd; /* Viền */
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-size: 14px;
         color: #333;
         box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng nhẹ */
         line-height: 1.6;
-    }
+}
 
 
     /* Tiêu đề */
@@ -367,10 +369,15 @@
     h3 + label {
         margin-top: 0; /* Đảm bảo không có khoảng cách thừa giữa h3 và label */
     }
+    .disabled {
+    opacity: 0.5; /* Làm mờ phần tử */
+    pointer-events: none; /* Ngăn người dùng tương tác */
+}
+
 </style>
 
 <div class="appointment-form">
-    <h2>ĐĂNG KÍ KHÁM THEO YÊU CẦU</h2>
+    <h2>ĐĂNG KÝ KHÁM THEO YÊU CẦU</h2>
 
     <form action="{{ route('appointment.store', ['id' => $user->id]) }}" method="POST">
         @csrf
@@ -436,7 +443,7 @@
 
                 <!-- Chọn ngày -->
                 <label for="date_picker">Ngày khám</label>
-                <div id="date_picker" style="display: flex; gap: 10px;"></div>
+                <div id="date_picker" class="disabled" style="display: flex; gap: 10px;"></div>
 
                 <!-- Trường ẩn để chứa giá trị ngày -->
                 <input type="hidden" name="date" id="selected_date">
@@ -459,6 +466,19 @@
         <button type="submit">Đặt lịch</button>
     </form>
 </div>
+@if (session('success'))
+<div class="alert alert-success" role="alert">
+    <p>{{ session('success') }}</p>
+    <div style="text-align: center; margin-top: 10px;">
+        <a href="{{ route('appointment.payment', ['enroll_id' => session('enroll_id')]) }}" class="btn btn-primary">
+            Thanh toán ngay
+        </a>
+        <a href="{{ route('appointment.history') }}" class="btn btn-secondary">
+            Thanh toán sau
+        </a>
+    </div>
+</div>
+@endif
 
 <!-- Modal -->
 <div id="specializationModal" class="modal-overlay" style="display: none;">
@@ -609,61 +629,65 @@
     }
 
     function renderDays() {
-        let datePicker = document.getElementById('date_picker');
-        if (!datePicker) return;
+    let datePicker = document.getElementById('date_picker');
+    if (!datePicker) return;
 
-        datePicker.innerHTML = ''; // Xóa nội dung cũ
+    datePicker.innerHTML = ''; // Xóa nội dung cũ
 
-        let days = getNextThreeDays();
-        days.forEach((day, index) => {
-            let dayDiv = document.createElement('div');
-            dayDiv.classList.add('item_date');
-            dayDiv.setAttribute('data-id', day.date); // Lưu ngày đúng vào data-id
-            dayDiv.innerHTML = `<strong>${day.display}</strong><br>${day.dayOfWeek}`;
+    // Lấy 3 ngày tiếp theo từ hôm nay
+    let days = getNextThreeDays();
+    days.forEach((day, index) => {
+        let dayDiv = document.createElement('div');
+        dayDiv.classList.add('item_date');
+        dayDiv.setAttribute('data-id', day.date); // Lưu ngày đúng vào data-id
+        dayDiv.innerHTML = `<strong>${day.display}</strong><br>${day.dayOfWeek}`;
 
-            if (index === 0) dayDiv.classList.add('active'); // Chọn mặc định
+        // Lắng nghe sự kiện click vào ngày
+        dayDiv.addEventListener('click', function () {
+            document.querySelectorAll('.item_date').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
 
-            dayDiv.addEventListener('click', function () {
+            let selectedDate = this.getAttribute('data-id'); // Lấy ngày từ data-id
+            document.getElementById('selected_date').value = selectedDate; // Cập nhật giá trị ngày vào trường ẩn
+            resetCostDetails();
+            updateTimeSlots(selectedDate); // Gọi hàm với ngày được chọn
+        });
+
+        datePicker.appendChild(dayDiv);
+    });
+
+    // Tạo ô "Ngày khác" với input date
+    let otherDayDiv = document.createElement('div');
+    otherDayDiv.classList.add('item_date');
+    otherDayDiv.innerHTML = `
+        <span>Ngày khác</span>
+        <input type="date" id="custom_date" style="display: none;">
+    `;
+
+    // Lắng nghe sự kiện click vào "Ngày khác"
+    otherDayDiv.addEventListener('click', function () {
+        let customDateInput = document.getElementById('custom_date');
+        customDateInput.style.display = 'block'; // Hiển thị lịch chọn ngày
+        customDateInput.focus(); // Focus vào input để dễ dàng chọn ngày
+
+        // Thiết lập giá trị min cho input date là ngày hôm nay
+        let today = new Date().toISOString().split('T')[0];
+        customDateInput.setAttribute('min', today); // Đảm bảo ngày chọn phải lớn hơn hoặc bằng ngày hôm nay
+
+        // Khi người dùng chọn ngày
+        customDateInput.addEventListener('change', function () {
+            let customDate = this.value; // Lấy ngày chọn từ input
+            if (customDate) {
                 document.querySelectorAll('.item_date').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
-
-                let selectedDate = this.getAttribute('data-id'); // Lấy ngày từ data-id
-                document.getElementById('selected_date').value = selectedDate; // Cập nhật giá trị ngày vào trường ẩn
+                document.getElementById('selected_date').value = customDate; // Cập nhật giá trị vào trường ẩn
                 resetCostDetails();
-                updateTimeSlots(selectedDate); // Gọi hàm với ngày được chọn
-            });
-
-            datePicker.appendChild(dayDiv);
+                updateTimeSlots(customDate); // Gọi hàm truy vấn khung giờ với ngày chọn
+            }
         });
+    });
 
-        // Ô "Ngày khác" với input date
-        let otherDayDiv = document.createElement('div');
-        otherDayDiv.classList.add('item_date');
-        otherDayDiv.innerHTML = `
-            <span>Ngày khác</span>
-            <input type="date" id="custom_date" style="display: none;">
-        `;
-
-        // Lắng nghe sự kiện click vào "Ngày khác"
-        otherDayDiv.addEventListener('click', function () {
-            let customDateInput = document.getElementById('custom_date');
-            customDateInput.style.display = 'block'; // Hiển thị lịch chọn ngày
-            customDateInput.focus(); // Focus vào input để dễ dàng chọn ngày
-
-            // Khi người dùng chọn ngày
-            customDateInput.addEventListener('change', function () {
-                let customDate = this.value; // Lấy ngày chọn từ input
-                if (customDate) {
-                    document.querySelectorAll('.item_date').forEach(i => i.classList.remove('active'));
-                    document.getElementById('selected_date').value = customDate; // Cập nhật giá trị vào trường ẩn
-                    resetCostDetails();
-                    updateTimeSlots(customDate); // Gọi hàm truy vấn khung giờ với ngày chọn
-                }
-            });
-        });
-
-        datePicker.appendChild(otherDayDiv);
-    }
+    datePicker.appendChild(otherDayDiv);
+}
 
     // Reset tổng tiền
     function resetCostDetails() {
@@ -676,7 +700,7 @@
 
         console.log("Ngày chọn: ", selectedDate); // Debug
         if (locationId && doctorId && selectedDate) {
-            fetch(`quanlyksk/get-timeslots/${locationId}/${doctorId}/${selectedDate}`)
+            fetch(`get-timeslots/${locationId}/${doctorId}/${selectedDate}`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Không tìm thấy lịch khám hợp lệ.'); // Nếu không có dữ liệu hợp lệ
@@ -697,40 +721,56 @@
         }
     }
 
-    // Hiển thị khung giờ và thêm logic chọn 1 khung giờ duy nhất
-    function renderTimeSlots(slots) {
-        let timeTable = document.getElementById('time_table');
-        timeTable.innerHTML = ''; // Xóa khung giờ cũ
+    function renderTimeSlots(slots, selectedDate) {
+    let timeTable = document.getElementById('time_table');
+    timeTable.innerHTML = ''; // Xóa khung giờ cũ
 
-        slots.forEach(slot => {
-            let timeSlotItem = document.createElement('div');
-            timeSlotItem.classList.add('time-item');
-            timeSlotItem.textContent = `${slot.timeStart} - ${slot.timeFinish}`;
+    // Lấy thời gian hiện tại ở Việt Nam
+    const now = new Date();
+    const today = now.toISOString().split('T')[0]; // Ngày hiện tại ở định dạng "YYYY-MM-DD"
+    const thirtyMinutesFromNow = new Date(now.getTime() + 30 * 60000); // Thời gian hiện tại cộng thêm 30 phút
 
-            // Làm mờ nếu khung giờ đã được đặt
-            if (slot.status === 'booked') {
-                timeSlotItem.classList.add('booked');
-                timeSlotItem.title = 'Đã được đặt';
-            } else {
-                timeSlotItem.addEventListener('click', function () {
-                    // Bỏ chọn tất cả các khung giờ
-                    document.querySelectorAll('.time-item').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active'); // Đánh dấu khung giờ được chọn
+    slots.forEach(slot => {
+        let timeSlotItem = document.createElement('div');
+        timeSlotItem.classList.add('time-item');
+        timeSlotItem.textContent = `${slot.timeStart} - ${slot.timeFinish}`;
 
-                    // Cập nhật giá trị time_slot vào form ẩn
-                    document.getElementById('selected_time_slot').value = `${slot.timeStart} - ${slot.timeFinish}`;
+        // Chuyển thời gian khung giờ thành đối tượng Date để so sánh
+        const slotStartTime = new Date(`${selectedDate}T${slot.timeStart}:00`); // Sử dụng selectedDate để xây dựng thời gian bắt đầu
 
-                    // Hiển thị phí khi chọn giờ
-                    showCostDetails(slot);
-                });
-            }
+        // Làm mờ nếu khung giờ đã được đặt
+        if (slot.status === 'booked') {
+            timeSlotItem.classList.add('booked');
+            timeSlotItem.title = 'Đã được đặt';
+        }
+        // Làm mờ nếu khung giờ thuộc ngày hiện tại và bắt đầu trước thời gian hiện tại + 30 phút
+        else if (selectedDate === today && slotStartTime < thirtyMinutesFromNow) {
+            timeSlotItem.classList.add('past');
+            timeSlotItem.title = 'Khung giờ phải sau ít nhất 30 phút';
+        }
+        else {
+            // Khung giờ hợp lệ, thêm sự kiện click
+            timeSlotItem.addEventListener('click', function () {
+                // Bỏ chọn tất cả các khung giờ
+                document.querySelectorAll('.time-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active'); // Đánh dấu khung giờ được chọn
 
-            timeTable.appendChild(timeSlotItem);
-        });
-    }
+                // Cập nhật giá trị time_slot vào form ẩn
+                document.getElementById('selected_time_slot').value = `${slot.timeStart} - ${slot.timeFinish}`;
 
-    // Hiển thị phí và tổng tiền với định dạng tiền tệ
-    // Hiển thị phí và tổng tiền với định dạng tiền tệ
+                // Hiển thị phí khi chọn giờ
+                showCostDetails(slot);
+            });
+        }
+
+        timeTable.appendChild(timeSlotItem);
+    });
+}
+
+
+
+
+
 // Hiển thị phí và tổng tiền với định dạng tiền tệ
 function showCostDetails(slot) {
     let costDetails = document.getElementById('cost_details');
@@ -748,11 +788,15 @@ function showCostDetails(slot) {
             </div>
         `;
         
-        // Hiển thị phần chi tiết phí
-        costDetails.style.display = 'block';
+        // Thêm class để hiển thị với viền
+        costDetails.classList.add('show-cost-details');
     } else {
-        // Ẩn phần chi tiết phí nếu không có dữ liệu
-        costDetails.style.display = 'none';
+        // Xóa nội dung
+        costDetails.innerHTML = '';
+
+        // Xóa class để ẩn và loại bỏ viền
+        costDetails.classList.remove('show-cost-details');   
+        costDetails.style.display= 'none';    /* Ẩn mặc định */                                                                                                                                                                                                                                                                                                                                                    
     }
 
     // Thêm tổng phí vào trường hidden
@@ -817,6 +861,52 @@ function showCostDetails(slot) {
         updateDoctors();
     });
     console.log('Mã JavaScript đã được tải');
+
+    function resetDaysAndTimeSlots() {
+    let datePicker = document.getElementById('date_picker');
+    if (datePicker) {
+        datePicker.innerHTML = ''; // Xóa nội dung cũ của ngày
+    }
+
+    let selectedDateInput = document.getElementById('selected_date');
+    if (selectedDateInput) {
+        selectedDateInput.value = ''; // Reset trường ngày ẩn
+    }
+
+    // Xóa chi tiết chi phí
+    resetCostDetails();
+
+    // Xóa toàn bộ time_slots trong bảng time_table
+    let timeTable = document.getElementById('time_table');
+    if (timeTable) {
+        timeTable.innerHTML = ''; // Xóa nội dung của bảng time_table
+    }
+
+    // Render lại các ngày mới
+    renderDays();
+}
+
+// Gắn sự kiện thay đổi cho location, specialty, và doctor
+document.getElementById('location').addEventListener('change', resetDaysAndTimeSlots);
+document.getElementById('specialization').addEventListener('change', resetDaysAndTimeSlots);
+document.getElementById('doctor').addEventListener('change', resetDaysAndTimeSlots);
+
+document.addEventListener('DOMContentLoaded', function () {
+    const doctorSelect = document.getElementById('doctor'); // Dropdown chọn bác sĩ
+    const datePicker = document.getElementById('date_picker'); // Phần tử Ngày khám
+
+    // Lắng nghe sự kiện thay đổi của dropdown "doctor"
+    doctorSelect.addEventListener('change', function () {
+        if (doctorSelect.value) {
+            // Nếu đã chọn bác sĩ -> Bỏ lớp "disabled"
+            datePicker.classList.remove('disabled');
+        } else {
+            // Nếu chưa chọn bác sĩ -> Thêm lớp "disabled"
+            datePicker.classList.add('disabled');
+        }
+    });
+});
+
 </script>
 
 @endsection

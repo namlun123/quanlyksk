@@ -26,6 +26,8 @@ class Enroll extends Model
         'reason',
         'result_pdf',
         'created_at',
+        'updated_at',
+        'updated_by_user',
     ];
     public function patient()
     {
