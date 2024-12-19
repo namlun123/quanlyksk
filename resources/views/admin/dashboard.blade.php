@@ -1,317 +1,205 @@
 @extends("layouts.admin")
+
 @section("content")
-<!-- //market-->
+<!-- Filter Section -->
 <div class="row">
-			<div class="panel-body">
-				<div class="col-md-12 w3ls-graph">
-					<!--agileinfo-grap-->
-						<div class="agileinfo-grap">
-							<div class="agileits-box">
-								<header class="agileits-box-header clearfix">
-									<h3>Visitor Statistics</h3>
-										<div class="toolbar">
-											
-											
-										</div>
-								</header>
-								<div class="agileits-box-body clearfix">
-									<div id="hero-area"></div>
-								</div>
-							</div>
-						</div>
-	<!--//agileinfo-grap-->
+    <div class="col-md-12">
+        <form method="GET" action="{{ route('admin.dashboard') }}">
+            <div class="form-group">
+                <label for="start_date">Lọc theo khoảng thời gian:</label>
+                <input type="date" name="start_date" id="start_date" value="{{ request()->get('start_date', now()->startOfMonth()->toDateString()) }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="end_date">To:</label>
+                <input type="date" name="end_date" id="end_date" value="{{ request()->get('end_date', now()->endOfMonth()->toDateString()) }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="location_filter">Lọc theo chi nhánh:</label>
+                <select name="location_id" id="location_filter" class="form-control">
+                    <option value="">Select Location</option>
+                    @foreach($locations as $location)
+                        <option value="{{ $location->location_id }}" {{ request()->get('location_id') == $location->location_id ? 'selected' : '' }}>
+                            {{ $location->location_name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary filter-btn">Lọc</button>
+        </form>
+    </div>
+</div>
 
-				</div>
-			</div>
-		</div>
-		<div class="agil-info-calendar">
-		<!-- calendar -->
-		<!-- <div class="col-md-6 agile-calendar">
-			<div class="calendar-widget">
-                <div class="panel-heading ui-sortable-handle">
-					<span class="panel-icon">
-                      <i class="fa fa-calendar-o"></i>
-                    </span>
-                    <span class="panel-title"> Calendar Widget</span>
-                </div>
-				<!- grids --
-					<div class="agile-calendar-grid">
-						<div class="page">
-							
-							<div class="w3l-calendar-left">
-								<div class="calendar-heading">
-									
-								</div>
-								<div class="monthly" id="mycalendar"></div>
-							</div>
-							
-							<div class="clearfix"> </div>
-						</div>
-					</div>
-			</div>
-		</div> -->
-		<!-- //calendar -->
-		<!-- <div class="col-md-6 w3agile-notifications">
-			<div class="notifications">
-				<!-notification start--
-				
-					<header class="panel-heading">
-						Notification 
-					</header>
-					<div class="notify-w3ls">
-						<div class="alert alert-info clearfix">
-							<span class="alert-icon"><i class="fa fa-envelope-o"></i></span>
-							<div class="notification-info">
-								<ul class="clearfix notification-meta">
-									<li class="pull-left notification-sender"><span><a href="#">Jonathan Smith</a></span> send you a mail </li>
-									<li class="pull-right notification-time">1 min ago</li>
-								</ul>
-								<p>
-									Urgent meeting for next proposal
-								</p>
-							</div>
-						</div>
-						<div class="alert alert-danger">
-							<span class="alert-icon"><i class="fa fa-facebook"></i></span>
-							<div class="notification-info">
-								<ul class="clearfix notification-meta">
-									<li class="pull-left notification-sender"><span><a href="#">Jonathan Smith</a></span> mentioned you in a post </li>
-									<li class="pull-right notification-time">7 Hours Ago</li>
-								</ul>
-								<p>
-									Very cool photo jack
-								</p>
-							</div>
-						</div>
-						<div class="alert alert-success ">
-							<span class="alert-icon"><i class="fa fa-comments-o"></i></span>
-							<div class="notification-info">
-								<ul class="clearfix notification-meta">
-									<li class="pull-left notification-sender">You have 5 message unread</li>
-									<li class="pull-right notification-time">1 min ago</li>
-								</ul>
-								<p>
-									<a href="#">Anjelina Mewlo, Jack Flip</a> and <a href="#">3 others</a>
-								</p>
-							</div>
-						</div>
-						<div class="alert alert-warning ">
-							<span class="alert-icon"><i class="fa fa-bell-o"></i></span>
-							<div class="notification-info">
-								<ul class="clearfix notification-meta">
-									<li class="pull-left notification-sender">Domain Renew Deadline 7 days ahead</li>
-									<li class="pull-right notification-time">5 Days Ago</li>
-								</ul>
-								<p>
-									Next 5 July Thursday is the last day
-								</p>
-							</div>
-						</div>
-						<div class="alert alert-info clearfix">
-							<span class="alert-icon"><i class="fa fa-envelope-o"></i></span>
-							<div class="notification-info">
-								<ul class="clearfix notification-meta">
-									<li class="pull-left notification-sender"><span><a href="#">Jonathan Smith</a></span> send you a mail </li>
-									<li class="pull-right notification-time">1 min ago</li>
-								</ul>
-								<p>
-									Urgent meeting for next proposal
-								</p>
-							</div>
-						</div>
-						
-					</div>
-				
-				<!-notification end--
-				</div>
-			</div> -->
-			<div class="clearfix"> </div>
-		</div>
-			<!-- tasks -->
-			<div class="agile-last-grids">
-				<div class="col-md-4 agile-last-left">
-					<div class="agile-last-grid">
-						<div class="area-grids-heading">
-							<h3>Monthly</h3>
-						</div>
-						<div id="graph7"></div>
-						<script>
-						// This crosses a DST boundary in the UK.
-						Morris.Area({
-						  element: 'graph7',
-						  data: [
-							{x: '2013-03-30 22:00:00', y: 3, z: 3},
-							{x: '2013-03-31 00:00:00', y: 2, z: 0},
-							{x: '2013-03-31 02:00:00', y: 0, z: 2},
-							{x: '2013-03-31 04:00:00', y: 4, z: 4}
-						  ],
-						  xkey: 'x',
-						  ykeys: ['y', 'z'],
-						  labels: ['Y', 'Z']
-						});
-						</script>
+<!-- Statistics Section -->
+<div class="row">
+    <!-- Revenue by Location -->
+    <div class="col-md-6">
+        <div class="widget widget-shadow">
+            <h4>Doanh thu theo chi nhánh đã lọc</h4>
+            <div class="revenue-by-location">
+                @if(request()->get('location_id'))
+                    @php
+                        $location = $revenueByLocation->firstWhere('location_id', request()->get('location_id'));
+                    @endphp
+                    <h5>{{ number_format($location->total_revenue_locations ?? 0) }} VND</h5>
+                @else
+                    <h5>{{ number_format($revenueByLocation->sum('total_revenue_locations')) }} VND</h5>
+                @endif
+            </div>
+        </div>
+    </div>
 
-					</div>
-				</div>
-				<div class="col-md-4 agile-last-left agile-last-middle">
-					<div class="agile-last-grid">
-						<div class="area-grids-heading">
-							<h3>Daily</h3>
-						</div>
-						<div id="graph8"></div>
-						<script>
-						/* data stolen from http://howmanyleft.co.uk/vehicle/jaguar_'e'_type */
-						var day_data = [
-						  {"period": "2016-10-01", "licensed": 3407, "sorned": 660},
-						  {"period": "2016-09-30", "licensed": 3351, "sorned": 629},
-						  {"period": "2016-09-29", "licensed": 3269, "sorned": 618},
-						  {"period": "2016-09-20", "licensed": 3246, "sorned": 661},
-						  {"period": "2016-09-19", "licensed": 3257, "sorned": 667},
-						  {"period": "2016-09-18", "licensed": 3248, "sorned": 627},
-						  {"period": "2016-09-17", "licensed": 3171, "sorned": 660},
-						  {"period": "2016-09-16", "licensed": 3171, "sorned": 676},
-						  {"period": "2016-09-15", "licensed": 3201, "sorned": 656},
-						  {"period": "2016-09-10", "licensed": 3215, "sorned": 622}
-						];
-						Morris.Bar({
-						  element: 'graph8',
-						  data: day_data,
-						  xkey: 'period',
-						  ykeys: ['licensed', 'sorned'],
-						  labels: ['Licensed', 'SORN'],
-						  xLabelAngle: 60
-						});
-						</script>
-					</div>
-				</div>
-				<div class="col-md-4 agile-last-left agile-last-right">
-					<div class="agile-last-grid">
-						<div class="area-grids-heading">
-							<h3>Yearly</h3>
-						</div>
-						<div id="graph9"></div>
-						<script>
-						var day_data = [
-						  {"elapsed": "I", "value": 34},
-						  {"elapsed": "II", "value": 24},
-						  {"elapsed": "III", "value": 3},
-						  {"elapsed": "IV", "value": 12},
-						  {"elapsed": "V", "value": 13},
-						  {"elapsed": "VI", "value": 22},
-						  {"elapsed": "VII", "value": 5},
-						  {"elapsed": "VIII", "value": 26},
-						  {"elapsed": "IX", "value": 12},
-						  {"elapsed": "X", "value": 19}
-						];
-						Morris.Line({
-						  element: 'graph9',
-						  data: day_data,
-						  xkey: 'elapsed',
-						  ykeys: ['value'],
-						  labels: ['value'],
-						  parseTime: false
-						});
-						</script>
+    <!-- Doanh thu theo chi nhánh -->
+    <div class="col-md-12">
+        <div class="widget widget-shadow">
+            <h4>Doanh thu theo chi nhánh</h4>
+            <div class="chart-widget">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 
-					</div>
-				</div>
-				<div class="clearfix"> </div>
-			</div>
-		<!-- //tasks -->
-		<div class="agileits-w3layouts-stats">
-					<div class="col-md-4 stats-info widget">
-						<div class="stats-info-agileits">
-							<div class="stats-title">
-								<h4 class="title">Browser Stats</h4>
-							</div>
-							<div class="stats-body">
-								<ul class="list-unstyled">
-									<li>GoogleChrome <span class="pull-right">85%</span>  
-										<div class="progress progress-striped active progress-right">
-											<div class="bar green" style="width:85%;"></div> 
-										</div>
-									</li>
-									<li>Firefox <span class="pull-right">35%</span>  
-										<div class="progress progress-striped active progress-right">
-											<div class="bar yellow" style="width:35%;"></div>
-										</div>
-									</li>
-									<li>Internet Explorer <span class="pull-right">78%</span>  
-										<div class="progress progress-striped active progress-right">
-											<div class="bar red" style="width:78%;"></div>
-										</div>
-									</li>
-									<li>Safari <span class="pull-right">50%</span>  
-										<div class="progress progress-striped active progress-right">
-											<div class="bar blue" style="width:50%;"></div>
-										</div>
-									</li>
-									<li>Opera <span class="pull-right">80%</span>  
-										<div class="progress progress-striped active progress-right">
-											<div class="bar light-blue" style="width:80%;"></div>
-										</div>
-									</li>
-									<li class="last">Others <span class="pull-right">60%</span>  
-										<div class="progress progress-striped active progress-right">
-											<div class="bar orange" style="width:60%;"></div>
-										</div>
-									</li> 
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-8 stats-info stats-last widget-shadow">
-						<div class="stats-last-agile">
-							<table class="table stats-table ">
-								<thead>
-									<tr>
-										<th>S.NO</th>
-										<th>PRODUCT</th>
-										<th>STATUS</th>
-										<th>PROGRESS</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<th scope="row">1</th>
-										<td>Lorem ipsum</td>
-										<td><span class="label label-success">In progress</span></td>
-										<td><h5>85% <i class="fa fa-level-up"></i></h5></td>
-									</tr>
-									<tr>
-										<th scope="row">2</th>
-										<td>Aliquam</td>
-										<td><span class="label label-warning">New</span></td>
-										<td><h5>35% <i class="fa fa-level-up"></i></h5></td>
-									</tr>
-									<tr>
-										<th scope="row">3</th>
-										<td>Lorem ipsum</td>
-										<td><span class="label label-danger">Overdue</span></td>
-										<td><h5 class="down">40% <i class="fa fa-level-down"></i></h5></td>
-									</tr>
-									<tr>
-										<th scope="row">4</th>
-										<td>Aliquam</td>
-										<td><span class="label label-info">Out of stock</span></td>
-										<td><h5>100% <i class="fa fa-level-up"></i></h5></td>
-									</tr>
-									<tr>
-										<th scope="row">5</th>
-										<td>Lorem ipsum</td>
-										<td><span class="label label-success">In progress</span></td>
-										<td><h5 class="down">10% <i class="fa fa-level-down"></i></h5></td>
-									</tr>
-									<tr>
-										<th scope="row">6</th>
-										<td>Aliquam</td>
-										<td><span class="label label-warning">New</span></td>
-										<td><h5>38% <i class="fa fa-level-up"></i></h5></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="clearfix"> </div>
-				</div>
 @endsection
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Dữ liệu doanh thu theo chi nhánh từ controller
+        var revenueData = @json($revenueByLocation_time);
+
+        // Tạo mảng nhãn và dữ liệu doanh thu
+        var labels = revenueData.map(function(location) {
+            return location.location_name;  // Tên chi nhánh
+        });
+
+        var data = revenueData.map(function(location) {
+            return location.total_revenue_locations;  // Giá trị doanh thu
+        });
+
+        // Lấy context của canvas để vẽ biểu đồ
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+
+        // Tạo biểu đồ
+        var revenueChart = new Chart(ctx, {
+            type: 'bar',  // Biểu đồ cột
+            data: {
+                labels: labels,  // Nhãn cho trục x
+                datasets: [{
+                    label: 'Doanh thu (VND)',  // Tiêu đề của biểu đồ
+                    data: data,  // Dữ liệu doanh thu
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',  // Màu sắc cột
+                    borderColor: 'rgba(75, 192, 192, 1)',  // Màu sắc viền cột
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,  // Kích thước phản hồi với màn hình
+                scales: {
+                    y: {
+                        beginAtZero: true,  // Bắt đầu từ 0 trên trục y
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString();  // Định dạng hiển thị số với dấu phân cách hàng nghìn
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.raw.toLocaleString() + ' VND';  // Hiển thị tooltip với dấu phân cách hàng nghìn
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+<style>
+    canvas {
+        max-height: 400px;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        margin-top: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    #start_date, #end_date, #location_filter {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+    }
+
+    #start_date:focus, #end_date:focus, #location_filter:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    .filter-btn {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .filter-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .widget {
+        background-color: white;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    .widget h4 {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .widget-shadow {
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .revenue-by-location h5, .paid-people h5, .cancelled-people h5, .total-revenue h5 {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2d3b55;
+    }
+
+    .chart-widget h4 {
+        font-size: 18px;
+        color: #333;
+    }
+
+    @media (max-width: 767px) {
+        .widget {
+            margin-bottom: 15px;
+        }
+        .filter-btn {
+            width: 100%;
+        }
+    }
+</style>

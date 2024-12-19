@@ -13,6 +13,7 @@ use App\Http\Middleware\BN;
 use App\Http\Middleware\TKBN;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\Admin;
+use App\Http\Controllers\CakhamController;
 
 Route::get('/', [CaptchaController::class, 'index']);
 Route::get('/reload-captcha', [CaptchaController::class, 'reloadCaptcha']);
@@ -48,13 +49,13 @@ Route::post('/payment-webhook', [SepayController::class, 'handleWebhook'])->name
 
 
 Route::middleware([BN::class])->group(function () {
-    Route::get('/lichthi', [UserController::class, 'lichthi'])->name('lich-thi');
     Route::get('/diadiemthi', [UserController::class, 'diadiemthi'])->name('dia-diem-thi');
     Route::get('/dangkythi/{baithi_id}', [UserController::class, 'dangkythi'])->name('dang-ky-thi');
     Route::get('/user-profile', [UserController::class, 'user_profile'])->name('user-profile');
     Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'])->name('user.update.profile');
     Route::get('/enroll-history', [UserController::class, 'enroll_history'])->name('enroll.history');
 });
+
 
 
 // View Admin
@@ -69,9 +70,10 @@ Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huon
 
 
 //Nút Profile Admin
-Route::get('/admin/info-admin', [ManageAdminController::class, 'info_admin'])->name('admin.info.admin');
+Route::match(['get', 'post'], '/admin/info-admin', [ManageAdminController::class, 'info_admin'])->name('admin.info.admin');
+
 //Quản lý tài khoản admin
-Route::get('/admin/all-admins', [ManageAdminController::class, 'all_admins'])->name('admin.admins');
+    Route::get('/admin/all-admins', [ManageAdminController::class, 'all_admins'])->name('admin.admins');
     Route::get('/admin/add-tkadmin', [ManageAdminController::class, 'add_tkadmin'])->name('admin.add.tkadmin');
     Route::get('/admin/all-tkadmin', [ManageAdminController::class, 'all_tkadmin'])->name('admin.tkadmin');
     Route::get('admin/tkadmin/{id}/edit', [ManageAdminController::class, 'edit_tkadmin'])->name('admin.edit.tkadmin');
@@ -88,6 +90,8 @@ Route::get('/admin/all-admins', [ManageAdminController::class, 'all_admins'])->n
     //đổi mật khẩu tk admin cá nhân
     Route::get('/admin/change-password', [AdminController::class, 'showChangePasswordForm'])->name('admin.change-password');
     Route::post('/admin/change-password', [AdminController::class, 'changePassword'])->name('admin.change-password.post');
+    Route::post('/admin/update-admin', [AdminController::class, 'updateAdmin'])->name('admin.update.adminsprofile');
+
 
 
 //quản lý bệnh nhân
@@ -103,3 +107,23 @@ Route::get('/admin/all-bn', [TKBNController::class, 'all_bn'])->name('admin.bn')
     Route::get('admin/tkbn/{id}/edit', [TKBNController::class, 'edit_tkbn'])->name('admin.edit.tkbn');
     Route::post('admin/tkbn/{id}/update', [TKBNController::class, 'update_tkbn'])->name('admin.update.tkbn');
     Route::get('admin/tkbn/{id}/delete', [TKBNController::class, 'delete_tkbn'])->name('admin.delete.tkbn');
+    
+//Quản lý ca khám
+    Route::post('/admin/save-cakham', [CakhamController::class, 'save_cakham'])->name('admin.save.cakham');
+    Route::get('/admin/all-cakham', [CakhamController::class, 'all_cakham'])->name('admin.cakham');
+    // Route GET để hiển thị form
+Route::get('/admin/add-cakham', [CakhamController::class, 'add_cakham'])->name('admin.add.cakham');
+
+// Route POST để xử lý form khi người dùng chọn chi nhánh
+    Route::post('/admin/add-cakham', [CakhamController::class, 'add_cakham'])->name('admin.add.cakham.submit');
+
+    Route::get('admin/cakham/{id}/edit', [CakhamController::class, 'edit_cakham'])->name('admin.edit.cakham');
+    Route::post('admin/cakham/{id}/update', [CakhamController::class, 'update_cakham'])->name('admin.update.cakham');
+    Route::get('admin/cakham/{id}/delete', [CakhamController::class, 'delete_cakham'])->name('admin.delete.cakham');
+    Route::get('/admin/get-doctors', [CakhamController::class, 'get_doctors_by_location'])->name('admin.get.doctors');
+    Route::put('admin/cakham/{id}/update', [CakhamController::class, 'update_cakham']);
+
+
+
+
+    

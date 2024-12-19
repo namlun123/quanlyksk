@@ -108,8 +108,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <span>Quản lý ca khám</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="basic_table.html">Thêm mới ca khám</a></li>
-                        <li><a href="responsive_table.html">Danh sách ca khám</a></li>
+                        <li><a href="{{route('admin.add.cakham')}}">Thêm mới ca khám</a></li>
+                        <li><a href="{{route('admin.cakham')}}">Danh sách ca khám</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
