@@ -256,6 +256,23 @@ p.text-center {
                 </div>
             </div>
         </section>
+        @if (session('alert'))
+            <div class="alert alert-success">
+                {{ session('alert') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="alert alert-succes">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <div class="container py-2">
         <!-- <h1 class="text-center text-uppercase color-primary-1">
@@ -339,16 +356,23 @@ p.text-center {
                             @endphp</td>
                         <td>{{ $infor->total_cost }}</td>
                        
-                        <td><span class="text-ellipsis"></span>
+                        <td>
+                        <span class="text-ellipsis"></span>
                             @php
-                                if ($infor->status==0) {
+                            if ($infor->status == 0) {
                             @endphp
-                                <button type="submit" class="btn-success" name="redirect">Thanh toán VNPay</button>
-
+                            <form action="{{ route('appointment.payment', ['enroll_id' => $infor->hoso_id]) }}" method="get">
+                                <button type="submit" class="btn btn-success">Thanh toán VNPay</button>
+                            </form>
                             @php
-                                } else {
+                                } elseif ($infor->status == 1) {
                             @endphp
                             <span class = "">Đã thanh toán</span>
+                            @php
+                                } elseif ($infor->status == 2) {
+                            @endphp
+                                <span style= "color:red;" class="text-danger">Đã hủy</span>
+
                             @php
                                 }
                             @endphp
@@ -368,8 +392,8 @@ p.text-center {
                             @php
                                 if ($infor->status==0) {
                             @endphp
-                            <span><a href="{{ route('user.edit.enroll', ['id' => $infor->hoso_id]) }}">Sửa / </a>
-                            <a onclick="return confirm('Bạn có muốn xóa không?')" href="{{ route('user.delete.enroll', ['id' => $infor->hoso_id]) }}">Hủy đăng ký</a></span>
+                            <span><a href="{{ route('appointment.edit', ['id' => $infor->hoso_id]) }}">Sửa / </a>
+                            <a onclick="return confirm('Bạn có chắc chắn hủy lịch hẹn không?')" href="{{ route('appointment.cancel', ['id' => $infor->hoso_id]) }}">Hủy đăng ký</a></span>
 
                             @php
                                 } else {
@@ -389,4 +413,17 @@ p.text-center {
         </div>
         <h2 id="result"></h2>
     </div> 
+
+
+    <script type="text/javascript">
+    // Hàm ẩn thông báo sau 5 giây
+    setTimeout(function() {
+        // Tìm tất cả các thông báo và ẩn chúng
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            alert.style.display = 'none';
+        });
+    }, 4000); // Thời gian là 5 giây (5000 milliseconds)
+</script>
+
 @endsection
