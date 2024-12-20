@@ -26,32 +26,42 @@ class ManageAdminController extends Controller
 
     public function save_tkadmin(Request $request)
     {
-
-        $validatedData = $request->validate([
-            'email' => 'required|email:rfc,dns|unique:admins|max:255',
+        // Validate dữ liệu từ request
+        $request->validate([
+            'email' => 'required|email:rfc,dns|max:255',
             'password' => 'required|min:1|max:100',
             'hoten' => 'required|string|max:255',
             'ngaysinh' => 'required|date|before:today',
-            'sdt' => 'required|string|max:10', ]);
-        
+            'sdt' => 'required|string|max:10',
+        ]);
+    
+        // Kiểm tra số điện thoại trùng lặp
+        $existingPhone = InfoAdmin::where('SDT', $request->sdt)->exists();
+        if ($existingPhone) {
+            return back()->withErrors(['sdt' => 'Số điện thoại này đã tồn tại trong hệ thống.'])->withInput();
+        }
+    
+        // Lưu thông tin admin
         $admin = new InfoAdmin();
-        $admin -> HoTen = $request -> hoten;
-        $admin -> NgaySinh = $request -> ngaysinh;
-        $admin -> SDT = $request -> sdt;
-        $admin -> save();
-
-        $adminId = $admin -> id;
-         
-        $adminfo =  new \App\Models\tkadmin();
-        $adminfo -> email = $request -> email;
-        $adminfo -> password = Hash::make($request->password);
-        $adminfo -> admin_id = $adminId;
-        $adminfo -> save();
-        return redirect::to('admin/all-tkadmin');
-
-
+        $admin->HoTen = $request->hoten;
+        $admin->NgaySinh = $request->ngaysinh;
+        $admin->SDT = $request->sdt;
+        $admin->save();
+    
+        // Lấy admin_id của bản ghi vừa tạo
+        $adminId = $admin->id;
+    
+        // Tạo mới bản ghi trong bảng tkadmin
+        $adminfo = new \App\Models\tkadmin();
+        $adminfo->email = $request->email;
+        $adminfo->password = Hash::make($request->password);
+        $adminfo->admin_id = $adminId;
+        $adminfo->save();
+    
+        // Điều hướng về danh sách admin
+        return Redirect::to('admin/all-tkadmin');
     }
-
+    
     public function all_tkadmin()
     {
         $adminUser = Auth::guard('admins')->user();
