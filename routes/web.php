@@ -20,6 +20,9 @@ use App\Http\Middleware\Admin;
 use App\Http\Controllers\ChuyenKhoaController;
 use App\Http\Controllers\LoaiXNController;
 use App\Http\Controllers\CakhamController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\DoctorController;
+
 
 Route::get('/', [CaptchaController::class, 'index']);
 Route::get('/reload-captcha', [CaptchaController::class, 'reloadCaptcha']);
@@ -181,3 +184,21 @@ Route::post('/admin/save-loaixn', [LoaiXNController::class, 'save_loaixn'])->nam
 Route::get('/admin/edit-loaixn/{id}', [LoaiXNController::class, 'edit_loaixn'])->name('admin.edit.loaixn');
 Route::get('/admin/delete-loaixn/{id}', [LoaiXNController::class, 'delete_loaixn'])->name('admin.delete.loaixn');
 Route::post('/admin/update-loaixn/{id}', [LoaiXNController::class, 'update_loaixn'])->name('admin.update.loaixn');
+
+//Quản lý địa điểm khám
+Route::get('/admin/all-location', [LocationController::class, 'all_location'])->name('admin.all.locations');
+Route::get('/admin/add-location', [LocationController::class, 'add_location'])->name('admin.add.locations');
+Route::post('/admin/save-location', [LocationController::class, 'save_location'])->name('admin.save.location');
+Route::get('/admin/edit-location/{id}', [LocationController::class, 'edit_location'])->name('admin.edit.location');
+Route::get('/admin/delete-location/{id}', [LocationController::class, 'delete_location'])->name('admin.delete.location');
+Route::post('/admin/update-location/{id}', [LocationController::class, 'update_location'])->name('admin.update.location');
+  
+//Quản lý bác sĩ
+Route::get('/admin/all-Doctor', [DoctorController::class, 'all_Doctor'])->name('admin.all.Doctor');
+Route::get('/admin/add-Doctor', [DoctorController::class, 'add_Doctor'])->name('admin.add.Doctor');
+Route::post('/admin/save-Doctor', [DoctorController::class, 'save_Doctor'])->name('admin.save.Doctor');
+Route::get('/admin/edit-Doctor/{id}', [DoctorController::class, 'edit_Doctor'])->name('admin.edit.doctor');
+Route::get('/admin/delete-Doctor/{id}', [DoctorController::class, 'delete_Doctor'])->name('admin.delete.doctor');
+Route::post('/admin/update-Doctor/{id}', [DoctorController::class, 'update_Doctor'])->name('admin.update.doctor');
+
+  

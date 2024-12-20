@@ -11,5 +11,6 @@ class Chuyenkhoa extends Model
     use HasFactory;
     use Authenticatable;
     protected $table = 'specialties';
+    protected $primaryKey = 'specialty_id';  // Khóa chính của bảng
     protected $fillable = ['specialty','mota'];
 }
