@@ -2,7 +2,7 @@
 @section("content")
 
 <div class="table-agile-info">
-    <h3 class="text-center mt-3">DANH SÁCH CHUYÊN KHOA</h3>
+    <h3 class="text-center mt-3">DANH SÁCH LOẠI XÉT NGHIỆM</h3>
     <div class="panel panel-default">
         
         <!-- Form tìm kiếm -->
@@ -10,25 +10,25 @@
             <form action="" method="get" class="w-100">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="col-sm-6 d-flex flex-column">
-                    <label for="keyword" class="form-label">Nhập tên chuyên khoa  </label> 
+                    <label for="keyword" class="form-label">Nhập tên loại xét nghiệm  </label> 
 
-                        <input type="search" id="keyword" name="keywords" class="form-control" style="width:50%" placeholder="Nhập tên chuyên khoa" value="{{ request()->keywords }}">
+                        <input type="search" id="keyword" name="keywords" class="form-control" style="width:50%" placeholder="Nhập tên loại xét nghiệm" value="{{ request()->keywords }}">
                         <button type="submit" id="apply_button" class="btn btn-primary mt-2">Lọc</button>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- Bảng danh sách chuyên khoa -->
+        <!-- Bảng danh sách loại xét nghiệm -->
         @php
-            $query = DB::table('specialties');
+            $query = DB::table('loaixn');
 
             if (request()->has('keywords') && !empty(request()->keywords)) {
                 $keyword = request()->keywords;
-                $query->where('specialty', 'like', '%' . $keyword . '%');
+                $query->where('tenxn', 'like', '%' . $keyword . '%');
             }
 
-            $all_chuyenkhoa = $query->paginate(5);
+            $all_loaixn = $query->paginate(5);
         @endphp
 
         <div class="table-responsive">
@@ -36,22 +36,20 @@
                 <thead>
                     <tr class="text-center table-primary">
                         <th>ID</th>
-                        <th>Chuyên khoa</th>
-                        <th>Mô tả</th>
+                        <th>Tên loại xét nghiệm</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($all_chuyenkhoa as $chuyenkhoa)
+                    @foreach($all_loaixn as $loaixn)
                         <tr class="text-center">
-                            <td>{{ $chuyenkhoa->specialty_id }}</td>
-                            <td>{{ $chuyenkhoa->specialty }}</td>
-                            <td>{{ $chuyenkhoa->mota }}</td>
+                            <td>{{ $loaixn->xetnghiem_id }}</td>
+                            <td>{{ $loaixn->tenxn }}</td>
                             <td>
-                                <a href="{{ route('admin.edit.chuyenkhoa', ['id' => $chuyenkhoa->specialty_id]) }}" class="text-success">
+                                <a href="{{ route('admin.edit.loaixn', ['id' => $loaixn->xetnghiem_id]) }}" class="text-success">
                                     <i class="fa fa-pencil-square-o"></i>
                                 </a>
-                                <a onclick="return confirm('Bạn có muốn xóa không?')" href="{{ route('admin.delete.chuyenkhoa', ['id' => $chuyenkhoa->specialty_id]) }}" class="text-danger">
+                                <a onclick="return confirm('Bạn có muốn xóa không?')" href="{{ route('admin.delete.loaixn', ['id' => $loaixn->xetnghiem_id]) }}" class="text-danger">
                                     <i class="fa fa-times"></i>
                                 </a>
                             </td>
@@ -65,7 +63,7 @@
 
 <!-- Pagination -->
 <div class="d-flex justify-content-center">
-    {{ $all_chuyenkhoa->links('pagination::bootstrap-4') }}
+    {{ $all_loaixn->links('pagination::bootstrap-4') }}
 </div>
 
 @endsection

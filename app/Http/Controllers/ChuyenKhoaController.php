@@ -117,4 +117,5 @@ public function update_chuyenkhoa(Request $request, $id)
         // Redirect to the specialties list
         return redirect()->route('admin.all.chuyenkhoa');
     }
+    
 }

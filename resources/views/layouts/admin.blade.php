@@ -157,8 +157,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <span>Quản lý loại xét nghiệm</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="{{ route('admin.add.kq') }}">Thêm mới loại xét nghiệm</a></li>
-                        <li><a href="flot_chart.html">Danh sách loại xét nghiệm</a></li>
+                        <li><a href="{{ route('admin.add.loaixn') }}">Thêm mới loại xét nghiệm</a></li>
+                        <li><a href="{{ route('admin.all.loaixn') }}">Danh sách loại xét nghiệm</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
