@@ -6,15 +6,15 @@
     <div class="col-md-12">
         <form method="GET" action="{{ route('admin.dashboard') }}">
             <div class="form-group">
-                <label for="start_date">Lọc theo khoảng thời gian:</label>
+                <label for="start_date">Lọc theo khoảng thời gian từ:</label>
                 <input type="date" name="start_date" id="start_date" value="{{ request()->get('start_date', now()->startOfMonth()->toDateString()) }}" class="form-control">
             </div>
             <div class="form-group">
-                <label for="end_date">To:</label>
+                <label for="end_date">Đến:</label>
                 <input type="date" name="end_date" id="end_date" value="{{ request()->get('end_date', now()->endOfMonth()->toDateString()) }}" class="form-control">
             </div>
             <div class="form-group">
-                <label for="location_filter">Lọc theo chi nhánh:</label>
+                <label for="location_filter">Chi nhánh:</label>
                 <select name="location_id" id="location_filter" class="form-control">
                     <option value="">Select Location</option>
                     @foreach($locations as $location)
@@ -51,7 +51,7 @@
     <!-- Doanh thu theo chi nhánh -->
     <div class="col-md-12">
         <div class="widget widget-shadow">
-            <h4>Doanh thu theo chi nhánh</h4>
+            <h4>Doanh thu giữa các chi nhánh</h4>
             <div class="chart-widget">
                 <canvas id="revenueChart"></canvas>
             </div>

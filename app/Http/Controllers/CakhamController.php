@@ -65,15 +65,33 @@ class CakhamController extends Controller
     ]);
 }
 
-public function save_cakham(Request $request) {
+public function save_cakham(Request $request)
+{
     $adminUser = Auth::guard('admins')->user();
     $adminId = session('admin_id');
-    
-    // Validation cho dữ liệu nhập
+
+    // Validation dữ liệu nhập
     $request->validate([
         'date' => 'required|date',
-        'time_start' => 'required|date_format:H:i',
-        'time_finish' => 'required|date_format:H:i|after:time_start',
+        'time_start' => [
+            'required',
+            'date_format:H:i',
+            function ($attribute, $value, $fail) {
+                if (Carbon::createFromFormat('H:i', $value)->lt(Carbon::createFromTime(7, 0))) {
+                    $fail('Thời gian bắt đầu không được sớm hơn 7:00 sáng.');
+                }
+            },
+        ],
+        'time_finish' => [
+            'required',
+            'date_format:H:i',
+            'after:time_start',
+            function ($attribute, $value, $fail) {
+                if (Carbon::createFromFormat('H:i', $value)->gt(Carbon::createFromTime(22, 0))) {
+                    $fail('Thời gian kết thúc không được muộn hơn 10:00 tối.');
+                }
+            },
+        ],
         'total_time' => 'required|numeric',
         'extra_cost' => 'nullable|numeric',
         'doctor_id' => 'required|exists:doctors,id',
@@ -81,43 +99,46 @@ public function save_cakham(Request $request) {
     ], [
         'time_finish.after' => 'Thời gian kết thúc phải lớn hơn thời gian bắt đầu.',
     ]);
-    
-    // Lấy dữ liệu từ request và chuẩn bị cho việc lưu vào DB
+
+    // Chuẩn bị dữ liệu để lưu vào DB
     $data = [
-        'date' => $request->date, // Ngày tháng cụ thể
+        'date' => $request->date, // Ngày khám
         'time_start' => $request->time_start, // Thời gian bắt đầu
         'time_finish' => $request->time_finish, // Thời gian kết thúc
         'total_time' => $request->total_time, // Tổng thời gian
         'extra_cost' => $request->extra_cost, // Chi phí phát sinh
-        'doctor_id' => $request->doctor_id, // Mã bác sĩ
-        'location_id' => $request->location_id, // Mã địa điểm
+        'doctor_id' => $request->doctor_id, // ID bác sĩ
+        'location_id' => $request->location_id, // ID địa điểm
         'created_at' => Carbon::now('Asia/Ho_Chi_Minh'), // Thời gian tạo
     ];
-    
-    // Kiểm tra trùng lặp thời gian khám
+
+    // Kiểm tra trùng lặp lịch khám
     $overlap = DB::table('cakham')
-    ->where('doctor_id', $data['doctor_id'])
-    ->where('date', $data['date'])
-    ->where(function ($query) use ($data) {
-        $query->whereBetween('time_start', [$data['time_start'], $data['time_finish']]) 
-              ->orWhereBetween('time_finish', [$data['time_start'], $data['time_finish']])
-              ->orWhere(function ($subQuery) use ($data) {
-                  $subQuery->where('time_start', '<=', $data['time_start'])
-                           ->where('time_finish', '>=', $data['time_finish']);
-              });
-    })
-    ->first();
+        ->where('doctor_id', $data['doctor_id'])
+        ->where('date', $data['date'])
+        ->where(function ($query) use ($data) {
+            $query->whereBetween('time_start', [$data['time_start'], $data['time_finish']])
+                  ->orWhereBetween('time_finish', [$data['time_start'], $data['time_finish']])
+                  ->orWhere(function ($subQuery) use ($data) {
+                      $subQuery->where('time_start', '<=', $data['time_start'])
+                               ->where('time_finish', '>=', $data['time_finish']);
+                  });
+        })
+        ->first();
 
     if ($overlap) {
-        // Trả về lỗi nếu phát hiện trùng thời gian và giữ lại dữ liệu đã nhập
-        return Redirect::to('admin/add-cakham') // Đảm bảo route này đúng tên của route "add-cakham"
+        // Trả về lỗi nếu phát hiện trùng lịch
+        return Redirect::to('admin/add-cakham')
             ->withErrors([
-                'time_start' => 'Giờ khám đã tồn tại từ ' . $overlap->time_start . ' đến ' . $overlap->time_finish . ' cho bác sĩ này.'
-            ]);
+                'time_start' => 'Giờ khám đã tồn tại từ ' . $overlap->time_start . ' đến ' . $overlap->time_finish . ' cho bác sĩ này.',
+            ])
+            ->withInput();
     }
 
-    // Nếu không trùng, lưu ca khám
+    // Lưu dữ liệu vào bảng "cakham" nếu không có trùng lặp
     DB::table('cakham')->insert($data);
+
+    // Đặt thông báo thành công
     Session()->put('message', 'Thêm ca khám thành công');
     return Redirect::to('admin/all-cakham');
 }
@@ -177,7 +198,7 @@ public function save_cakham(Request $request) {
                 
             ],
             'time_start' => 'required',
-            'time_finish' => 'required',
+            'time_finish' => 'required|after:time_start',
             'total_time' => 'required|numeric',
             'extra_cost' => 'nullable|numeric',
             'doctor_id' => 'required|exists:doctors,id',  // Ensure doctor exists
@@ -189,6 +210,7 @@ public function save_cakham(Request $request) {
             'total_time.required' => 'Phải nhập thời gian tổng',
             'doctor_id.required' => 'Phải chọn bác sĩ',
             'location_id.required' => 'Phải chọn địa điểm khám',
+            'time_finish.after' => 'Thời gian kết thúc phải lớn hơn thời gian bắt đầu.'
         ]);
     
         // Prepare the data to be updated
