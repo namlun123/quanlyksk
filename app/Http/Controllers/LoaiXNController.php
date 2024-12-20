@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+
 
 class LoaiXNController extends Controller
 {
@@ -32,8 +34,12 @@ class LoaiXNController extends Controller
     {
         $adminId = session('admin_id');
 
+        // Validate dữ liệu đầu vào, kiểm tra trùng tên
         $validatedData = $request->validate([
-            'tenxn' => 'required|string|max:255',
+            'tenxn' => 'required|string|max:255|unique:loaixn,tenxn',
+        ], [
+            'tenxn.required' => 'Tên loại xét nghiệm không được để trống.',
+            'tenxn.unique' => 'Tên loại xét nghiệm đã tồn tại. Vui lòng nhập tên khác.',
         ]);
 
         DB::table('loaixn')->insert([
@@ -61,19 +67,28 @@ class LoaiXNController extends Controller
 
     public function update_loaixn(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'tenxn' => 'required|string|max:255',
+       // Validate dữ liệu đầu vào, kiểm tra trùng tên (bỏ qua tên hiện tại)
+       $validatedData = $request->validate([
+        'tenxn' => [
+            'required',
+            'string',
+            'max:255',
+            Rule::unique('loaixn', 'tenxn')->ignore($id, 'xetnghiem_id'),
+        ],
+    ], [
+        'tenxn.required' => 'Tên loại xét nghiệm không được để trống.',
+        'tenxn.unique' => 'Tên loại xét nghiệm đã tồn tại. Vui lòng nhập tên khác.',
+    ]);
+
+    DB::table('loaixn')
+        ->where('xetnghiem_id', $id)
+        ->update([
+            'tenxn' => $request->tenxn,
         ]);
 
-        DB::table('loaixn')
-            ->where('xetnghiem_id', $id)
-            ->update([
-                'tenxn' => $request->tenxn,
-            ]);
+    session()->put('message', 'Cập nhật thông tin loại xét nghiệm thành công');
 
-        session()->put('message', 'Cập nhật thông tin loại xét nghiệm thành công');
-
-        return redirect()->route('admin.all.loaixn');
+    return redirect()->route('admin.all.loaixn');
     }
 
     public function delete_loaixn($xetnghiem_id)
