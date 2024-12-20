@@ -97,18 +97,6 @@
             </div>
         </div>
 
-        <!-- Bảng lịch ca khám -->
-        <div class="col-lg-6">
-            <div class="mb-4">
-                <h4 class="text-uppercase text-title-form" id="scheduleTitle">Lịch Ca Khám</h4>
-                <table class="table table-bordered" id="scheduleTable">
-                    <!-- Bảng lịch ca khám sẽ được hiển thị ở đây -->
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-
 @endsection
 
 <script>
