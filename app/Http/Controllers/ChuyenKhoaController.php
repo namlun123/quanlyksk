@@ -6,6 +6,8 @@ use App\Models\Chuyenkhoa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
+
 
 class ChuyenKhoaController extends Controller
 {
@@ -32,23 +34,27 @@ class ChuyenKhoaController extends Controller
     public function save_chuyenkhoa(Request $request)
     {
         // Lấy ID admin từ session
-        $adminId = session('admin_id');
+    $adminId = session('admin_id');
 
-        // Validate dữ liệu đầu vào
-        $validatedData = $request->validate([
-            'specialty' => 'required|string|max:255',
-            'mota' => 'required|string|max:255',
-        ]);
+    // Validate dữ liệu đầu vào với thông báo lỗi tùy chỉnh
+    $validatedData = $request->validate([
+        'specialty' => 'required|string|max:255|unique:specialties,specialty',
+        'mota' => 'required|string|max:255',
+    ], [
+        'specialty.unique' => 'Tên chuyên khoa đã tồn tại. Vui lòng nhập tên khác.',
+        'specialty.required' => 'Tên chuyên khoa không được để trống.',
+        'mota.required' => 'Mô tả không được để trống.',
+    ]);
 
-        // Tạo mới chuyên khoa
-        $chuyenkhoa = new Chuyenkhoa();
-        $chuyenkhoa->specialty = $request->specialty; // Đúng tên input form
-        $chuyenkhoa->mota = $request->mota; // Đúng tên input form
-        $chuyenkhoa->created_by = $adminId; // Thêm ID người tạo
-        $chuyenkhoa->save();
+    // Tạo mới chuyên khoa
+    $chuyenkhoa = new Chuyenkhoa();
+    $chuyenkhoa->specialty = $request->specialty; 
+    $chuyenkhoa->mota = $request->mota; 
+    $chuyenkhoa->created_by = $adminId; 
+    $chuyenkhoa->save();
 
-        // Redirect sau khi lưu thành công
-        return redirect()->route('admin.all.chuyenkhoa')->with('success', 'Chuyên khoa đã được thêm thành công!');
+    // Redirect sau khi lưu thành công
+    return redirect()->route('admin.all.chuyenkhoa')->with('success', 'Chuyên khoa đã được thêm thành công!');
     }
     public function edit_chuyenkhoa($id)
 {
@@ -69,10 +75,19 @@ class ChuyenKhoaController extends Controller
 }
 public function update_chuyenkhoa(Request $request, $id)
 {
-    // Validate dữ liệu đầu vào
+    // Validate dữ liệu đầu vào với thông báo lỗi tùy chỉnh
     $validatedData = $request->validate([
-        'specialty' => 'required|string|max:255',
+        'specialty' => [
+            'required',
+            'string',
+            'max:255',
+            Rule::unique('specialties', 'specialty')->ignore($id, 'specialty_id'),
+        ],
         'mota' => 'required|string|max:255',
+    ], [
+        'specialty.unique' => 'Tên chuyên khoa đã tồn tại. Vui lòng nhập tên khác.',
+        'specialty.required' => 'Tên chuyên khoa không được để trống.',
+        'mota.required' => 'Mô tả không được để trống.',
     ]);
 
     // Cập nhật thông tin chuyên khoa
