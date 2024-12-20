@@ -100,13 +100,31 @@
           </tbody>
         </table>
       </div>
+      @php
+            $query = DB::table('specialties');
+
+            if (request()->has('keywords') && !empty(request()->keywords)) {
+                $keyword = request()->keywords;
+                $query->where('specialty', 'like', '%' . $keyword . '%');
+            }
+
+            $all_chuyenkhoa = $query->paginate(5);
+        @endphp
 
       <!-- Main Content Section -->
   <div class="row">
     <!-- Left Column -->
     <div class="col-md-8">
-      <h3 class="text-secondary">Danh sách chuyên khoa</h3>
-      
+      <h3 class="text-secondary">Danh sách chuyên khoa</h3> <br>
+      <div class="list-group">
+        @foreach($all_chuyenkhoa as $chuyenkhoa)
+          <a href="#" class="list-group-item list-group-item-action">
+            <div class="news-item">
+              <h5 class="font-weight-bold">{{ $chuyenkhoa->specialty }}</h5>
+              <p class="text-muted">{{ Str::limit($chuyenkhoa->mota, 100) }}</p> <!-- Show a snippet of the description -->
+            </div>
+          </a>
+        @endforeach
         
     
       </div>
