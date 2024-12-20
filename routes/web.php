@@ -18,6 +18,7 @@ use App\Http\Middleware\TKBN;
 use Illuminate\Foundation\Application;
 use App\Http\Middleware\Admin;
 use App\Http\Controllers\ChuyenKhoaController;
+use App\Http\Controllers\LoaiXNController;
 use App\Http\Controllers\CakhamController;
 
 Route::get('/', [CaptchaController::class, 'index']);
@@ -171,3 +172,11 @@ Route::post('/admin/save-chuyenkhoa', [ChuyenKhoaController::class, 'save_chuyen
 Route::get('/admin/edit-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'edit_chuyenkhoa'])->name('admin.edit.chuyenkhoa');
 Route::get('/admin/delete-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'delete_chuyenkhoa'])->name('admin.delete.chuyenkhoa');
 Route::post('/admin/update-chuyenkhoa/{id}', [ChuyenKhoaController::class, 'update_chuyenkhoa'])->name('admin.update.chuyenkhoa');
+
+//Quản lý loại xét nghiệm
+Route::get('/admin/all-loaixn', [LoaiXNController::class, 'all_loaixn'])->name('admin.all.loaixn');
+Route::get('/admin/add-loaixn', [LoaiXNController::class, 'add_loaixn'])->name('admin.add.loaixn');
+Route::post('/admin/save-loaixn', [LoaiXNController::class, 'save_loaixn'])->name('admin.save.loaixn');
+Route::get('/admin/edit-loaixn/{id}', [LoaiXNController::class, 'edit_loaixn'])->name('admin.edit.loaixn');
+Route::get('/admin/delete-loaixn/{id}', [LoaiXNController::class, 'delete_loaixn'])->name('admin.delete.loaixn');
+Route::post('/admin/update-loaixn/{id}', [LoaiXNController::class, 'update_loaixn'])->name('admin.update.loaixn');
