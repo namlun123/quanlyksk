@@ -2,7 +2,7 @@
 @section("content")
 
 <div class="table-agile-info">
-    <h3 class="text-center mt-3">DANH SÁCH CHUYÊN KHOA</h3>
+    <h3 class="text-center mt-3">DANH SÁCH CHUYÊN KHOA</h3> <br>
     <div class="panel panel-default">
         
         <!-- Form tìm kiếm -->
