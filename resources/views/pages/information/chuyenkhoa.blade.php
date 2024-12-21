@@ -9,7 +9,7 @@
     color: #333; /* Màu khi hover */
   }
   .faq-table {
-  margin-top: 30px;  /* Điều chỉnh khoảng cách theo ý muốn */
+  margin-top: 30px; /* Điều chỉnh khoảng cách theo ý muốn */
 }
 .row .col-md-6 {
   margin-bottom: 30px; /* Điều chỉnh khoảng cách theo ý muốn */
@@ -57,6 +57,27 @@
   margin-bottom: 0; /* Loại bỏ khoảng cách dưới đoạn mô tả */
 }
 
+ /* Điều chỉnh khoảng cách giữa các dòng chuyên khoa */
+ .row .col-md-4 {
+    margin-bottom: 20px; /* Khoảng cách giữa các mục là 20px */
+  }
+
+  /* Căn chỉnh tiêu đề chuyên khoa */
+  .text-secondary {
+    text-align: center;
+    margin-bottom: 30px; /* Tạo thêm khoảng cách dưới tiêu đề */
+    font-size: 32px; /* Kích thước chữ lớn hơn */
+  }
+
+  /* Thay đổi kích thước và canh giữa danh sách chuyên khoa */
+  .list-group-item {
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .row .col-md-16 {
+    margin-bottom: 50px; /* Tăng khoảng cách phía dưới */
+  }
 
 </style>
 <div class="container mt-5">
@@ -67,7 +88,38 @@
   </div>
 
   <!-- Main Content Section -->
+      @php
+            $query = DB::table('specialties');
+
+            if (request()->has('keywords') && !empty(request()->keywords)) {
+                $keyword = request()->keywords;
+                $query->where('specialty', 'like', '%' . $keyword . '%');
+            }
+
+            $all_chuyenkhoa = $query->paginate(5);
+        @endphp
+
+      <!-- Main Content Section -->
   <div class="row">
+    <!-- Left Column -->
+    <div class="col-md-16">
+      <h3 class="text-secondary">Danh sách chuyên khoa</h3> <br>
+      <div class="row">
+        @foreach($all_chuyenkhoa as $chuyenkhoa)
+          <div class="col-md-4 mb-4">
+            <a href="#" class="list-group-item list-group-item-action">
+              <div class="news-item">
+                <h5 class="font-weight-bold">{{ $chuyenkhoa->specialty }}</h5>
+                <p class="text-muted">{{ Str::limit($chuyenkhoa->mota, 100) }}</p> <!-- Show a snippet of the description -->
+              </div>
+            </a>
+          </div>
+        @endforeach
+        
+    
+      </div>
+    </div>
+    <div class="row">
     <!-- Left Column -->
     <div class="col-md-8">
       <!-- Working Hours Section -->
@@ -100,36 +152,6 @@
           </tbody>
         </table>
       </div>
-      @php
-            $query = DB::table('specialties');
-
-            if (request()->has('keywords') && !empty(request()->keywords)) {
-                $keyword = request()->keywords;
-                $query->where('specialty', 'like', '%' . $keyword . '%');
-            }
-
-            $all_chuyenkhoa = $query->paginate(5);
-        @endphp
-
-      <!-- Main Content Section -->
-  <div class="row">
-    <!-- Left Column -->
-    <div class="col-md-8">
-      <h3 class="text-secondary">Danh sách chuyên khoa</h3> <br>
-      <div class="list-group">
-        @foreach($all_chuyenkhoa as $chuyenkhoa)
-          <a href="#" class="list-group-item list-group-item-action">
-            <div class="news-item">
-              <h5 class="font-weight-bold">{{ $chuyenkhoa->specialty }}</h5>
-              <p class="text-muted">{{ Str::limit($chuyenkhoa->mota, 100) }}</p> <!-- Show a snippet of the description -->
-            </div>
-          </a>
-        @endforeach
-        
-    
-      </div>
-    </div>
-
       <!-- FAQ Section -->
       <table class="table table-bordered faq-table">
         <thead>
