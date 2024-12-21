@@ -57,13 +57,12 @@ Route::get('/get-doctors/{locationId}/{specializationId}', [AppointmentControlle
 Route::get('/get-timeslots/{locationId}/{doctorId}/{date}', [AppointmentController::class, 'getTimeSlots']);
 Route::get('/get-timeslots/{locationId}/{doctorId}/{selectedDate}', [AppointmentController::class, 'getTimeSlots']);
 Route::get('/appointment/{id}/edit', [AppointmentController::class, 'edit_appointment'])->name('appointment.edit');
+Route::put('/appointment/{appointment_id}/update', [AppointmentController::class, 'update_appointment'])->name('appointment.update');
 Route::post('/appointment/{id}/cancel', [AppointmentController::class, 'cancel_appointment'])->name('appointment.cancel');
 Route::post('/appointment/{id}/confirmpayment', [AppointmentController::class, 'confirm_payment'])->name('appointment.paymentconfirm');
 Route::put('/appointment/{appointment_id}/update', [AppointmentController::class, 'update_appointment'])->name('appointment.update');
 //Route::post('/appointment/update/{appointment_id}', [AppointmentController::class, 'update_appointment'])->name('appointment.update');
 
-// Route cho trang thanh toán
-Route::get('/vnpay/payment/{enroll_id}', [VNPAYController::class, 'createPayment'])->name('appointment.payment');
 
 // Route cho trang trả kết quả từ VNPAY
 Route::get('/vnpay/return', [VNPAYController::class, 'handleReturn'])->name('appointment.return');
@@ -78,7 +77,7 @@ Route::get('/chuyenkhoa', [UserController::class, 'chuyenkhoa'])->name('chuyenkh
 
 //View Bác sĩ
 Route::get('/Doctor', [UserController::class, 'Doctor'])->name('Doctor');   
-
+   
 
 
 
@@ -109,6 +108,10 @@ Route::match(['get', 'post'], '/admin/info-admin', [ManageAdminController::class
     Route::post('/admin/tkadmin/login', [ManageAdminController::class, 'loginPost_tkadmin'])->name('admin.loginPost.tkadmin');
     Route::post('/admin/tkadmin/{id}/changepassword', [ManageAdminController::class, 'changePassword'])->name('admin.changepassword.tkadmin');
     Route::get('admin/tkadmin/{id}/password', [ManageAdminController::class, 'password_tkadmin'])->name('admin.password.tkadmin');
+    //đổi mật khẩu tk admin cá nhân
+    Route::get('/admin/change-password', [AdminController::class, 'showChangePasswordForm'])->name('admin.change-password');
+    Route::post('/admin/change-password', [AdminController::class, 'changePassword'])->name('admin.change-password.post');
+    Route::post('/admin/update-admin', [AdminController::class, 'updateAdmin'])->name('admin.update.adminsprofile');
     Route::get('/admin/all-appointment', [AppointmentController::class, 'all_appointment'])->name('admin.appointment.all');
     Route::delete('/admin/appointments/{id}', [AppointmentController::class, 'delete'])->name('appointment.delete');
     Route::get('/admin/appointments/{id}/edit', [AppointmentController::class, 'admin_edit_appointment'])->name('admin.appointment.edit');
@@ -116,11 +119,6 @@ Route::match(['get', 'post'], '/admin/info-admin', [ManageAdminController::class
     Route::get('admin/appointments/receipt/{id}', [AppointmentController::class, 'getReceipt']);
     Route::post('/admin/appointment/cancel/{id}', [AppointmentController::class, 'admin_cancel_appointment'])->name('admin.appointment.cancel');
     Route::put('/admin/appointment/{id}/update', [AppointmentController::class, 'admin_update_appointment'])->name('admin.appointment.update');
-    //đổi mật khẩu tk admin cá nhân
-    Route::get('/admin/change-password', [AdminController::class, 'showChangePasswordForm'])->name('admin.change-password');
-    Route::post('/admin/change-password', [AdminController::class, 'changePassword'])->name('admin.change-password.post');
-    Route::post('/admin/update-admin', [AdminController::class, 'updateAdmin'])->name('admin.update.adminsprofile');
-
 
 
 //quản lý bệnh nhân
