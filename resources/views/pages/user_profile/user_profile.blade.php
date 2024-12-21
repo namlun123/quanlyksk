@@ -229,11 +229,21 @@
 
                 </div>
                 <div class="row">
-                    <div class="form-group col-lg-6">
-                        <label class="form-label mb-1 text-2 required">Số điện thoại</label>
-                        <input class="form-control text-3 h-auto py-2" type="text" name="sdt"
-                               placeholder="Nhập số điện thoại" value="{{$infor->sdt}}">
-                    </div>
+                <div class="form-group col-lg-6">
+                    <label class="form-label mb-1 text-2 required">Số điện thoại</label>
+                    <input 
+                        class="form-control text-3 h-auto py-2" 
+                        type="text" 
+                        name="sdt" 
+                        placeholder="Nhập số điện thoại" 
+                        value="{{$infor->sdt}}" 
+                        maxlength="10"
+                        pattern="0\d{9}" 
+                        title="Số điện thoại phải bắt đầu bằng 0 và gồm đúng 10 chữ số"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                    >
+                </div>
+
                     <div class="form-group col-lg-6">
                         <label class="form-label mb-1 text-2 required">Email</label>
                         <input value="{{$user->email}}" class="form-control text-3 h-auto py-2"
