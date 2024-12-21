@@ -157,10 +157,22 @@
                             });
 
                             </script>
-                            <div class="form-group">
-                                <label for="phone">Số điện thoại</label>
-                                <input type="text"  value="{{ $bn->sdt }}" name ="sdt" placeholder="Nhập số điện thoại" min_length="1" max_length="10" class="form-control">
-                            </div>
+                          <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input 
+                                type="text"  
+                                value="{{ $bn->sdt }}" 
+                                name="sdt" 
+                                placeholder="Nhập số điện thoại" 
+                                class="form-control"
+                                maxlength="10"
+                                pattern="0\d{9}" 
+                                title="Số điện thoại phải bắt đầu bằng 0 và gồm đúng 10 chữ số"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                            >
+                        </div>
+
+
 
                             <div class="btn-container">
                             <button type="submit" class="btn btn-info">Cập nhật thông tin</button>
