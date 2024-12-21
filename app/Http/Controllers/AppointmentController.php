@@ -185,6 +185,7 @@ class AppointmentController extends Controller
             ->where('specialty_id', $validated['specialization_id'])
             ->where('date', $validated['date'])
             ->where('time_slot', $validated['time_slot'])
+            ->where('status', '!=', 2) // Loại trừ các lịch hẹn đã hủy
             ->first();
 
         if ($existingAppointment) {
