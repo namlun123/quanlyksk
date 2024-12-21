@@ -39,16 +39,19 @@
                         </div>
 
                         <!-- Chuyên Khoa -->
+                        
                         <div class="form-group">
-                            <label for="specialty_id">Chuyên Khoa</label>
-                            <select name="specialty_id" id="specialty_id" class="form-control">
-                                @foreach($specialties as $specialty)
-                                    <option value="{{ $specialty->id }}" {{ $doctor->specialty_id == $specialty->id ? 'selected' : '' }}>
-                                        {{ $specialty->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+    <label for="specialty_id">Chuyên Khoa</label>
+    <select name="specialty_id" id="specialty_id" class="form-control">
+        @foreach($specialties as $specialty)
+            <option value="{{ $specialty->specialty_id }}" 
+                {{ $doctor->specialty_id == $specialty->specialty_id ? 'selected' : '' }}>
+                {{ $specialty->specialty }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
 
                         <!-- Địa điểm -->
                         <div class="form-group">

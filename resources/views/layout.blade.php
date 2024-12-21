@@ -122,7 +122,7 @@ http://www.tooplate.com/view/2098-health
                     <ul class="nav navbar-nav navbar-center">
                          <li><a href="{{ URL::to('/trang-chu') }}" class="smoothScroll">Trang chủ</a></li>
                          <li><a href="{{ route('chuyenkhoa') }}" class="smoothScroll">Chuyên khoa</a></li>
-                         <li><a href="#news" class="smoothScroll">Chuyên gia - Bác sĩ</a></li>
+                         <li><a href="{{ route('Doctor') }}" class="smoothScroll">Chuyên gia - Bác sĩ</a></li>
                          <!-- <li><a href="#news" class="smoothScroll">Tra cứu kết quả khám</a></li> -->
                          <li><a href="{{ route('huongdankham') }}" class="smoothScroll">Hướng dẫn khám</a></li>
                          <li><a href="#google-map" class="smoothScroll">Liên hệ</a></li>

@@ -35,7 +35,7 @@
 
                         <!-- Lương Cơ Bản -->
                         <div class="form-group">
-                            <label for="PhiCoBan">Lương Cơ Bản</label>
+                            <label for="PhiCoBan">Phí Cơ Bản</label>
                             <input type="number" id="PhiCoBan" name="PhiCoBan" class="form-control" placeholder="Nhập lương cơ bản" required>
                         </div>
 

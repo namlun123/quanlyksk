@@ -75,7 +75,11 @@ Route::get('/vnpay/return', [VNPAYController::class, 'handleReturn'])->name('app
 Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huongdankham');      
 
 //view Chuyên khoa
-Route::get('/chuyenkhoa', [UserController::class, 'chuyenkhoa'])->name('chuyenkhoa');      
+Route::get('/chuyenkhoa', [UserController::class, 'chuyenkhoa'])->name('chuyenkhoa');   
+
+//View Bác sĩ
+Route::get('/Doctor', [UserController::class, 'Doctor'])->name('Doctor');   
+
 
 
 

@@ -210,6 +210,11 @@ class UserController extends Controller
         $user = Auth::guard('patients')->user();
         return view('pages.information.huongdankham', ['user'=>$user]);
     }
+    public function Doctor()
+    {   
+        $user = Auth::guard('patients')->user();
+        return view('pages.information.Doctor', ['user'=>$user]);
+    }
     public function chuyenkhoa()
     {   
         $user = Auth::guard('patients')->user();
