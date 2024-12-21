@@ -59,7 +59,7 @@ Route::post('/appointment/{id}/confirmpayment', [AppointmentController::class, '
 Route::put('/appointment/{appointment_id}/update', [AppointmentController::class, 'update_appointment'])->name('appointment.update');
 //Route::post('/appointment/update/{appointment_id}', [AppointmentController::class, 'update_appointment'])->name('appointment.update');
 
-// Route cho trang thanh toán
+// Route cho trang thanh toán đăng ký
 Route::get('/vnpay/payment/{enroll_id}', [VNPAYController::class, 'createPayment'])->name('appointment.payment');
 
 // Route cho trang trả kết quả từ VNPAY

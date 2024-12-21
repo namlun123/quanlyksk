@@ -393,8 +393,11 @@ p.text-center {
                                 if ($infor->status==0) {
                             @endphp
                             <span><a href="{{ route('appointment.edit', ['id' => $infor->hoso_id]) }}">Sửa / </a>
-                            <a onclick="return confirm('Bạn có chắc chắn hủy lịch hẹn không?')" href="{{ route('appointment.cancel', ['id' => $infor->hoso_id]) }}">Hủy đăng ký</a></span>
-
+                            <form action="{{ route('appointment.cancel', ['id' => $infor->hoso_id]) }}" method="POST" id="cancel-form-{{ $infor->hoso_id }}">
+                                @csrf
+                                @method('POST') <!-- Sử dụng phương thức POST -->
+                                <a href="javascript:void(0);" onclick="document.getElementById('cancel-form-{{ $infor->hoso_id }}').submit(); return confirm('Bạn có chắc chắn hủy lịch hẹn không?')">Hủy đăng ký</a>
+                            </form>
                             @php
                                 } else {
                             @endphp

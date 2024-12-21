@@ -21,7 +21,7 @@
     .appointment-form h2 {
         color: #a5c422;
         text-align: center;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         font-size: 22px;
         font: bold;
     }
@@ -432,7 +432,7 @@
 }
 
 .appointment-value {
-    font-size: 1.1em;
+    font-size: 1em;
     color: #333;
 }
 
@@ -466,6 +466,9 @@
 </style>
 <div class="appointment-form">
     <h2>SỬA ĐĂNG KÍ KHÁM</h2>
+    <p style="text-align: center; font-style: italic; font-size: 1em; margin-bottom: 15px;">
+        <strong>Mã đăng ký: {{ $appointment->id }}</strong>
+    </p>
 
     <form action="{{ route('appointment.update', ['appointment_id' => $appointment->id]) }}" method="POST">
         @csrf

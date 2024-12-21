@@ -335,6 +335,7 @@ class AppointmentController extends Controller
             ->where('date', $request->date)
             ->where('time_slot', $request->time_slot)
             ->where('id', '<>', $appointment_id) // Không so sánh với chính lịch hiện tại
+            ->where('status', '<>', 2) // Bỏ qua các lịch đã bị hủy
             ->first();
 
         if ($existingAppointment) {
@@ -565,6 +566,7 @@ class AppointmentController extends Controller
             ->where('date', $request->date)
             ->where('time_slot', $request->time_slot)
             ->where('id', '<>', $appointment_id) // Không so sánh với chính lịch hiện tại
+            ->where('status', '<>', 2) // Bỏ qua các lịch đã bị hủy
             ->first();
 
         if ($existingAppointment) {
@@ -594,7 +596,7 @@ class AppointmentController extends Controller
 
         if ($appointment) {
             // Kiểm tra nếu lịch hẹn chưa thanh toán
-            if ($appointment->status == 0 || $appointment->status == 2) {
+            if ($appointment->status == 0) {
                 $appointment->status = 1; // Cập nhật trạng thái là "Đã thanh toán"
                 $appointment->save();
 

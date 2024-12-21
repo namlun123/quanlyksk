@@ -616,8 +616,8 @@ a:hover {
         </div>
         <!-- Thông tin ngày và xác thực -->
         <div class="footer" style="background-color: #0056b3; color: #ffffff; text-align: center; padding: 5px 10px; font-size: 11px; position: relative; bottom: 0; width: 100%; box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);">
-            <p style="margin: 5px 0;"><strong>Ngày in:</strong> <span id="printDate" style="font-weight: normal;">Đang tải...</span></p>
-            <p style="margin: 5px 0;"><strong>Xác nhận bởi:</strong> <span style="font-weight: normal;">Hệ thống chăm sóc sức khỏe HealthCare</span></p>
+            <p style="margin: 5px 0; font-size:14px"><strong>Ngày in:</strong> <span id="printDate" style="font-weight: normal;">Đang tải...</span></p>
+            <p style="margin: 5px 0; font-size:14px"><strong>Xác nhận bởi:</strong> <span style="font-weight: normal;">Hệ thống chăm sóc sức khỏe HealthCare</span></p>
         </div>
 
 
