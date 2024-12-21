@@ -26,7 +26,7 @@
                 $query->where('HoTen', 'like', '%' . $keyword . '%');
             }
 
-            $all_doctors = $query->paginate(6);
+            $all_doctors = $query->paginate(10);
         @endphp
 
         <div class="table-responsive">
