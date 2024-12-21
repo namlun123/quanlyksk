@@ -353,7 +353,7 @@
 
     /* Tiêu đề */
     .cost-header {
-        font-size: 15px;
+        font-size: 18px;
         font-weight: bold;
         color:rgb(0, 63, 131); /* Màu xanh nổi bật */
         margin-bottom: 10px;
@@ -604,7 +604,7 @@ input[type="radio"]:checked + label:hover::before {
 
                 <!-- Email -->
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" value="{{ $user->email }}" disabled>
+                <input type="email" name="email" id="email" value="{{ $patientEmail }}" disabled>
             </div>
         </div>
 

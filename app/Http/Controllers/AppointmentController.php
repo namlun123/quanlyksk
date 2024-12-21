@@ -369,6 +369,11 @@ class AppointmentController extends Controller
             return redirect()->route('enroll.history')->with('error', 'Không tìm thấy lịch hẹn để hủy.');
         }
 
+         // Kiểm tra nếu lịch hẹn đã bị hủy
+        if ($appointment->status == 2) {
+            return redirect()->route('enroll.history')->with('error', 'Lịch hẹn này đã bị hủy trước đó.');
+        }
+
         // Kiểm tra nếu lịch hẹn đã thanh toán, không thể hủy
         if ($appointment->status == 1) {
             return redirect()->route('enroll.history')->with('error', 'Lịch hẹn đã được thanh toán, không thể hủy.');
@@ -502,48 +507,62 @@ class AppointmentController extends Controller
 
     public function admin_edit_appointment($id)
     {
-        // Lấy thông tin người dùng hiện tại từ bảng 'patients'
-        $user = Auth::guard('patients')->user();  // Lấy thông tin người dùng hiện tại từ guard 'patients'
-        $userId = $user->id;  // Lưu trữ id của người dùng hiện tại
-
-        // Truy vấn thông tin chi tiết người bệnh từ bảng 'infor_patients' bằng cách sử dụng user_id
-        $patientInfo = DB::table('info_patients')
-            ->where('id', $user->user_id)  // Liên kết bảng 'patients' với bảng 'infor_patients' thông qua user_id
+        // Truy vấn thông tin chi tiết cuộc hẹn từ bảng enrolls
+        $appointment = DB::table('enrolls')
+            ->where('id', $id)  // Lấy thông tin cuộc hẹn dựa trên id được truyền vào
             ->first();
-
+        
+        // Nếu không tìm thấy cuộc hẹn, có thể thêm xử lý lỗi ở đây (ví dụ: redirect về trang danh sách cuộc hẹn)
+        if (!$appointment) {
+            return redirect()->route('admin.appointment.index')->with('error', 'Appointment not found.');
+        }
+        
+        // Lấy thông tin người bệnh (patient) qua patient_id từ bảng enrolls
+        $patientInfo = DB::table('info_patients')
+            ->where('id', $appointment->patient_id)  // Liên kết với patient_id trong bảng enrolls
+            ->first();
+    
+        // Truy vấn email từ bảng patients thông qua user_id trong bảng patients
+        $patientEmail = DB::table('patients')
+            ->where('user_id', $patientInfo->id)  // Liên kết với user_id trong bảng patients và id trong bảng info_patients
+            ->value('email');  // Lấy giá trị của email
+    
+        // Lấy thông tin người dùng hiện tại là admin từ guard 'admin'
+        $admin = Auth::guard('admins')->user();
+        if (!$admin) {
+            return redirect()->route('admin.login')->with('error', 'You must be logged in as admin to view this page.');
+        }
+    
         // Truy vấn tất cả các bệnh viện/phòng khám từ CSDL
         $locations = DB::table('locations')->get();
-
+    
         // Truy vấn tất cả các chuyên khoa từ CSDL
         $specialties = DB::table('specialties')->get();
-
+    
         // Truy vấn tất cả các bác sĩ từ CSDL
         $doctors = DB::table('doctors')->get();
-
+    
         // Truy vấn thời gian khám từ bảng cakham cho ngày hôm nay trở đi
         $today = date('Y-m-d');  // Lấy ngày hôm nay
         $timeslots = DB::table('cakham')
             ->where('date', '>=', $today)
             ->orderBy('date')  // Sắp xếp theo ngày
             ->get();
-
-        // Truy vấn thông tin chi tiết cuộc hẹn từ bảng enrolls
-        $appointment = DB::table('enrolls')
-            ->where('id', $id)  // Lấy thông tin cuộc hẹn dựa trên id được truyền vào
-            ->first();
-
+    
         // Trả về view với dữ liệu
         return view('admin.appointment.edit', compact(
-            'user',
+            'admin',
             'locations',
             'specialties',
-            'userId',
             'doctors',
             'timeslots',
             'patientInfo',
-            'appointment'
+            'appointment',
+            'patientEmail'  // Truyền email vào view
         ));
     }
+    
+    
 
     public function admin_update_appointment(Request $request, $appointment_id)
     {
@@ -615,6 +634,11 @@ class AppointmentController extends Controller
         // Kiểm tra nếu lịch hẹn không tồn tại
         if (!$appointment) {
             return redirect()->back()->with('error', 'Lịch hẹn không tồn tại.');
+        }
+
+        // Kiểm tra nếu lịch hẹn đã bị hủy
+        if ($appointment->status == 2) {
+            return redirect()->back()->with('error', 'Lịch hẹn này đã bị hủy trước đó.');
         }
     
         // Lấy ngày giờ hiện tại

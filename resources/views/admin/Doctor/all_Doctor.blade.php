@@ -14,6 +14,9 @@
 
                         <input type="search" id="keyword" name="keywords" class="form-control" style="width:50%; margin-left: 10px;" placeholder="Nhập tên bác sĩ" value="{{ request()->keywords }}">
                         <button type="submit" id="apply_button" class="btn btn-primary mt-2">Lọc</button>
+                        <div class="col-md-3 d-flex align-items-end">
+                    <a href="{{ url()->current() }}" id="show_all_button" class="btn btn-secondary w-100">Hiển thị tất cả</a>
+                </div>
                     </div>
                 </div>
             </form>
@@ -21,17 +24,20 @@
 
         <!-- Bảng danh sách Bác Sĩ -->
         @php
-    // Xây dựng truy vấn lấy danh sách bác sĩ
-    $query = DB::table('doctors');
+$query = DB::table('doctors')
+    ->leftJoin('specialties', 'doctors.specialty_id', '=', 'specialties.specialty_id')
+    ->leftJoin('locations', 'doctors.location_id', '=', 'locations.location_id');
 
-    // Kiểm tra nếu có tham số 'keywords' trong yêu cầu GET
-    if (request()->has('keywords') && !empty(request()->keywords)) {
-        $keyword = request()->keywords;
-        $query->where('HoTen', 'like', '%' . $keyword . '%');
-    }
+if (request()->has('keywords') && !empty(request()->keywords)) {
+    $keyword = request()->keywords;
+    $query->where('doctors.HoTen', 'like', '%' . $keyword . '%');
+}
 
-    // Phân trang danh sách bác sĩ với mỗi trang hiển thị 6 bác sĩ
-    $all_doctors = $query->paginate(6);
+$all_doctors = $query->select(
+    'doctors.*',
+    'specialties.specialty',
+    'locations.location_name'
+)->paginate(6);
 @endphp
 
 <div class="table-responsive">
@@ -54,8 +60,8 @@
                 <td>{{ $doctor->HoTen }}</td>
                 <td>{{ $doctor->ChucVu }}</td>
                 <td>{{ number_format($doctor->PhiCoBan, 0, ',', '.') }}</td>
-                <td>{{ $doctor->Chuyenkhoa->specialty ?? 'Không rõ' }}</td>
-                <td>{{ $doctor->location->location_name ?? 'Không rõ' }}</td>
+                <td>{{ $doctor->specialty ?? 'Không rõ' }}</td>
+                <td>{{ $doctor->location_name ?? 'Không rõ' }}</td>
                 <td>
                     <a href="{{ route('admin.edit.doctor', ['id' => $doctor->id]) }}" class="text-success">
                         <i class="fa fa-pencil-square-o"></i>
@@ -142,4 +148,24 @@
     background-color: rgba(153, 41, 41, 0.77);
     margin-left: 10px; /* Điều chỉnh khoảng cách giữa trường nhập liệu và nút lọc */
   }
+  #apply_button, #show_all_button {
+    background-color: rgba(153, 41, 41, 0.77); /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Loại bỏ viền */
+    padding: 8px 16px; /* Khoảng cách trong */
+    border-radius: 4px; /* Bo góc */
+    font-size: 14px; /* Cỡ chữ */
+    cursor: pointer; /* Con trỏ */
+    transition: background-color 0.3s ease; /* Hiệu ứng hover */
+}
+
+/* Hiệu ứng hover */
+#apply_button:hover, #show_all_button:hover {
+    background-color: #990000; /* Màu nền khi hover */
+}
+
+/* Đảm bảo nút Hiển thị tất cả nằm ngay cạnh nút Lọc */
+#apply_button + #show_all_button {
+    margin-left: 5px; /* Khoảng cách nhỏ giữa hai nút */
+}
 </style>
