@@ -359,7 +359,7 @@
 
     /* Tiêu đề */
     .cost-header {
-        font-size: 15px;
+        font-size: 18px;
         font-weight: bold;
         color:rgb(0, 63, 131); /* Màu xanh nổi bật */
         margin-bottom: 10px;

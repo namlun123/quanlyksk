@@ -36,7 +36,7 @@ table td {
     color: white !important; /* Màu chữ trắng */
     font-weight: bold;
     text-align: center; /* Căn giữa theo chiều ngang */
-    vertical-align: middle; /* Căn giữa theo chiều dọc */
+    vertical-align: middle !important; /* Căn giữa theo chiều dọc */
     padding: 12px 15px; /* Đảm bảo đủ không gian cho các ô */
 }
 
@@ -444,6 +444,7 @@ a:hover {
             <div class="filter-button-container">
                 <button type="button" class="filter-button" onclick="openQrModal()">Quét QR</button>
                 <button type="submit" class="filter-button">Tìm kiếm</button>
+                <button type="button" class="filter-button" onclick="resetFilters()">Tất cả</button>
             </div>
         </div>
     </form>
@@ -632,6 +633,13 @@ a:hover {
 
 <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
 <script>
+    function resetFilters() {
+        // Reset form để xóa các bộ lọc
+        document.querySelector('.filter-form').reset();
+        // Cập nhật lại URL để xóa các tham số GET (bộ lọc)
+        window.location.href = "{{ route('admin.appointment.all') }}";
+    }
+    
     const video = document.getElementById("video");
     const canvas = document.getElementById("canvas");
     const canvasContext = canvas.getContext("2d");
