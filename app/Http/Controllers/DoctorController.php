@@ -71,6 +71,8 @@ class DoctorController extends Controller
             'HoTen' => 'required',
             'ChucVu' => 'required',
             'PhiCoBan' => 'required|numeric',
+            'specialty_id' => 'required',
+            'location_id' => 'required'
         ]);
 
         $doctor = Doctor::findOrFail($id);
@@ -83,6 +85,8 @@ class DoctorController extends Controller
             'HoTen' => $request->HoTen,
             'ChucVu' => $request->ChucVu,
             'PhiCoBan' => $request->PhiCoBan,
+            'specialty_id' => $request->specialty_id,
+            'location_id' => $request->location_id,
             'updated_by' => $adminId, // Lưu ID của admin đã cập nhật
         ]);
 
