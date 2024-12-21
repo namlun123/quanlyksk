@@ -144,11 +144,27 @@ class ManageAdminController extends Controller
     public function delete_tkadmin($tkadmin_id)
     {
         $adminUser = Auth::guard('admins')->user();
+    
+        // Lấy thông tin admin từ bảng 'admins'
         $tkadmin = DB::table('admins')->where('id', $tkadmin_id)->first();
-        DB::table('admins')->where('id', $tkadmin_id) ->delete();
-        Session()->put('message', 'Xóa tài khoản thành công');
+    
+        if (!$tkadmin) {
+            return back()->withErrors(['message' => 'Không tìm thấy tài khoản admin']);
+        }
+    
+        // Xóa bản ghi trong bảng 'admins' trước
+        DB::table('admins')->where('id', $tkadmin_id)->delete();
+    
+        // Xóa bản ghi trong bảng 'info_admins'
+        DB::table('info_admins')->where('id', $tkadmin_id)->delete();
+    
+        // Đặt thông báo thành công
+        Session()->put('message', 'Xóa tài khoản và thông tin admin thành công');
+    
         return Redirect::to('admin/all-tkadmin');
     }
+    
+    
 
     public function delete_admins($admin_id)
     {

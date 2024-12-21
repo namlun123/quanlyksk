@@ -66,7 +66,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <span class="username">
         @if (Auth::guard('admins')->check())
             @php
-                $admin = DB::table('info_admins')->where('id', Auth::guard('admins')->user()->id)->first();
+                $admin = DB::table('info_admins')->where('id', Auth::guard('admins')->user()->admin_id)->first();
             @endphp
             {{ $admin->HoTen }} <!-- Hiển thị tên admin từ bảng info_admins -->
         @else
