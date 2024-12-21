@@ -10,7 +10,9 @@
             <form action="" method="get" class="w-100">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="col-sm-6 d-flex flex-column">
-                        <input type="search" id="keyword" name="keywords" class="form-control" style="width:50%" placeholder="Nhập tên địa điểm" value="{{ request()->keywords }}">
+                    <label for="keyword" class="form-label">Nhập địa chỉ</label> 
+
+                        <input type="search" id="keyword" name="keywords" class="form-control" style="width:50%; margin-left: 10px;" placeholder="Nhập tên địa điểm" value="{{ request()->keywords }}">
                         <button type="submit" id="apply_button" class="btn btn-primary mt-2">Lọc</button>
                     </div>
                 </div>
@@ -33,7 +35,7 @@
                 <thead>
                     <tr class="text-center table-primary">
                         <th>ID</th>
-                        <th>Location</th>
+                        <th>Tên chi nhánh</th>
                         <th>Địa chỉ</th>
                         <th>Thao tác</th>
                     </tr>
