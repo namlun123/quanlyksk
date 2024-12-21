@@ -68,35 +68,66 @@
 @endsection
 
 <style>
+ .row.mb-4 {
+        margin-bottom: 5px; /* Điều chỉnh khoảng cách giữa các hàng */
+    }
+  .col-sm-6 {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-top:30px;
+    padding-bottom:30px;
+  }
+/* Tổng thể bảng */
 .table {
-    border-collapse: collapse;
-    font-size: 14px;
-    margin: 20px 0;
-    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    border-collapse: collapse; /* Gộp đường viền */
+    font-size: 14px; /* Cỡ chữ */
+    margin: 20px 0; /* Khoảng cách của bảng */
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1) ; /* Đổ bóng nhẹ */
+
 }
 
+/* Định dạng header */
 .table thead th {
     text-transform: uppercase;
-    color: white !important;
-    text-align: center;
-    vertical-align: middle;
-    padding: 12px;
-    border: 1px solid #000;
-    background-color: rgba(153, 41, 41, 0.77) !important;
+    color: white !important; /* Màu chữ cho header */
+    text-align: center; /* Chữ căn giữa ngang */
+    vertical-align: middle; /* Căn giữa theo chiều dọc */
+    padding: 12px; /* Khoảng cách bên trong */
+    border: 1px solid rgb(6, 7, 7) ; /* Đường viền */
+    background-color:rgba(153, 41, 41, 0.77) !important;
 }
 
+/* Dòng của bảng */
+.table tbody tr {
+    transition: all 0.3s ease-in-out; /* Hiệu ứng hover */
+}
+
+/* Định dạng các ô trong bảng */
 .table tbody td {
-    padding: 10px;
-    border: 1px solid #dee2e6;
+    padding: 10px; /* Khoảng cách bên trong */
+    border: 1px solid #dee2e6; /* Đường viền */
+    color: #000 !important;
 }
 
+/* Định dạng các biểu tượng sửa/xóa */
 .table tbody td a {
-    margin: 0 5px;
-    font-size: 18px;
+   
+    margin: 0 5px; /* Khoảng cách giữa các biểu tượng */
+    font-size: 18px; /* Kích thước icon */
 }
 
-#apply_button {
-    background-color: rgba(153, 41, 41, 0.77);
-    margin-left: 10px;
+.table tbody td a:hover {
+    color: #0056b3; /* Màu khi hover */
 }
+
+/* Hiệu ứng cho cột ID và Mã bệnh nhân */
+.table tbody td:first-child, 
+.table tbody td:nth-child(4) {
+    font-weight: bold; /* Chữ đậm */
+}
+  #apply_button {
+    background-color: rgba(153, 41, 41, 0.77);
+    margin-left: 10px; /* Điều chỉnh khoảng cách giữa trường nhập liệu và nút lọc */
+  }
 </style>

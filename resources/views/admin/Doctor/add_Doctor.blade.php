@@ -34,13 +34,15 @@
                         </div>
 
                         <!-- Lương Cơ Bản -->
-                        <div class="form-group">
-                            <label for="PhiCoBan">Phí Cơ Bản</label>
-                            <input type="number" id="PhiCoBan" name="PhiCoBan" class="form-control" placeholder="Nhập lương cơ bản" required>
-                        </div>
+                        <!-- Lương Cơ Bản -->
+<div class="form-group">
+    <label for="PhiCoBan">Phí Cơ Bản</label>
+    <input type="number" id="PhiCoBan" name="PhiCoBan" class="form-control" placeholder="Nhập phí cơ bản" min="1"  required>
+</div>
 
-                        <!-- Chuyên Khoa -->
-                        <div class="form-group">
+
+                         <!-- Chuyên Khoa -->
+                         <div class="form-group">
                             <label for="specialty_id">Chuyên Khoa</label>
                             <select name="specialty_id" id="specialty_id" class="form-control">
     @foreach($specialties as $specialty)

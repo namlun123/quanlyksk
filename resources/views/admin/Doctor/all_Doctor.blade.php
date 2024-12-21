@@ -19,69 +19,60 @@
 
         <!-- Bảng danh sách Bác Sĩ -->
         @php
-            $query = DB::table('doctors');
+    // Xây dựng truy vấn lấy danh sách bác sĩ
+    $query = DB::table('doctors');
 
-            if (request()->has('keywords') && !empty(request()->keywords)) {
-                $keyword = request()->keywords;
-                $query->where('HoTen', 'like', '%' . $keyword . '%');
-            }
+    // Kiểm tra nếu có tham số 'keywords' trong yêu cầu GET
+    if (request()->has('keywords') && !empty(request()->keywords)) {
+        $keyword = request()->keywords;
+        $query->where('HoTen', 'like', '%' . $keyword . '%');
+    }
 
-            $all_doctors = $query->paginate(10);
-        @endphp
+    // Phân trang danh sách bác sĩ với mỗi trang hiển thị 6 bác sĩ
+    $all_doctors = $query->paginate(6);
+@endphp
 
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered align-middle">
-                <thead>
-                    <tr class="text-center table-primary">
-                        <th>ID</th>
-                        <th>Họ Tên</th>
-                        <th>Chức Vụ</th>
-                        <th>Phí Cơ Bản</th>
-                        <th>Chuyên Khoa</th>
-                        <th>Địa Điểm</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach($doctors as $doctor)
-    <tr class="text-center">
-        <td>{{ $doctor->id }}</td>
-        <td>{{ $doctor->HoTen }}</td>
-        <td>{{ $doctor->ChucVu }}</td>
-        <td>{{ number_format($doctor->PhiCoBan, 0, ',', '.') }}</td>
-        <td>
-            @if($doctor->Chuyenkhoa)
-                {{ $doctor->Chuyenkhoa->specialty }}
-            @endif
-        </td>
-        <td>
-            @if($doctor->location)
-                {{ $doctor->location->location_name }}
-            @endif
-        </td>
-        <td>
-            <a href="{{ route('admin.edit.doctor', ['id' => $doctor->id]) }}" class="text-success">
-                <i class="fa fa-pencil-square-o"></i>
-            </a>
-            <a onclick="return confirm('Bạn có muốn xóa không?')" href="{{ route('admin.delete.doctor', ['id' => $doctor->id]) }}" class="text-danger">
-                <i class="fa fa-times"></i>
-            </a>
-        </td>
-    </tr>
-@endforeach
-
-
-</tbody>
-
-            </table>
-        </div>
-    </div>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle">
+        <thead>
+            <tr class="text-center table-primary">
+                <th>ID</th>
+                <th>Họ Tên</th>
+                <th>Chức Vụ</th>
+                <th>Phí Cơ Bản</th>
+                <th>Chuyên Khoa</th>
+                <th>Địa Điểm</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach($all_doctors as $doctor)
+            <tr class="text-center">
+                <td>{{ $doctor->id }}</td>
+                <td>{{ $doctor->HoTen }}</td>
+                <td>{{ $doctor->ChucVu }}</td>
+                <td>{{ number_format($doctor->PhiCoBan, 0, ',', '.') }}</td>
+                <td>{{ $doctor->Chuyenkhoa->specialty ?? 'Không rõ' }}</td>
+                <td>{{ $doctor->location->location_name ?? 'Không rõ' }}</td>
+                <td>
+                    <a href="{{ route('admin.edit.doctor', ['id' => $doctor->id]) }}" class="text-success">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </a>
+                    <a onclick="return confirm('Bạn có muốn xóa không?')" href="{{ route('admin.delete.doctor', ['id' => $doctor->id]) }}" class="text-danger">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
 </div>
 
 <!-- Pagination -->
 <div class="d-flex justify-content-center">
-    {{ $all_doctors->links('pagination::bootstrap-4') }}
+    {{ $all_doctors->appends(request()->query())->links('pagination::bootstrap-4') }}
 </div>
+
 
 @endsection
 
