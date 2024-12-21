@@ -369,6 +369,11 @@ class AppointmentController extends Controller
             return redirect()->route('enroll.history')->with('error', 'Không tìm thấy lịch hẹn để hủy.');
         }
 
+         // Kiểm tra nếu lịch hẹn đã bị hủy
+        if ($appointment->status == 2) {
+            return redirect()->route('enroll.history')->with('error', 'Lịch hẹn này đã bị hủy trước đó.');
+        }
+
         // Kiểm tra nếu lịch hẹn đã thanh toán, không thể hủy
         if ($appointment->status == 1) {
             return redirect()->route('enroll.history')->with('error', 'Lịch hẹn đã được thanh toán, không thể hủy.');
@@ -629,6 +634,11 @@ class AppointmentController extends Controller
         // Kiểm tra nếu lịch hẹn không tồn tại
         if (!$appointment) {
             return redirect()->back()->with('error', 'Lịch hẹn không tồn tại.');
+        }
+
+        // Kiểm tra nếu lịch hẹn đã bị hủy
+        if ($appointment->status == 2) {
+            return redirect()->back()->with('error', 'Lịch hẹn này đã bị hủy trước đó.');
         }
     
         // Lấy ngày giờ hiện tại
