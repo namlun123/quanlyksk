@@ -28,6 +28,7 @@ class Enroll extends Model
         'created_at',
         'updated_at',
         'updated_by_user',
+        'updated_by_admin',
     ];
     public function patient()
     {
@@ -38,12 +39,4 @@ class Enroll extends Model
         return $this->hasMany(KQ::class, 'hoso_id', 'id');
     }
 
-    public function doctor()
-    {
-        return $this->belongsTo(Doctor::class, 'doctor_id');  // 'doctor_id' là khóa ngoại trong bảng enrolls
-    }
-    public function locations()
-    {
-        return $this->belongsTo(Benhnhan::class, 'location_id'); // 'patient_id' là trường trong bảng enroll
-    }
 }

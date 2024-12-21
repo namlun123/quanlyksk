@@ -108,7 +108,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <span>Quản lý đăng ký khám</span>
                     </a>
                     <ul class="sub">
-						<li><a href="glyphicon.html">Danh sách ca khám</a></li>
+                        <li><a href="{{ route('admin.appointment.all') }}">Danh sách đăng ký khám</a></li>
                     </ul>
                 </li>
                 <li>

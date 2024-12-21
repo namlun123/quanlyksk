@@ -28,6 +28,28 @@ class VNPAYController extends Controller
     public function createPayment($enroll_id, Request $request)
     {
         $enroll = Enroll::find($enroll_id);
+
+        // Kiểm tra nếu lịch hẹn không tồn tại
+        if (!$enroll) {
+            return redirect()->route('enroll.history')->with('error', 'Lịch hẹn không tồn tại.');
+        }
+
+        // Kiểm tra nếu lịch hẹn đã được thanh toán
+        if ($enroll->status == 1) {
+            return redirect()->route('enroll.history')->with('error', 'Lịch hẹn này đã được thanh toán.');
+        }
+
+        // Kiểm tra nếu lịch hẹn đã được thanh toán bởi người khác (kiểm tra các lịch hẹn trùng lặp)
+        $conflictingAppointment = Enroll::where('doctor_id', $enroll->doctor_id)  // Kiểm tra theo bác sĩ
+                                        ->where('date', $enroll->date)          // Kiểm tra theo ngày
+                                        ->where('time_slot', $enroll->time_slot) // Kiểm tra theo thời gian
+                                        ->where('status', 1)                    // Kiểm tra đã thanh toán
+                                        ->first();
+
+        if ($conflictingAppointment) {
+            // Nếu có lịch hẹn đã thanh toán trùng với lịch hẹn hiện tại
+            return redirect()->route('enroll.history')->with('error', 'Lịch hẹn đã được thanh toán bởi người khác. Bạn không thể thanh toán cho lịch này.');
+        }
         
         $vnp_TmnCode = "PHLIXEQM";
         $vnp_HashSecret = "FZG0G0EH4F3KJM5H8C2PGYNGYPY2R54R";
@@ -114,7 +136,7 @@ class VNPAYController extends Controller
         if ($secureHash === $vnp_SecureHash) {
             // Xác thực phản hồi thanh toán
             $responseCode = $request->get('vnp_ResponseCode');
-            $redirectUrl = 'http://localhost/quanlyksk/dangkykham';
+            $redirectUrl = 'http://localhost/quanlyksk//enroll-history';
             
             if ($responseCode === '00') {
                 // Thanh toán thành công
@@ -126,23 +148,23 @@ class VNPAYController extends Controller
                         ->update(['status' => 1]); // Cập nhật trạng thái thành "đã thanh toán"
                     
                     session()->forget('id'); // Xóa ID đăng ký trong session
-                    return redirect($redirectUrl)
-                        ->with('alert', 'Thanh toán thành công');
+                    
+                    // Chuyển hướng về trang lịch sử khám với thông báo thành công
+                    return redirect()->route('enroll.history')
+                        ->with('alert', 'Thanh toán thành công. Lịch sử khám đã được cập nhật.');
                 } else {
-                    return redirect($redirectUrl)
+                    return redirect()->route('enroll.history')
                         ->with('error', 'Không tìm thấy ID đăng ký. Vui lòng thử lại.');
                 }
             } else {
                 // Thanh toán thất bại
-                return redirect($redirectUrl)
+                return redirect()->route('enroll.history')
                     ->with('alert', 'Thanh toán không thành công. Mã phản hồi: ' . $responseCode);
             }
-        } else {
-            // Chữ ký không hợp lệ
-            return redirect('http://localhost/quanlyksk/dangkykham')
-                ->with('error', 'Chữ ký thanh toán không hợp lệ.');
+            } else {
+                // Chữ ký không hợp lệ
+                return redirect()->route('enroll.history')
+                    ->with('error', 'Chữ ký thanh toán không hợp lệ.');
+            }            
         }
-        
-    }
-    
 }

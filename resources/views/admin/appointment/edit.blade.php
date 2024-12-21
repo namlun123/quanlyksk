@@ -1,15 +1,9 @@
-@extends('layout')
+@extends('layouts.admin')
 
 @section('content')
 <style>
-    body {
-        background-image: url('public/frontend/images/imagebg.jpg'); /* Đường dẫn đến hình ảnh */
-        background-size: cover;  /* Đảm bảo hình ảnh phủ hết toàn bộ trang */
-        background-position: center;  /* Căn giữa hình ảnh */
-        background-attachment: fixed;  /* Hình ảnh sẽ cố định khi cuộn trang */
-    }
     .appointment-form {
-        width: 80%; /* Điều chỉnh độ rộng của form */
+        width: 100%; /* Điều chỉnh độ rộng của form */
         margin: auto;
         margin-top: 20px;
         padding: 20px;
@@ -320,7 +314,7 @@
 
 #chooseSpecializationBtn {
         height: 40px; /* Chiều cao bằng ô text */
-        width: 180px; /* Chiều ngang cố định */
+        width: 220px; /* Chiều ngang cố định */
         border: none;
         background-color: #007bff; /* Màu nền */
         color: white; /* Màu chữ */
@@ -463,11 +457,80 @@
     background-color:rgb(113, 182, 255) !important;
 }
 
+/* Ẩn radio button mặc định */
+input[type="radio"] {
+    display: none;
+}
+
+/* Tạo kiểu cho label chứa radio */
+input[type="radio"] + label {
+    position: relative;
+    padding-left: 25px;  /* Khoảng cách giữa text và vòng tròn */
+    cursor: pointer;
+    font-size: 14px;  /* Kích thước chữ */
+    color: #333;
+    line-height: 18px;  /* Giảm chiều cao dòng để căn gần hơn */
+    display: inline-block;
+    margin-right: 20px;  /* Đảm bảo có khoảng cách giữa các radio */
+}
+
+/* Vòng tròn radio button */
+input[type="radio"] + label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);  /* Đảm bảo vòng tròn căn giữa */
+    width: 18px;  /* Kích thước vòng tròn */
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #007bff;
+    background-color: #fff;
+    transition: background-color 0.3s, border 0.3s;
+}
+
+/* Khi radio được chọn */
+input[type="radio"]:checked + label::before {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* Vòng tròn bên trong khi radio được chọn */
+input[type="radio"]:checked + label::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+/* Thêm hiệu ứng khi hover vào label */
+input[type="radio"]:not(:checked) + label:hover::before {
+    border-color: #0056b3;
+}
+
+input[type="radio"]:checked + label:hover::before {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Dàn các radio button ngang hàng */
+.radio-group {
+    display: flex;
+    justify-content: flex-start;  /* Dàn các radio button từ trái qua phải */
+    gap: 20px;  /* Khoảng cách giữa các radio button */
+}
+
+
+
 </style>
 <div class="appointment-form">
     <h2>SỬA ĐĂNG KÍ KHÁM</h2>
 
-    <form action="{{ route('appointment.update', ['appointment_id' => $appointment->id]) }}" method="POST">
+    <form action="{{ route('admin.appointment.update', ['id' => $appointment->id]) }}" method="POST">
         @csrf
         @method('PUT') <!-- Specifies that the form should use the PUT method for updating -->
 
@@ -525,6 +588,16 @@
                 <!-- Ngày tháng năm sinh -->
                 <label for="dob">Ngày tháng năm sinh</label>
                 <input type="date" name="dob" id="dob" value="{{ $patientInfo->NgaySinh }}" disabled>
+
+                <!-- Giới tính -->
+                <label for="gender">Giới tính</label><br>
+                <div class="radio-group" style=" margin-top:0px">
+                    <input type="radio" id="male" name="gender" value="1" {{ $patientInfo->GioiTinh == 1 ? 'checked' : '' }} disabled>
+                    <label for="male">Nam</label>
+
+                    <input type="radio" id="female" name="gender" value="0" {{ $patientInfo->GioiTinh == 0 ? 'checked' : '' }} disabled>
+                    <label for="female">Nữ</label>
+                </div>
 
                 <!-- Email -->
                 <label for="email">Email</label>
@@ -609,6 +682,7 @@
         <h3>Danh sách chuyên khoa</h3>
 
         <!-- Ô tìm kiếm -->
+        <label>Nhập từ khóa để tìm kiếm chuyên khoa</label>
         <input type="text" id="searchSpecialization" placeholder="Tìm kiếm chuyên khoa...">
 
         <!-- Danh sách chuyên khoa -->
