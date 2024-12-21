@@ -76,7 +76,7 @@
                   <!-- Tổng thời gian -->
                                         
                         <div class="form-group col-lg-6">
-                            <label class="form-label mb-1 text-2 required">Tổng thời gian</label>
+                            <label class="form-label mb-1 text-2 required">Thời gian khám</label>
                             <input type="number" class="form-control text-3 h-auto py-2" name="total_time" id="TotalTime" required min="2" step="1" value="{{ old('total_time') }}">
                         </div>
 

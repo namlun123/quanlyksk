@@ -88,7 +88,7 @@
                     <th>Ngày</th>
                     <th>Giờ bắt đầu</th>
                     <th>Giờ kết thúc</th>
-                    <th>Tổng thời gian</th>
+                    <th>Thời gian khám</th>
                     <th>Chi phí phụ</th>
                     <th>Bác sĩ</th>
                     <th>Địa điểm</th>
