@@ -16,10 +16,14 @@
     <form action="" method="get" class="w-100">
         <div class="d-flex justify-content-between align-items-center">
         <div class="col-sm-6 d-flex flex-column">
-            <label for="keyword" class="form-label">Nhập tên bệnh nhân</label> 
+            <label for="keyword" class="form-label">Nhập tên</label> 
             <input type="search" id="keyword" name="keywords" class="form-control" style = "width:50%; margin-left: 10px;" placeholder="Nhập Email hoặc Mã bệnh nhân" value="{{ request()->keywords }}">
             <button type="submit" id="apply_button" class="btn btn-primary ml-2">Lọc</button>
+            <div class="col-md-3 d-flex align-items-end">
+                    <a href="{{ url()->current() }}" id="show_all_button" class="btn btn-secondary w-100">Hiển thị tất cả</a>
+                </div>
         </div>
+        
 
         </div>
     </form>
@@ -164,6 +168,27 @@
     background-color: rgba(153, 41, 41, 0.77);
     margin-left: 10px; /* Điều chỉnh khoảng cách giữa trường nhập liệu và nút lọc */
   }
+  #apply_button, #show_all_button {
+    background-color: rgba(153, 41, 41, 0.77); /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Loại bỏ viền */
+    padding: 8px 16px; /* Khoảng cách trong */
+    border-radius: 4px; /* Bo góc */
+    font-size: 14px; /* Cỡ chữ */
+    cursor: pointer; /* Con trỏ */
+    transition: background-color 0.3s ease; /* Hiệu ứng hover */
+}
+
+/* Hiệu ứng hover */
+#apply_button:hover, #show_all_button:hover {
+    background-color: #990000; /* Màu nền khi hover */
+}
+
+/* Đảm bảo nút Hiển thị tất cả nằm ngay cạnh nút Lọc */
+#apply_button + #show_all_button {
+    margin-left: 5px; /* Khoảng cách nhỏ giữa hai nút */
+}
 </style>
+
 
 
