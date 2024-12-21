@@ -10,8 +10,13 @@
             <form action="" method="get" class="w-100">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="col-sm-6 d-flex flex-column">
-                        <input type="search" id="keyword" name="keywords" class="form-control" style="width:50%" placeholder="Nhập tên bác sĩ" value="{{ request()->keywords }}">
+                    <label for="keyword" class="form-label">Nhập tên</label> 
+
+                        <input type="search" id="keyword" name="keywords" class="form-control" style="width:50%; margin-left: 10px;" placeholder="Nhập tên bác sĩ" value="{{ request()->keywords }}">
                         <button type="submit" id="apply_button" class="btn btn-primary mt-2">Lọc</button>
+                        <div class="col-md-3 d-flex align-items-end">
+                    <a href="{{ url()->current() }}" id="show_all_button" class="btn btn-secondary w-100">Hiển thị tất cả</a>
+                </div>
                     </div>
                 </div>
             </form>
@@ -19,69 +24,63 @@
 
         <!-- Bảng danh sách Bác Sĩ -->
         @php
-            $query = DB::table('doctors');
+$query = DB::table('doctors')
+    ->leftJoin('specialties', 'doctors.specialty_id', '=', 'specialties.specialty_id')
+    ->leftJoin('locations', 'doctors.location_id', '=', 'locations.location_id');
 
-            if (request()->has('keywords') && !empty(request()->keywords)) {
-                $keyword = request()->keywords;
-                $query->where('HoTen', 'like', '%' . $keyword . '%');
-            }
+if (request()->has('keywords') && !empty(request()->keywords)) {
+    $keyword = request()->keywords;
+    $query->where('doctors.HoTen', 'like', '%' . $keyword . '%');
+}
 
-            $all_doctors = $query->paginate(10);
-        @endphp
+$all_doctors = $query->select(
+    'doctors.*',
+    'specialties.specialty',
+    'locations.location_name'
+)->paginate(6);
+@endphp
 
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered align-middle">
-                <thead>
-                    <tr class="text-center table-primary">
-                        <th>ID</th>
-                        <th>Họ Tên</th>
-                        <th>Chức Vụ</th>
-                        <th>Phí Cơ Bản</th>
-                        <th>Chuyên Khoa</th>
-                        <th>Địa Điểm</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach($doctors as $doctor)
-    <tr class="text-center">
-        <td>{{ $doctor->id }}</td>
-        <td>{{ $doctor->HoTen }}</td>
-        <td>{{ $doctor->ChucVu }}</td>
-        <td>{{ number_format($doctor->PhiCoBan, 0, ',', '.') }}</td>
-        <td>
-            @if($doctor->Chuyenkhoa)
-                {{ $doctor->Chuyenkhoa->specialty }}
-            @endif
-        </td>
-        <td>
-            @if($doctor->location)
-                {{ $doctor->location->location_name }}
-            @endif
-        </td>
-        <td>
-            <a href="{{ route('admin.edit.doctor', ['id' => $doctor->id]) }}" class="text-success">
-                <i class="fa fa-pencil-square-o"></i>
-            </a>
-            <a onclick="return confirm('Bạn có muốn xóa không?')" href="{{ route('admin.delete.doctor', ['id' => $doctor->id]) }}" class="text-danger">
-                <i class="fa fa-times"></i>
-            </a>
-        </td>
-    </tr>
-@endforeach
-
-
-</tbody>
-
-            </table>
-        </div>
-    </div>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle">
+        <thead>
+            <tr class="text-center table-primary">
+                <th>ID</th>
+                <th>Họ Tên</th>
+                <th>Chức Vụ</th>
+                <th>Phí Cơ Bản</th>
+                <th>Chuyên Khoa</th>
+                <th>Địa Điểm</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach($all_doctors as $doctor)
+            <tr class="text-center">
+                <td>{{ $doctor->id }}</td>
+                <td>{{ $doctor->HoTen }}</td>
+                <td>{{ $doctor->ChucVu }}</td>
+                <td>{{ number_format($doctor->PhiCoBan, 0, ',', '.') }}</td>
+                <td>{{ $doctor->specialty ?? 'Không rõ' }}</td>
+                <td>{{ $doctor->location_name ?? 'Không rõ' }}</td>
+                <td>
+                    <a href="{{ route('admin.edit.doctor', ['id' => $doctor->id]) }}" class="text-success">
+                        <i class="fa fa-pencil-square-o"></i>
+                    </a>
+                    <a onclick="return confirm('Bạn có muốn xóa không?')" href="{{ route('admin.delete.doctor', ['id' => $doctor->id]) }}" class="text-danger">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
 </div>
 
 <!-- Pagination -->
 <div class="d-flex justify-content-center">
-    {{ $all_doctors->links('pagination::bootstrap-4') }}
+    {{ $all_doctors->appends(request()->query())->links('pagination::bootstrap-4') }}
 </div>
+
 
 @endsection
 
@@ -149,4 +148,24 @@
     background-color: rgba(153, 41, 41, 0.77);
     margin-left: 10px; /* Điều chỉnh khoảng cách giữa trường nhập liệu và nút lọc */
   }
+  #apply_button, #show_all_button {
+    background-color: rgba(153, 41, 41, 0.77); /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Loại bỏ viền */
+    padding: 8px 16px; /* Khoảng cách trong */
+    border-radius: 4px; /* Bo góc */
+    font-size: 14px; /* Cỡ chữ */
+    cursor: pointer; /* Con trỏ */
+    transition: background-color 0.3s ease; /* Hiệu ứng hover */
+}
+
+/* Hiệu ứng hover */
+#apply_button:hover, #show_all_button:hover {
+    background-color: #990000; /* Màu nền khi hover */
+}
+
+/* Đảm bảo nút Hiển thị tất cả nằm ngay cạnh nút Lọc */
+#apply_button + #show_all_button {
+    margin-left: 5px; /* Khoảng cách nhỏ giữa hai nút */
+}
 </style>
