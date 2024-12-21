@@ -127,8 +127,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <span>Quản lý bác sĩ</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="basic_table.html">Thêm mới bác sĩ</a></li>
-                        <li><a href="responsive_table.html">Danh sách bác sĩ</a></li>
+                        <li><a href="{{ route('admin.add.Doctor') }}">Thêm mới bác sĩ</a></li>
+                        <li><a href="{{ route('admin.all.Doctor') }}">Danh sách bác sĩ</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
@@ -147,8 +147,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                         <span>Quản lý địa điểm khám</span>
                     </a>
                     <ul class="sub">
-                        <li><a href="mail.html">Thêm mới địa điểm </a></li>
-                        <li><a href="mail_compose.html">Danh sách địa điểm</a></li>
+                        <li><a href="{{ route('admin.add.locations') }}">Thêm mới địa điểm </a></li>
+                        <li><a href="{{ route('admin.all.locations') }}">Danh sách địa điểm</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
