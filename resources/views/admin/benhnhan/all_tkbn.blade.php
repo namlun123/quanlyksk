@@ -26,19 +26,23 @@
     <form action="" method="get" class="w-100">
       <div class="d-flex justify-content-between align-items-center">
           <div class="col-sm-6 d-flex flex-column">
-              <label for="filter" class="form-label">Lọc theo</label>
+              <label for="filter" class="form-label">Theo</label>
               <div class="d-flex">
                   <select id="filter" name="filter" class="form-control" style="width:80%; margin-left:10px;">
                   <option value="email" {{ request('filter') == 'email' ? 'selected' : '' }}>Email</option>
                   <option value="user_id" {{ request('filter') == 'user_id' ? 'selected' : '' }}>Mã bệnh nhân</option>
                   </select>
               </div>
-              <label for="keyword" class="form-label mt-2">Từ khóa</label>
+              <label for="keyword" class="form-label mt-2"style="white-space: nowrap;">Từ khóa</label>
               <div class="d-flex">
                   <input type="search" id="keyword" name="keyword" class="form-control" style="width:80%; margin-left:10px;" value="{{ request()->keyword }}">
               </div>
               <button type="submit" id="apply_button" class="btn btn-primary mt-2">Lọc</button>
+              <div class="col-md-3 d-flex align-items-end">
+                    <a href="{{ url()->current() }}" id="show_all_button" class="btn btn-secondary w-100">Hiển thị tất cả</a>
+                </div>
           </div>
+          
       </div>
   </form>
     </div>
@@ -173,4 +177,24 @@
     background-color: rgba(153, 41, 41, 0.77);
     margin-left: 10px; /* Điều chỉnh khoảng cách giữa trường nhập liệu và nút lọc */
   }
+  #apply_button, #show_all_button {
+    background-color: rgba(153, 41, 41, 0.77); /* Màu nền */
+    color: white; /* Màu chữ */
+    border: none; /* Loại bỏ viền */
+    padding: 8px 16px; /* Khoảng cách trong */
+    border-radius: 4px; /* Bo góc */
+    font-size: 14px; /* Cỡ chữ */
+    cursor: pointer; /* Con trỏ */
+    transition: background-color 0.3s ease; /* Hiệu ứng hover */
+}
+
+/* Hiệu ứng hover */
+#apply_button:hover, #show_all_button:hover {
+    background-color: #990000; /* Màu nền khi hover */
+}
+
+/* Đảm bảo nút Hiển thị tất cả nằm ngay cạnh nút Lọc */
+#apply_button + #show_all_button {
+    margin-left: 5px; /* Khoảng cách nhỏ giữa hai nút */
+}
 </style>

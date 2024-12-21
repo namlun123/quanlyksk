@@ -72,18 +72,18 @@
                             </select>
                             </div>
                             <div class="form-group mb-3">
-    <label for="sdt" class="form-label">Số điện thoại</label>
-    <input 
-        type="text" 
-        class="form-control" 
-        id="sdt" 
-        name="sdt" 
-        placeholder="Nhập số điện thoại" 
-        inputmode="numeric" 
-        pattern="[0-9]{10}" 
-        title="Số điện thoại chỉ được chứa 10 chữ số"
-        oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)">
-</div>
+                            <label for="sdt" class="form-label">Số điện thoại</label>
+                            <input 
+                                type="text" 
+                                class="form-control" 
+                                id="sdt" 
+                                name="sdt" 
+                                placeholder="Nhập số điện thoại" 
+                                inputmode="numeric" 
+                                pattern="[0-9]{10}" 
+                                title="Số điện thoại chỉ được chứa 10 chữ số"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)">
+                        </div>
 
                             <div class="form-group form-check mb-3">
                                 <input type="checkbox" class="form-check-input" id="terms" checked>
