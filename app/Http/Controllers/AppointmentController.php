@@ -482,7 +482,7 @@ class AppointmentController extends Controller
         }
 
         // Xử lý giới tính
-        $appointment->gender = $appointment->gender == 1 ? 'Nam' : ($appointment->gender == 2 ? 'Nữ' : 'Không xác định');
+        $appointment->gender = $appointment->gender == 1 ? 'Nam' : ($appointment->gender == 0 ? 'Nữ' : 'Không xác định');
 
         // Xử lý trạng thái thanh toán
         switch ($appointment->status) {
