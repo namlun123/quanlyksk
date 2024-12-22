@@ -38,7 +38,7 @@
             <table class="table table-hover table-bordered align-middle">
                 <thead>
                     <tr class="text-center table-primary">
-                        <th>ID</th>
+                        <th>Mã admin</th>
                         <th>Email</th>
                         <th>Thao tác</th>
                     </tr>
@@ -46,7 +46,7 @@
                 <tbody>
                     @foreach($all_tkadmin as $key => $tkadmin)
                     <tr>
-                        <td>{{$tkadmin->id}}</td>
+                        <td>{{$tkadmin->admin_id}}</td>
                         <td>{{$tkadmin->email}}</td>
                         <td>
                             <a onclick="return confirm('Bạn có muốn xóa không?')" href="{{ route('admin.delete.tkadmin', ['id' => $tkadmin->id]) }}" class="active styling-edit" ui-toggle-class="" alt="Xóa đăng ký">

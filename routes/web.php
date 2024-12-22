@@ -152,12 +152,6 @@ Route::get('/admin/add-cakham', [CakhamController::class, 'add_cakham'])->name('
     Route::get('/admin/get-doctors', [CakhamController::class, 'get_doctors_by_location'])->name('admin.get.doctors');
     Route::put('admin/cakham/{id}/update', [CakhamController::class, 'update_cakham']);
 
-
-
-    
-});
-
-
 //quản lý kết quả
 Route::get('/admin/add-kq', [KQController::class, 'add_kq'])->name('admin.add.kq');
 Route::post('/admin/add-kq/store', [KQController::class, 'store'])->name('admin.add.kq.store');
@@ -210,5 +204,11 @@ Route::post('/admin/save-Doctor', [DoctorController::class, 'save_Doctor'])->nam
 Route::get('/admin/edit-Doctor/{id}', [DoctorController::class, 'edit_Doctor'])->name('admin.edit.doctor');
 Route::get('/admin/delete-Doctor/{id}', [DoctorController::class, 'delete_Doctor'])->name('admin.delete.doctor');
 Route::post('/admin/update-Doctor/{id}', [DoctorController::class, 'update_Doctor'])->name('admin.update.doctor');
+
+
+    
+});
+
+
 
   
