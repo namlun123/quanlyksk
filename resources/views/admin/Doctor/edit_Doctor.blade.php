@@ -35,19 +35,18 @@
                         <!-- Lương Cơ Bản -->
                          <!-- Lương Cơ Bản -->
 <div class="form-group">
-    <label for="PhiCoBan">Lương Cơ Bản</label>
+    <label for="PhiCoBan">Phí Cơ Bản</label>
     <input 
-        type="number" 
-        id="PhiCoBan" 
-        name="PhiCoBan" 
-        class="form-control" 
-        placeholder="Nhập lương cơ bản" 
-        min="1" 
-        required>
+    type="number" 
+    id="PhiCoBan" 
+    name="PhiCoBan" 
+    value="{{ $doctor->PhiCoBan }}" 
+    class="form-control" 
+    placeholder="Nhập lương cơ bản" 
+    min="1" 
+    required>
+
 </div>
-
-
-
 
                         <!-- Chuyên Khoa -->
                         

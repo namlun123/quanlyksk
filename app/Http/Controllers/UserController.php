@@ -9,6 +9,7 @@ use App\Models\Benhnhan as ModelsBN;
 use App\Models\TKbenhnhan as ModelsTKBN;
 use App\Models\User as ModelsUser;
 use App\Models\Enroll;
+use App\Models\Doctor;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -215,6 +216,12 @@ class UserController extends Controller
         $user = Auth::guard('patients')->user();
         return view('pages.information.Doctor', ['user'=>$user]);
     }
+
+    // Phương thức hiển thị chi tiết bác sĩ (DoctorDetail)
+  
+    
+
+
     public function chuyenkhoa()
     {   
         $user = Auth::guard('patients')->user();

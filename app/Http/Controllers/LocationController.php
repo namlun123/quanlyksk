@@ -40,6 +40,15 @@ class LocationController extends Controller
             'location_address' => 'required|string|max:255',
         ]);
 
+        // Kiểm tra trùng tên hoặc địa chỉ không phân biệt hoa thường
+        $existingLocation = Location::whereRaw('LOWER(location_name) = ?', [strtolower($request->location_name)])
+            ->orWhereRaw('LOWER(location_address) = ?', [strtolower($request->location_address)])
+            ->first();
+
+        if ($existingLocation) {
+            return back()->withErrors(['message' => 'Tên hoặc địa chỉ địa điểm đã tồn tại!'])->withInput();
+        }
+
         // Tạo mới địa điểm
         $location = new Location();
         $location->location_name = $request->location_name;
@@ -78,6 +87,18 @@ class LocationController extends Controller
             'location_name' => 'required|string|max:255',
             'location_address' => 'required|string|max:255',
         ]);
+
+        // Kiểm tra trùng tên hoặc địa chỉ không phân biệt hoa thường
+        $existingLocation = Location::where('location_id', '!=', $id)
+            ->where(function ($query) use ($request) {
+                $query->whereRaw('LOWER(location_name) = ?', [strtolower($request->location_name)])
+                    ->orWhereRaw('LOWER(location_address) = ?', [strtolower($request->location_address)]);
+            })
+            ->first();
+
+        if ($existingLocation) {
+            return back()->withErrors(['message' => 'Tên hoặc địa chỉ địa điểm đã tồn tại!'])->withInput();
+        }
 
         // Cập nhật thông tin địa điểm
         DB::table('locations')

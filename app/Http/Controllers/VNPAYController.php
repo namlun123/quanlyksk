@@ -59,7 +59,7 @@ class VNPAYController extends Controller
         // Tính thời gian hết hạn (15 phút sau thời điểm hiện tại)
         $expire = Carbon::now('Asia/Ho_Chi_Minh')->addMinutes(15)->format('YmdHis');
 
-        $vnp_TxnRef = $enroll_id; //Mã giao dịch thanh toán tham chiếu của merchant
+        $vnp_TxnRef = rand(100,10000); //Mã giao dịch thanh toán tham chiếu của merchant
         $vnp_Amount = $enroll->total_cost; // Số tiền thanh toán
         $vnp_Locale = 'vn'; //Ngôn ngữ chuyển hướng thanh toán
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR']; //IP Khách hàng thanh toán

@@ -39,7 +39,7 @@
         <table class="table table-hover table-bordered align-middle">
           <thead>
             <tr class="text-center table-primary">
-                <th>ID</th>
+                <th>Mã admin</th>
                 <th>Họ Tên</th>
                 <th>Ngày Sinh</th>
                 <th>Số Điện Thoại</th>
