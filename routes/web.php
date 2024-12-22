@@ -36,9 +36,12 @@ Route::get('/register', [UserController::class, 'userregister'])->name('userregi
 Route::post('/register-kh', [UserController::class, 'register_kh'])->name('register-kh');
 Route::post('/login-kh', [UserController::class, 'login_kh'])->name('login-kh');
 Route::get('/dang-xuat', [UserController::class, 'sign_out'])->name('dang-xuat');
+Route::middleware([TKBN::class])->group(function () {
+
 //sửa thông tin
 Route::get('/user-profile', [UserController::class, 'user_profile'])->name('user-profile');
 Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'])->name('user.update.profile');
+
 // lịch sử khám
 Route::get('/enroll-history', [UserController::class, 'enroll_history'])->name('enroll.history');
 Route::get('user/enroll/{id}/edit', [UserController::class, 'edit_enroll'])->name('user.edit.enroll');
@@ -68,8 +71,7 @@ Route::get('/vnpay/payment/{enroll_id}', [VNPAYController::class, 'createPayment
 
 // Route cho trang trả kết quả từ VNPAY
 Route::get('/vnpay/return', [VNPAYController::class, 'handleReturn'])->name('appointment.return');
-
-
+});
 
 //View thông tin hướng dẫn khám
 Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huongdankham');      
