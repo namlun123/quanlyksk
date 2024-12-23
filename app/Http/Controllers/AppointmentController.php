@@ -211,8 +211,6 @@ class AppointmentController extends Controller
         $data = $enroll->id;
         $url = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' . urlencode($data);
         $qrCodeImage = file_get_contents($url);
-        $qrCodePath = public_path('qrcodes/qr-code-' . $data . '.png');
-        file_put_contents($qrCodePath, $qrCodeImage);
 
         // Lấy thông tin bệnh nhân
         $patient = DB::table('patients')
@@ -244,19 +242,14 @@ class AppointmentController extends Controller
             'location_name' => $location->location_name,
             'total_cost' => $request->total_cost,
             'email' => $patient->email,
-            'qr_code_path' => $qrCodePath,
         ];
 
         // Gửi email xác nhận với QR code inline
         try {
-            Mail::send('pages.emails.appointment_confirmation', $appointment, function ($message) use ($patient, $appointment) {
+            Mail::send('pages.emails.appointment_confirmation', $appointment, function ($message) use ($patient, $appointment, $qrCodeImage) {
                 $message->to($patient->email)
                     ->subject('Xác nhận lịch hẹn')
-                    ->attach($appointment['qr_code_path'], [
-                        'as' => 'qrcode.png',
-                        'mime' => 'image/png',
-                    ])
-                    ->embedData(file_get_contents($appointment['qr_code_path']), 'qrcode.png', 'image/png'); // Dùng embedData thay vì embed
+                    ->embedData($qrCodeImage, 'qrcode.png', 'image/png'); // Nhúng mã QR trực tiếp vào email
             });
         
             // Lưu enroll_id vào session
