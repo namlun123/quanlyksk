@@ -36,9 +36,12 @@ Route::get('/register', [UserController::class, 'userregister'])->name('userregi
 Route::post('/register-kh', [UserController::class, 'register_kh'])->name('register-kh');
 Route::post('/login-kh', [UserController::class, 'login_kh'])->name('login-kh');
 Route::get('/dang-xuat', [UserController::class, 'sign_out'])->name('dang-xuat');
+Route::middleware([TKBN::class])->group(function () {
+
 //sửa thông tin
 Route::get('/user-profile', [UserController::class, 'user_profile'])->name('user-profile');
 Route::post('user/profile/{id}/update', [UserController::class, 'update_profile'])->name('user.update.profile');
+
 // lịch sử khám
 Route::get('/enroll-history', [UserController::class, 'enroll_history'])->name('enroll.history');
 Route::get('user/enroll/{id}/edit', [UserController::class, 'edit_enroll'])->name('user.edit.enroll');
@@ -68,8 +71,7 @@ Route::get('/vnpay/payment/{enroll_id}', [VNPAYController::class, 'createPayment
 
 // Route cho trang trả kết quả từ VNPAY
 Route::get('/vnpay/return', [VNPAYController::class, 'handleReturn'])->name('appointment.return');
-
-
+});
 
 //View thông tin hướng dẫn khám
 Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huongdankham');      
@@ -78,7 +80,13 @@ Route::get('/huongdankham', [UserController::class, 'huongdankham'])->name('huon
 Route::get('/chuyenkhoa', [UserController::class, 'chuyenkhoa'])->name('chuyenkhoa');   
 
 //View Bác sĩ
-Route::get('/Doctor', [UserController::class, 'Doctor'])->name('Doctor');   
+Route::get('/Doctor', [UserController::class, 'Doctor'])->name('Doctor');  
+
+
+
+
+
+
    
 
 
@@ -152,12 +160,6 @@ Route::get('/admin/add-cakham', [CakhamController::class, 'add_cakham'])->name('
     Route::get('/admin/get-doctors', [CakhamController::class, 'get_doctors_by_location'])->name('admin.get.doctors');
     Route::put('admin/cakham/{id}/update', [CakhamController::class, 'update_cakham']);
 
-
-
-    
-});
-
-
 //quản lý kết quả
 Route::get('/admin/add-kq', [KQController::class, 'add_kq'])->name('admin.add.kq');
 Route::post('/admin/add-kq/store', [KQController::class, 'store'])->name('admin.add.kq.store');
@@ -210,5 +212,11 @@ Route::post('/admin/save-Doctor', [DoctorController::class, 'save_Doctor'])->nam
 Route::get('/admin/edit-Doctor/{id}', [DoctorController::class, 'edit_Doctor'])->name('admin.edit.doctor');
 Route::get('/admin/delete-Doctor/{id}', [DoctorController::class, 'delete_Doctor'])->name('admin.delete.doctor');
 Route::post('/admin/update-Doctor/{id}', [DoctorController::class, 'update_Doctor'])->name('admin.update.doctor');
+
+
+    
+});
+
+
 
   
